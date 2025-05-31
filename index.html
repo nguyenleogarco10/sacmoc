@@ -1,22 +1,408 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Sắc Mộc</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sắc Mộc - Vẻ Đẹp Có Trách Nhiệm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .text-brand { color: #8D6E63; }
+        .bg-brand { background-color: #8D6E63; }
+        .bg-brand-light { background-color: #D7CCC8; }
+        .bg-brand-superlight { background-color: #EFEBE9; }
+        .border-brand { border-color: #8D6E63; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 500px;
+                max-height: 70vh;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #8D6E63;
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
 </head>
-<body>
-  <header>
-    <h1>Sắc Mộc</h1>
-    <nav>
-      <a href="index.html">Trang chủ</a>
-      <a href="ai.html">Thử son AI</a>
-    </nav>
-  </header>
-  <main>
-    <h2>100% thiên nhiên</h2>
-    <p>Chào mừng bạn đến với Sắc Mộc – nơi tôn vinh vẻ đẹp tự nhiên qua từng thỏi son.</p>
-  </main>
+<body class="antialiased">
+
+    <header id="header" class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex-shrink-0">
+                    <a href="#hero" class="text-2xl font-bold text-brand">Sắc Mộc</a>
+                </div>
+                <div class="hidden md:block">
+                    <nav class="flex items-center space-x-8">
+                        <a href="#philosophy" class="text-gray-600 nav-link font-medium">Triết Lý</a>
+                        <a href="#products" class="text-gray-600 nav-link font-medium">Sản Phẩm</a>
+                        <a href="#transparency" class="text-gray-600 nav-link font-medium">Minh Bạch</a>
+                        <a href="#community" class="text-gray-600 nav-link font-medium">Cộng Đồng</a>
+                    </nav>
+                </div>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-600 hover:text-brand focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden">
+            <nav class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#philosophy" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50">Triết Lý</a>
+                <a href="#products" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50">Sản Phẩm</a>
+                <a href="#transparency" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50">Minh Bạch</a>
+                <a href="#community" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand hover:bg-gray-50">Cộng Đồng</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="pt-16 h-screen flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1590431305265-538183495a43?q=80&w=2070&auto=format&fit=crop');">
+            <div class="absolute inset-0 bg-white/50"></div>
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-brand tracking-tight">Vẻ Đẹp Có Trách Nhiệm</h1>
+                <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-700">Sắc Mộc không chỉ là son môi. Đó là một lựa chọn an toàn cho bạn, tử tế với hành tinh và cam kết cho một vẻ đẹp minh bạch.</p>
+                <div class="mt-8">
+                    <a href="#philosophy" class="inline-block bg-brand text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105">Khám Phá Câu Chuyện</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="philosophy" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-brand">Triết Lý Sắc Mộc</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi ra đời để giải quyết những lo ngại về sức khỏe và môi trường trong ngành mỹ phẩm. Sắc Mộc là câu trả lời cho nhu cầu về một vẻ đẹp không chỉ rạng rỡ bên ngoài mà còn an tâm từ bên trong.</p>
+                </div>
+                <div class="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+                    <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">🌿</div>
+                        <h3 class="mt-5 text-xl font-semibold text-brand">An Toàn & Tinh Khiết</h3>
+                        <p class="mt-2 text-gray-600">Công thức với hơn 95% thành phần tự nhiên, không chứa kim loại nặng, parabens hay hóa chất độc hại.</p>
+                    </div>
+                    <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">🌍</div>
+                        <h3 class="mt-5 text-xl font-semibold text-brand">Bền Vững & Ý Thức</h3>
+                        <p class="mt-2 text-gray-600">Bao bì thân thiện môi trường, tái chế được và nguồn nguyên liệu khai thác có đạo đức.</p>
+                    </div>
+                    <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
+                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">💖</div>
+                        <h3 class="mt-5 text-xl font-semibold text-brand">Minh Bạch & Đạo Đức</h3>
+                        <p class="mt-2 text-gray-600">Cam kết 100% không thử nghiệm trên động vật và công khai toàn bộ thành phần sản phẩm.</p>
+                    </div>
+                     <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
+                        <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">✨</div>
+                        <h3 class="mt-5 text-xl font-semibold text-brand">Hiệu Suất Vượt Trội</h3>
+                        <p class="mt-2 text-gray-600">Màu sắc rực rỡ, lâu trôi và chất son mềm mịn. Vẻ đẹp "sạch" không có nghĩa là phải thỏa hiệp.</p>
+                    </div>
+                </div>
+
+                <div class="mt-20">
+                    <div class="text-center">
+                        <h3 class="text-2xl font-bold text-brand">So Sánh Trực Quan</h3>
+                        <p class="mt-2 max-w-2xl mx-auto text-md text-gray-600">Một cái nhìn nhanh để thấy sự khác biệt mà Sắc Mộc mang lại cho bạn và cho hành tinh.</p>
+                    </div>
+                    <div class="mt-8 chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="products" class="py-20 bg-brand-superlight">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-brand">Khám Phá Màu Son Của Bạn</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tìm kiếm sắc màu hoàn hảo chưa bao giờ dễ dàng hơn. Hãy thử ngay những gam màu lấy cảm hứng từ thiên nhiên của chúng tôi.</p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8" id="product-list">
+                </div>
+
+                <div class="mt-12 text-center">
+                     <button id="open-vto-modal" class="bg-white text-brand font-bold py-3 px-8 rounded-full shadow-lg border border-brand-light hover:bg-brand-light hover:text-white transition-all transform hover:scale-105">
+                        Trải Nghiệm Thử Son Ảo
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="transparency" class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-brand">Trung Tâm Minh Bạch</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi tin vào vẻ đẹp không che giấu. Khám phá câu chuyện đằng sau mỗi thành phần làm nên thỏi son của bạn.</p>
+                </div>
+                <div id="ingredient-accordion" class="mt-12 max-w-3xl mx-auto space-y-4">
+                </div>
+            </div>
+        </section>
+
+        <section id="community" class="py-20 bg-brand-superlight">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-brand">Cộng Đồng Sắc Mộc</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tham gia cùng hàng ngàn phụ nữ Việt đã lựa chọn vẻ đẹp có ý thức. Chia sẻ khoảnh khắc của bạn với #SacMocBeauty.</p>
+                </div>
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
+                        <img src="https://images.unsplash.com/photo-1587504313009-5a556a31f79f?q=80&w=1887&auto=format&fit=crop" alt="Testimonial 1" class="w-20 h-20 mx-auto rounded-full object-cover">
+                        <p class="mt-4 text-gray-600 italic">"Lần đầu tiên mình tìm được một thỏi son vừa đẹp, vừa lâu trôi mà lại an tâm về thành phần. Yêu Sắc Mộc!"</p>
+                        <h4 class="mt-4 font-bold text-brand">- An Nhiên, TP.HCM</h4>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
+                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1887&auto=format&fit=crop" alt="Testimonial 2" class="w-20 h-20 mx-auto rounded-full object-cover">
+                        <p class="mt-4 text-gray-600 italic">"Mình đang mang thai nên rất kỹ tính. Sắc Mộc là cứu tinh, giúp mình vẫn xinh đẹp mà không lo ảnh hưởng đến bé."</p>
+                        <h4 class="mt-4 font-bold text-brand">- Minh Thư, Hà Nội</h4>
+                    </div>
+                     <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
+                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1887&auto=format&fit=crop" alt="Testimonial 3" class="w-20 h-20 mx-auto rounded-full object-cover">
+                        <p class="mt-4 text-gray-600 italic">"Thích nhất là bao bì! Vừa đẹp vừa thân thiện môi trường. Một thương hiệu Việt Nam quá tự hào."</p>
+                        <h4 class="mt-4 font-bold text-brand">- Quỳnh Anh, Đà Nẵng</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h3 class="text-2xl font-bold">Sắc Mộc</h3>
+            <p class="mt-2">Vẻ Đẹp Có Trách Nhiệm</p>
+            <div class="mt-6 flex justify-center space-x-6">
+                <a href="#" class="hover:text-brand-light">Facebook</a>
+                <a href="#" class="hover:text-brand-light">Instagram</a>
+                <a href="#" class="hover:text-brand-light">Tiktok</a>
+            </div>
+            <p class="mt-6 text-sm text-gray-400">&copy; 2025 Sắc Mộc Việt Nam. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="vto-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl relative transform transition-all duration-300 scale-95">
+            <button id="close-vto-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">&times;</button>
+            <h3 class="text-2xl font-bold text-brand text-center mb-4">Trải Nghiệm Thử Son Ảo</h3>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="relative w-full aspect-w-1 aspect-h-1">
+                    <img id="vto-face" src="https://placehold.co/600x600/EFEBE9/8D6E63?text=Chọn+Màu+Son" alt="Virtual Try On Model Face" class="w-full h-full object-cover rounded-lg">
+                    <div id="vto-lips" class="absolute inset-0" style="clip-path: polygon(29% 62%, 35% 58%, 43% 56%, 50% 57%, 57% 56%, 65% 58%, 71% 62%, 65% 66%, 57% 68%, 50% 69%, 43% 68%, 35% 66%);"></div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-700 mb-2">Chọn màu son của bạn:</h4>
+                    <div id="vto-color-options" class="grid grid-cols-4 gap-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            const comparisonChartCtx = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(comparisonChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Thành Phần', 'Bao Bì', 'Thử Nghiệm Động Vật', 'Minh Bạch Nguồn Gốc', 'Hiệu Suất'],
+                    datasets: [{
+                        label: 'Son Truyền Thống',
+                        data: [4, 2, 3, 2, 8],
+                        backgroundColor: '#D7CCC8',
+                        borderColor: '#C8BDBA',
+                        borderWidth: 1
+                    }, {
+                        label: 'Sắc Mộc',
+                        data: [9, 8, 10, 10, 9],
+                        backgroundColor: '#8D6E63',
+                        borderColor: '#795548',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                callback: function(value) {
+                                    return value
+                                }
+                            }
+                        },
+                        y: {
+                           ticks: {
+                                font: {
+                                    size: 14
+                                }
+                           }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + '/10 điểm';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const products = [
+                { name: 'Đỏ Đất - 01', color: '#B95C50', image: 'https://placehold.co/400x400/B95C50/FFFFFF?text=Đỏ+Đất'},
+                { name: 'Cam Cháy - 02', color: '#D87C4F', image: 'https://placehold.co/400x400/D87C4F/FFFFFF?text=Cam+Cháy'},
+                { name: 'Hồng Đào - 03', color: '#E48F82', image: 'https://placehold.co/400x400/E48F82/FFFFFF?text=Hồng+Đào'},
+                { name: 'Nâu Gỗ - 04', color: '#8C5A4D', image: 'https://placehold.co/400x400/8C5A4D/FFFFFF?text=Nâu+Gỗ'},
+                { name: 'Hồng Đất - 05', color: '#C68582', image: 'https://placehold.co/400x400/C68582/FFFFFF?text=Hồng+Đất'}
+            ];
+
+            const productList = document.getElementById('product-list');
+            products.forEach(p => {
+                productList.innerHTML += `
+                    <div class="text-center group">
+                        <div class="relative w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden card-hover">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-center object-cover">
+                        </div>
+                        <h4 class="mt-4 font-semibold text-gray-800">${p.name}</h4>
+                        <div class="w-6 h-6 rounded-full mx-auto mt-2" style="background-color: ${p.color};"></div>
+                    </div>
+                `;
+            });
+
+            const ingredients = [
+                { name: 'Dầu Jojoba Hữu Cơ', description: 'Giàu Vitamin E, hoạt động như một chất dưỡng ẩm tự nhiên, giúp môi mềm mại và căng mọng. Nguồn gốc từ các trang trại hữu cơ bền vững.' },
+                { name: 'Bơ Hạt Mỡ', description: 'Cung cấp độ ẩm sâu, làm dịu và phục hồi đôi môi khô, nứt nẻ. Được thu mua công bằng từ các hợp tác xã phụ nữ ở Tây Phi.' },
+                { name: 'Sáp Candelilla', description: 'Một loại sáp thực vật thay thế cho sáp ong, tạo độ cứng và bóng cho son môi. Thu hoạch từ cây Candelilla ở sa mạc Chihuahuan.'},
+                { name: 'Màu Khoáng Thiên Nhiên', description: 'Sử dụng oxit sắt và mica được khai thác có đạo đức thay cho thuốc nhuộm tổng hợp, đảm bảo màu sắc an toàn và rực rỡ.'}
+            ];
+
+            const accordion = document.getElementById('ingredient-accordion');
+            ingredients.forEach((ing, index) => {
+                const item = document.createElement('div');
+                item.className = 'border border-gray-200 rounded-lg overflow-hidden';
+                item.innerHTML = `
+                    <button class="accordion-button w-full text-left p-4 bg-brand-superlight hover:bg-brand-light transition duration-300 flex justify-between items-center">
+                        <span class="font-semibold text-brand">${ing.name}</span>
+                        <span class="accordion-icon text-brand font-bold">+</span>
+                    </button>
+                    <div class="accordion-content hidden p-4 bg-white">
+                        <p class="text-gray-600">${ing.description}</p>
+                    </div>
+                `;
+                accordion.appendChild(item);
+            });
+            
+            accordion.addEventListener('click', function(e) {
+                const button = e.target.closest('.accordion-button');
+                if (button) {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('.accordion-icon');
+                    const isOpen = !content.classList.contains('hidden');
+
+                    document.querySelectorAll('.accordion-content').forEach(c => c.classList.add('hidden'));
+                    document.querySelectorAll('.accordion-icon').forEach(i => i.textContent = '+');
+                    
+                    if (!isOpen) {
+                        content.classList.remove('hidden');
+                        icon.textContent = '-';
+                    }
+                }
+            });
+
+            const vtoModal = document.getElementById('vto-modal');
+            const openVtoModalBtn = document.getElementById('open-vto-modal');
+            const closeVtoModalBtn = document.getElementById('close-vto-modal');
+            const vtoLips = document.getElementById('vto-lips');
+            const vtoColorOptions = document.getElementById('vto-color-options');
+            const vtoFaceImg = document.getElementById('vto-face');
+
+            products.forEach(p => {
+                vtoColorOptions.innerHTML += `
+                    <button data-color="${p.color}" data-image="${p.image.replace('?text=','/EFEBE9/FFFFFF?text=')}" class="vto-color-btn w-full h-16 rounded-lg" style="background-color: ${p.color};"></button>
+                `;
+            });
+            
+            openVtoModalBtn.addEventListener('click', () => {
+                vtoModal.classList.remove('hidden');
+                setTimeout(() => vtoModal.querySelector('div').classList.remove('scale-95'), 10);
+            });
+
+            closeVtoModalBtn.addEventListener('click', () => {
+                 vtoModal.querySelector('div').classList.add('scale-95');
+                 setTimeout(() => vtoModal.classList.add('hidden'), 300);
+            });
+            
+            vtoModal.addEventListener('click', function(e) {
+                if(e.target === vtoModal){
+                    closeVtoModalBtn.click();
+                }
+            });
+
+            vtoColorOptions.addEventListener('click', (e) => {
+                if (e.target.matches('.vto-color-btn')) {
+                    const color = e.target.dataset.color;
+                    const image = e.target.dataset.image;
+                    vtoLips.style.backgroundColor = color;
+                    vtoFaceImg.src = image; 
+                }
+            });
+
+        });
+    </script>
 </body>
 </html>
