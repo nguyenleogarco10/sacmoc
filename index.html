@@ -6,6 +6,12 @@
     <title>Sắc Mộc - Vẻ Đẹp Có Trách Nhiệm</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@3.18.0/dist/tf-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@3.18.0/dist/tf-converter.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@3.18.0/dist/tf-backend-webgl.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2/dist/face-landmarks-detection.min.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
@@ -47,6 +53,49 @@
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .testimonial-container {
+            display: flex;
+            overflow-x: hidden;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .testimonial-card {
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+            transition: transform 0.5s ease-in-out;
+        }
+         @media (min-width: 768px) {
+            .testimonial-card {
+                flex: 0 0 50%;
+            }
+        }
+        @media (min-width: 1024px) {
+            .testimonial-card {
+                flex: 0 0 33.3333%;
+            }
+        }
+        #vto-video-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px; /* Control max size */
+            margin: auto;
+            aspect-ratio: 4 / 3; /* Maintain aspect ratio */
+        }
+        #vto-video, #vto-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5rem; /* Tailwind's rounded-lg */
+            object-fit: cover; /* Ensure video covers the area */
+        }
+         #vto-video {
+            transform: scaleX(-1); /* Mirror mode for webcam */
+        }
+        #vto-canvas {
+            pointer-events: none; /* Allow interaction with elements below if any */
         }
     </style>
 </head>
@@ -150,7 +199,7 @@
 
                 <div class="mt-12 text-center">
                      <button id="open-vto-modal" class="bg-white text-brand font-bold py-3 px-8 rounded-full shadow-lg border border-brand-light hover:bg-brand-light hover:text-white transition-all transform hover:scale-105">
-                        Trải Nghiệm Thử Son Ảo
+                        Trải Nghiệm Thử Son Ảo (Live)
                     </button>
                 </div>
             </div>
@@ -173,22 +222,19 @@
                     <h2 class="text-3xl font-bold text-brand">Cộng Đồng Sắc Mộc</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tham gia cùng hàng ngàn phụ nữ Việt đã lựa chọn vẻ đẹp có ý thức. Chia sẻ khoảnh khắc của bạn với #SacMocBeauty.</p>
                 </div>
-                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
-                        <img src="https://images.unsplash.com/photo-1587504313009-5a556a31f79f?q=80&w=1887&auto=format&fit=crop" alt="Testimonial 1" class="w-20 h-20 mx-auto rounded-full object-cover">
-                        <p class="mt-4 text-gray-600 italic">"Lần đầu tiên mình tìm được một thỏi son vừa đẹp, vừa lâu trôi mà lại an tâm về thành phần. Yêu Sắc Mộc!"</p>
-                        <h4 class="mt-4 font-bold text-brand">- An Nhiên, TP.HCM</h4>
+                <div class="mt-16 relative">
+                    <div id="testimonial-slider" class="testimonial-container">
                     </div>
-                     <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
-                        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1887&auto=format&fit=crop" alt="Testimonial 2" class="w-20 h-20 mx-auto rounded-full object-cover">
-                        <p class="mt-4 text-gray-600 italic">"Mình đang mang thai nên rất kỹ tính. Sắc Mộc là cứu tinh, giúp mình vẫn xinh đẹp mà không lo ảnh hưởng đến bé."</p>
-                        <h4 class="mt-4 font-bold text-brand">- Minh Thư, Hà Nội</h4>
-                    </div>
-                     <div class="bg-white p-6 rounded-xl shadow-sm text-center card-hover">
-                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1887&auto=format&fit=crop" alt="Testimonial 3" class="w-20 h-20 mx-auto rounded-full object-cover">
-                        <p class="mt-4 text-gray-600 italic">"Thích nhất là bao bì! Vừa đẹp vừa thân thiện môi trường. Một thương hiệu Việt Nam quá tự hào."</p>
-                        <h4 class="mt-4 font-bold text-brand">- Quỳnh Anh, Đà Nẵng</h4>
-                    </div>
+                    <button id="prev-testimonial" class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white/70 hover:bg-white text-brand p-3 rounded-full shadow-md z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </button>
+                    <button id="next-testimonial" class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1/2 bg-white/70 hover:bg-white text-brand p-3 rounded-full shadow-md z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </section>
@@ -207,22 +253,22 @@
         </div>
     </footer>
 
-    <div id="vto-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+    <div id="vto-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl relative transform transition-all duration-300 scale-95">
-            <button id="close-vto-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">&times;</button>
+            <button id="close-vto-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 z-10">&times;</button>
             <h3 class="text-2xl font-bold text-brand text-center mb-4">Trải Nghiệm Thử Son Ảo</h3>
-            <div class="grid md:grid-cols-2 gap-8 items-center">
-                <div class="relative w-full aspect-w-1 aspect-h-1">
-                    <img id="vto-face" src="https://placehold.co/600x600/EFEBE9/8D6E63?text=Chọn+Màu+Son" alt="Virtual Try On Model Face" class="w-full h-full object-cover rounded-lg">
-                    <div id="vto-lips" class="absolute inset-0" style="clip-path: polygon(29% 62%, 35% 58%, 43% 56%, 50% 57%, 57% 56%, 65% 58%, 71% 62%, 65% 66%, 57% 68%, 50% 69%, 43% 68%, 35% 66%);"></div>
+            <div class="grid md:grid-cols-2 gap-6 items-start">
+                <div id="vto-video-container" class="bg-gray-200 rounded-lg flex items-center justify-center">
+                    <video id="vto-video" playsinline autoplay muted class="rounded-lg"></video>
+                    <canvas id="vto-canvas" class="rounded-lg"></canvas>
+                    <p id="vto-status" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-600 bg-white/70 p-2 rounded">Đang tải model và khởi động webcam...</p>
                 </div>
-                <div>
-                    
-<label class="block text-sm font-medium text-gray-700 mb-2">Tải ảnh mặt của bạn:</label>
-<input id="vto-upload" type="file" accept="image/*" class="mb-4 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-brand-light file:text-white hover:file:bg-brand">
-
-<h4 class="font-semibold text-gray-700 mb-2">Chọn màu son của bạn:</h4>
-                    <div id="vto-color-options" class="grid grid-cols-4 gap-4">
+                <div class="pt-4 md:pt-0">
+                    <h4 class="font-semibold text-gray-700 mb-2">Chọn màu son của bạn:</h4>
+                    <div id="vto-color-options" class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                    </div>
+                    <div class="mt-4 p-3 bg-amber-100 border-l-4 border-amber-500 text-amber-700 text-sm">
+                        <p><strong>Lưu ý:</strong> Để có kết quả tốt nhất, hãy đảm bảo khuôn mặt bạn được chiếu sáng đủ và nhìn thẳng vào webcam.</p>
                     </div>
                 </div>
             </div>
@@ -238,9 +284,14 @@
                 mobileMenu.classList.toggle('hidden');
             });
             
-            document.querySelectorAll('#mobile-menu a').forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
+            document.querySelectorAll('#mobile-menu a, header a[href^="#"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.closest('#mobile-menu')) mobileMenu.classList.add('hidden');
+                    const targetId = link.getAttribute('href');
+                    if (targetId.startsWith('#')) {
+                        e.preventDefault();
+                        document.querySelector(targetId).scrollIntoView({ behavior: 'smooth'});
+                    }
                 });
             });
 
@@ -267,52 +318,17 @@
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            max: 10,
-                            ticks: {
-                                callback: function(value) {
-                                    return value
-                                }
-                            }
-                        },
-                        y: {
-                           ticks: {
-                                font: {
-                                    size: 14
-                                }
-                           }
-                        }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.x !== null) {
-                                        label += context.parsed.x + '/10 điểm';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    }
+                    scales: {x: {beginAtZero: true,max: 10}, y: {ticks: {font: {size: 12}}}},
+                    plugins: {legend: {position: 'top'}, tooltip: {callbacks: {label: (ctx) => `${ctx.dataset.label || ''}: ${ctx.parsed.x}/10 điểm`}}}
                 }
             });
 
             const products = [
-                { name: 'Đỏ Đất - 01', color: '#B95C50', image: 'https://placehold.co/400x400/B95C50/FFFFFF?text=Đỏ+Đất'},
-                { name: 'Cam Cháy - 02', color: '#D87C4F', image: 'https://placehold.co/400x400/D87C4F/FFFFFF?text=Cam+Cháy'},
-                { name: 'Hồng Đào - 03', color: '#E48F82', image: 'https://placehold.co/400x400/E48F82/FFFFFF?text=Hồng+Đào'},
-                { name: 'Nâu Gỗ - 04', color: '#8C5A4D', image: 'https://placehold.co/400x400/8C5A4D/FFFFFF?text=Nâu+Gỗ'},
-                { name: 'Hồng Đất - 05', color: '#C68582', image: 'https://placehold.co/400x400/C68582/FFFFFF?text=Hồng+Đất'}
+                { name: 'Đỏ Đất - 01', color: '#B95C50', hexOpacity: 'B95C50B3', image: 'https://placehold.co/400x400/B95C50/FFFFFF?text=Đỏ+Đất'},
+                { name: 'Cam Cháy - 02', color: '#D87C4F', hexOpacity: 'D87C4FB3', image: 'https://placehold.co/400x400/D87C4F/FFFFFF?text=Cam+Cháy'},
+                { name: 'Hồng Đào - 03', color: '#E48F82', hexOpacity: 'E48F82B3', image: 'https://placehold.co/400x400/E48F82/FFFFFF?text=Hồng+Đào'},
+                { name: 'Nâu Gỗ - 04', color: '#8C5A4D', hexOpacity: '8C5A4DB3', image: 'https://placehold.co/400x400/8C5A4D/FFFFFF?text=Nâu+Gỗ'},
+                { name: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3', image: 'https://placehold.co/400x400/C68582/FFFFFF?text=Hồng+Đất'}
             ];
 
             const productList = document.getElementById('product-list');
@@ -320,15 +336,15 @@
                 productList.innerHTML += `
                     <div class="text-center group">
                         <div class="relative w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden card-hover">
-                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-center object-cover">
+                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-center object-cover" onerror="this.src='https://placehold.co/400x400/EFEBE9/8D6E63?text=Ảnh+Lỗi'">
                         </div>
                         <h4 class="mt-4 font-semibold text-gray-800">${p.name}</h4>
-                        <div class="w-6 h-6 rounded-full mx-auto mt-2" style="background-color: ${p.color};"></div>
+                        <div class="w-6 h-6 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};"></div>
                     </div>
                 `;
             });
 
-            const ingredients = [
+            const ingredientsData = [
                 { name: 'Dầu Jojoba Hữu Cơ', description: 'Giàu Vitamin E, hoạt động như một chất dưỡng ẩm tự nhiên, giúp môi mềm mại và căng mọng. Nguồn gốc từ các trang trại hữu cơ bền vững.' },
                 { name: 'Bơ Hạt Mỡ', description: 'Cung cấp độ ẩm sâu, làm dịu và phục hồi đôi môi khô, nứt nẻ. Được thu mua công bằng từ các hợp tác xã phụ nữ ở Tây Phi.' },
                 { name: 'Sáp Candelilla', description: 'Một loại sáp thực vật thay thế cho sáp ong, tạo độ cứng và bóng cho son môi. Thu hoạch từ cây Candelilla ở sa mạc Chihuahuan.'},
@@ -336,7 +352,7 @@
             ];
 
             const accordion = document.getElementById('ingredient-accordion');
-            ingredients.forEach((ing, index) => {
+            ingredientsData.forEach((ing) => {
                 const item = document.createElement('div');
                 item.className = 'border border-gray-200 rounded-lg overflow-hidden';
                 item.innerHTML = `
@@ -356,68 +372,224 @@
                 if (button) {
                     const content = button.nextElementSibling;
                     const icon = button.querySelector('.accordion-icon');
-                    const isOpen = !content.classList.contains('hidden');
-
-                    document.querySelectorAll('.accordion-content').forEach(c => c.classList.add('hidden'));
-                    document.querySelectorAll('.accordion-icon').forEach(i => i.textContent = '+');
+                    const isHidden = content.classList.contains('hidden');
                     
-                    if (!isOpen) {
+                    document.querySelectorAll('#ingredient-accordion .accordion-content').forEach(c => c.classList.add('hidden'));
+                    document.querySelectorAll('#ingredient-accordion .accordion-icon').forEach(i => i.textContent = '+');
+                    
+                    if (isHidden) {
                         content.classList.remove('hidden');
                         icon.textContent = '-';
                     }
                 }
             });
 
+            const testimonials = [
+                { text: "Lần đầu tiên mình tìm được một thỏi son vừa đẹp, vừa lâu trôi mà lại an tâm về thành phần. Yêu Sắc Mộc!", author: "An Nhiên, TP.HCM" },
+                { text: "Mình đang mang thai nên rất kỹ tính. Sắc Mộc là cứu tinh, giúp mình vẫn xinh đẹp mà không lo ảnh hưởng đến bé.", author: "Minh Thư, Hà Nội" },
+                { text: "Thích nhất là bao bì! Vừa đẹp vừa thân thiện môi trường. Một thương hiệu Việt Nam quá tự hào.", author: "Quỳnh Anh, Đà Nẵng" },
+                { text: "Màu son lên chuẩn, chất son mềm mịn không gây khô môi. Sẽ ủng hộ Sắc Mộc dài dài.", author: "Ngọc Hà, Hải Phòng" },
+                { text: "Tìm kiếm mãi mới được một brand son 'sạch' đúng nghĩa. Rất hài lòng với chất lượng sản phẩm.", author: "Thu Trang, Cần Thơ" },
+                { text: "Từ ngày dùng Sắc Mộc, mình không còn lo lắng về chì hay hóa chất độc hại nữa. Cảm ơn thương hiệu!", author: "Phương Vy, Bình Dương" }
+            ];
+            const testimonialSlider = document.getElementById('testimonial-slider');
+            testimonials.forEach(t => {
+                const card = document.createElement('div');
+                card.className = 'testimonial-card p-4 md:p-6';
+                card.innerHTML = `<div class="bg-white p-6 rounded-xl shadow-sm text-center h-full flex flex-col justify-center card-hover"><p class="text-gray-600 italic text-lg">"${t.text}"</p><h4 class="mt-4 font-bold text-brand">- ${t.author}</h4></div>`;
+                testimonialSlider.appendChild(card);
+            });
+            const prevTestimonialBtn = document.getElementById('prev-testimonial');
+            const nextTestimonialBtn = document.getElementById('next-testimonial');
+            let currentTestimonialIndex = 0;
+            function getVisibleCardsCount() { return window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1); }
+            function showTestimonials() {
+                const cardWidth = testimonialSlider.querySelector('.testimonial-card').offsetWidth;
+                testimonialSlider.style.transform = `translateX(-${currentTestimonialIndex * cardWidth}px)`;
+                prevTestimonialBtn.disabled = currentTestimonialIndex === 0;
+                nextTestimonialBtn.disabled = currentTestimonialIndex >= testimonials.length - getVisibleCardsCount();
+            }
+            nextTestimonialBtn.addEventListener('click', () => { if (currentTestimonialIndex < testimonials.length - getVisibleCardsCount()) currentTestimonialIndex++; showTestimonials(); });
+            prevTestimonialBtn.addEventListener('click', () => { if (currentTestimonialIndex > 0) currentTestimonialIndex--; showTestimonials(); });
+            window.addEventListener('resize', () => { currentTestimonialIndex = 0; showTestimonials(); });
+            showTestimonials();
+
+
+            // VTO Enhanced Logic
             const vtoModal = document.getElementById('vto-modal');
             const openVtoModalBtn = document.getElementById('open-vto-modal');
             const closeVtoModalBtn = document.getElementById('close-vto-modal');
-            const vtoLips = document.getElementById('vto-lips');
+            const vtoVideo = document.getElementById('vto-video');
+            const vtoCanvas = document.getElementById('vto-canvas');
+            const vtoCtx = vtoCanvas.getContext('2d');
             const vtoColorOptions = document.getElementById('vto-color-options');
-            const vtoFaceImg = document.getElementById('vto-face');
+            const vtoStatus = document.getElementById('vto-status');
 
-const vtoUploadInput = document.getElementById('vto-upload');
-vtoUploadInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        vtoFaceImg.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
-});
+            let faceLandmarksModel;
+            let currentLipColor = 'rgba(185, 92, 80, 0.7)'; // Default color with opacity
+            let videoStream;
+            let animationFrameId;
+
+            const LIP_LANDMARKS = {
+                // These are approximate indices for MediaPipe Facemesh for outer and inner lips.
+                // You may need to fine-tune these for precise lip shapes.
+                // Outer contour for a fuller lip area
+                upperOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291, 321, 314, 17, 84, 181, 91, 146],
+                lowerOuter: [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291, 409, 270, 269, 267, 0, 37, 39, 40, 185], // This forms a complete loop for both lips.
+                // Or more detailed approach:
+                lipsUpperOutline: [72, 73, 74, 76, 77, 61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291, 307, 306, 304, 303, 302],
+                lipsLowerOutline: [72, 73, 74, 76, 77, 91, 181, 84, 17, 314, 405, 321, 375, 291, 307, 306, 304, 303, 302], // Needs to be closed path
+                // For filling, sometimes drawing upper and lower separately looks better
+                upperLip: [61,185,40,39,37,0,267,269,270,409,291,308,415,310,311,312,13,82,81,80,191,78],
+                lowerLip: [61,146,91,181,84,17,314,405,321,375,291,324,318,402,317,14,87,178,88,95,78]
+            };
 
 
-            products.forEach(p => {
-                vtoColorOptions.innerHTML += `
-                    <button data-color="${p.color}" data-image="${p.image.replace('?text=','/EFEBE9/FFFFFF?text=')}" class="vto-color-btn w-full h-16 rounded-lg" style="background-color: ${p.color};"></button>
-                `;
-            });
+            async function setupWebcam() {
+                try {
+                    videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+                    vtoVideo.srcObject = videoStream;
+                    return new Promise((resolve) => {
+                        vtoVideo.onloadedmetadata = () => resolve(true);
+                    });
+                } catch (err) {
+                    console.error("Error accessing webcam:", err);
+                    vtoStatus.textContent = "Không thể truy cập webcam. Vui lòng cấp quyền.";
+                    return false;
+                }
+            }
+
+            async function loadFaceLandmarksModel() {
+                vtoStatus.textContent = "Đang tải model AI...";
+                try {
+                    await tf.setBackend('webgl'); // Or 'wasm' or 'cpu'
+                    faceLandmarksModel = await faceLandmarksDetection.load(
+                        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
+                        { maxFaces: 1, shouldLoadIrisModel: false } // Optimize, no iris needed
+                    );
+                    vtoStatus.textContent = "Model đã sẵn sàng. Đang chờ webcam...";
+                } catch (error) {
+                     console.error("Error loading model:", error);
+                     vtoStatus.textContent = "Lỗi tải model AI.";
+                }
+            }
             
+            function hexToRgba(hex, alpha = 0.7) { // Default alpha 0.7
+                const r = parseInt(hex.slice(1, 3), 16);
+                const g = parseInt(hex.slice(3, 5), 16);
+                const b = parseInt(hex.slice(5, 7), 16);
+                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            }
+
+            function drawLipstick(predictions) {
+                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
+                if (predictions && predictions.length > 0) {
+                    const keypoints = predictions[0].scaledMesh; // scaledMesh are 3D points
+                    
+                    vtoCtx.fillStyle = currentLipColor;
+                    
+                    // Draw upper lip
+                    vtoCtx.beginPath();
+                    const upperLipPoints = LIP_LANDMARKS.upperLip.map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]}));
+                    vtoCtx.moveTo(upperLipPoints[0].x, upperLipPoints[0].y);
+                    for (let i = 1; i < upperLipPoints.length; i++) {
+                        vtoCtx.lineTo(upperLipPoints[i].x, upperLipPoints[i].y);
+                    }
+                    vtoCtx.closePath();
+                    vtoCtx.fill();
+
+                    // Draw lower lip
+                    vtoCtx.beginPath();
+                    const lowerLipPoints = LIP_LANDMARKS.lowerLip.map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]}));
+                    vtoCtx.moveTo(lowerLipPoints[0].x, lowerLipPoints[0].y);
+                    for (let i = 1; i < lowerLipPoints.length; i++) {
+                        vtoCtx.lineTo(lowerLipPoints[i].x, lowerLipPoints[i].y);
+                    }
+                    vtoCtx.closePath();
+                    vtoCtx.fill();
+                    vtoStatus.style.display = 'none'; // Hide status if face detected
+                } else {
+                    vtoStatus.textContent = "Không tìm thấy khuôn mặt.";
+                    vtoStatus.style.display = 'block';
+                }
+            }
+
+            async function detectionLoop() {
+                if (faceLandmarksModel && vtoVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+                    const predictions = await faceLandmarksModel.estimateFaces({ input: vtoVideo });
+                    drawLipstick(predictions);
+                }
+                animationFrameId = requestAnimationFrame(detectionLoop);
+            }
+
+            async function startVTO() {
+                if (!faceLandmarksModel) {
+                    await loadFaceLandmarksModel();
+                    if (!faceLandmarksModel) return; // Stop if model failed to load
+                }
+                
+                const webcamReady = await setupWebcam();
+                if (!webcamReady) return;
+
+                vtoVideo.play();
+                vtoCanvas.width = vtoVideo.videoWidth;
+                vtoCanvas.height = vtoVideo.videoHeight;
+                
+                vtoStatus.textContent = "Đang nhận diện...";
+                detectionLoop();
+            }
+
+            function stopVTO() {
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                    animationFrameId = null;
+                }
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                    videoStream = null;
+                }
+                vtoVideo.srcObject = null;
+                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
+                vtoStatus.textContent = "Đang tải model và khởi động webcam..."; // Reset status
+                vtoStatus.style.display = 'block';
+            }
+
             openVtoModalBtn.addEventListener('click', () => {
                 vtoModal.classList.remove('hidden');
-                setTimeout(() => vtoModal.querySelector('div').classList.remove('scale-95'), 10);
+                 setTimeout(() => vtoModal.querySelector('div').classList.remove('scale-95'), 10);
+                startVTO();
             });
 
             closeVtoModalBtn.addEventListener('click', () => {
-                 vtoModal.querySelector('div').classList.add('scale-95');
-                 setTimeout(() => vtoModal.classList.add('hidden'), 300);
+                vtoModal.querySelector('div').classList.add('scale-95');
+                setTimeout(() => vtoModal.classList.add('hidden'), 300);
+                stopVTO();
             });
             
-            vtoModal.addEventListener('click', function(e) {
+            vtoModal.addEventListener('click', function(e) { // Close on overlay click
                 if(e.target === vtoModal){
                     closeVtoModalBtn.click();
                 }
             });
 
-            vtoColorOptions.addEventListener('click', (e) => {
-                if (e.target.matches('.vto-color-btn')) {
-                    const color = e.target.dataset.color;
-                    const image = e.target.dataset.image;
-                    vtoLips.style.backgroundColor = color;
-                    vtoFaceImg.src = image; 
-                }
+            products.forEach(p => {
+                const colorBtn = document.createElement('button');
+                colorBtn.className = 'vto-color-btn w-full h-12 sm:h-16 rounded-lg border-2 border-transparent hover:border-brand focus:border-brand focus:ring-2 focus:ring-brand-light outline-none';
+                colorBtn.style.backgroundColor = p.color;
+                colorBtn.dataset.color = p.color;
+                colorBtn.setAttribute('aria-label', `Thử màu ${p.name}`);
+                colorBtn.addEventListener('click', () => {
+                    currentLipColor = hexToRgba(p.color, 0.6); // Using 0.6 alpha for blending
+                     document.querySelectorAll('.vto-color-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand'));
+                     colorBtn.classList.add('ring-2', 'ring-brand');
+                });
+                vtoColorOptions.appendChild(colorBtn);
             });
 
+            const firstColorButton = vtoColorOptions.firstElementChild;
+            if (firstColorButton) { 
+                 firstColorButton.click();
+            }
         });
     </script>
 </body>
