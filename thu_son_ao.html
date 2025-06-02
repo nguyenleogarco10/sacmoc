@@ -3,14 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sắc Mộc - Thử Son Ảo (WebGL-CPU-WASM, refineLandmarks)</title>
+    <title>Sắc Mộc - Thử Son Ảo (MediaPipe Tasks Vision)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@3.18.0/dist/tf-core.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@3.18.0/dist/tf-converter.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@3.18.0/dist/tf-backend-webgl.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-wasm@3.18.0/dist/tf-backend-wasm.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2/dist/face-landmarks-detection.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js"></script>
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
@@ -67,6 +63,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+            /* Default clip-path, will be updated if VTO fails */
             clip-path: polygon(29% 62%, 35% 58%, 43% 56%, 50% 57%, 57% 56%, 65% 58%, 71% 62%, 65% 66%, 57% 68%, 50% 69%, 43% 68%, 35% 66%);
         }
         #vto-controls {
@@ -113,7 +110,7 @@
 </head>
 <body>
     <div id="vto-container">
-        <h1 class="text-3xl font-bold text-brand mb-4">Thử Son Ảo Sắc Mộc</h1>
+        <h1 class="text-3xl font-bold text-brand mb-4">Thử Son Ảo Sắc Mộc (MediaPipe)</h1>
         
         <div id="vto-video-container">
             <img id="vto-face-static" src="https://placehold.co/600x400/EFEBE9/8D6E63?text=Xem+trước+tĩnh" alt="Khuôn mặt mẫu" class="hidden">
@@ -125,8 +122,7 @@
 
         <div id="vto-controls">
             <h4 class="font-semibold text-gray-700">Chọn màu son của bạn:</h4>
-            <div id="vto-color-options">
-                </div>
+            <div id="vto-color-options"></div>
             <div class="mt-2 p-3 bg-amber-100 border-l-4 border-amber-500 text-amber-700 text-sm w-full">
                 <p><strong>Lưu ý:</strong> Để có kết quả tốt nhất, hãy đảm bảo khuôn mặt bạn được chiếu sáng đủ và nhìn thẳng vào webcam.</p>
                 <p id="vto-fallback-note" class="hidden mt-1">Chế độ xem trước AI không khả dụng, đang hiển thị bản xem trước tĩnh.</p>
@@ -134,7 +130,10 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // Dynamically import MediaPipe Tasks Vision components
+        const { FaceLandmarker, FilesetResolver } = await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js");
+
         const vtoVideo = document.getElementById('vto-video');
         const vtoCanvas = document.getElementById('vto-canvas');
         const vtoFaceStatic = document.getElementById('vto-face-static');
@@ -144,16 +143,18 @@
         const vtoStatus = document.getElementById('vto-status');
         const vtoFallbackNote = document.getElementById('vto-fallback-note');
 
-        let faceLandmarksModel;
+        let faceLandmarker;
         let currentLipColor = 'rgba(185, 92, 80, 0.7)'; // Default color
         let videoStream;
         let animationFrameId;
         let advancedVtoAvailable = false;
+        let lastVideoTime = -1;
 
-        const LIP_LANDMARKS = {
-            upperLip: [61,185,40,39,37,0,267,269,270,409,291,308,415,310,311,312,13,82,81,80,191,78],
-            lowerLip: [61,146,91,181,84,17,314,405,321,375,291,324,318,402,317,14,87,178,88,95,78]
-        };
+        // These landmark indices are standard for MediaPipe Face Mesh (478 landmarks model)
+        // and should map to lips.
+        const LIP_OUTLINE_UPPER = [61,185,40,39,37,0,267,269,270,409,291,308,415,310,311,312,13,82,81,80,191,78];
+        const LIP_OUTLINE_LOWER = [61,146,91,181,84,17,314,405,321,375,291,324,318,402,317,14,87,178,88,95,78];
+
 
         const products = [
             { name: 'Đỏ Đất - 01', color: '#B95C50'},
@@ -191,7 +192,18 @@
                 });
                 vtoVideo.srcObject = videoStream;
                 return new Promise((resolve) => {
-                    vtoVideo.onloadedmetadata = () => resolve(true);
+                    vtoVideo.onloadedmetadata = () => {
+                        vtoVideo.play().then(() => { // Autoplay after metadata is loaded
+                           resolve(true);
+                        }).catch(e => {
+                           console.error("Error auto-playing video:", e);
+                           resolve(false); // Could not play
+                        });
+                    }
+                    vtoVideo.onerror = () => { // Handle video error
+                        console.error("Video error.");
+                        resolve(false);
+                    }
                 });
             } catch (err) {
                 console.error("Error accessing webcam:", err);
@@ -200,101 +212,32 @@
                 return false;
             }
         }
-
-        async function loadFaceLandmarksModel() {
+        
+        async function createFaceLandmarker() {
             vtoStatus.textContent = "Đang khởi tạo AI...";
             advancedVtoAvailable = false;
-            faceLandmarksModel = null;
-            const modelConfig = { 
-                runtime: 'tfjs', 
-                maxFaces: 1, 
-                refineLandmarks: true // Using refineLandmarks
-            };
-            console.log("Sử dụng model config:", modelConfig);
-
             try {
-                await tf.ready();
-                console.log("TensorFlow.js core is ready. Initial backend: " + tf.getBackend());
-
-                let backendInitialized = false;
-                
-                console.log("Attempting to set backend to WebGL (Priority 1)...");
-                try {
-                    await tf.setBackend('webgl');
-                    await tf.ready();
-                    if (tf.getBackend() === 'webgl') {
-                        console.log("Successfully set and ready with WebGL backend.");
-                        backendInitialized = true;
-                    } else {
-                        console.warn("Tried to set WebGL backend, but current backend is: " + tf.getBackend());
-                    }
-                } catch (e_webgl) {
-                    console.warn("Failed to initialize WebGL backend. Error:", e_webgl);
-                }
-
-                if (!backendInitialized) {
-                    console.log("WebGL backend failed or was not set. Attempting CPU backend (Priority 2)...");
-                    try {
-                        await tf.setBackend('cpu');
-                        await tf.ready();
-                        if (tf.getBackend() === 'cpu') {
-                            console.log("Successfully set and ready with CPU backend.");
-                            backendInitialized = true;
-                        } else {
-                           console.warn("Tried to set CPU backend, but current backend is: " + tf.getBackend());
-                        }
-                    } catch (e_cpu) {
-                        console.warn("Failed to initialize CPU backend. Error:", e_cpu);
-                    }
-                }
-
-                if (!backendInitialized) {
-                    console.log("CPU backend also failed. Attempting WASM backend as a last resort (Priority 3)...");
-                    try {
-                        await tf.setBackend('wasm');
-                        await tf.ready(); 
-                        if (tf.getBackend() === 'wasm') {
-                            console.log("Successfully set and ready with WASM backend.");
-                            backendInitialized = true;
-                        } else {
-                            console.warn("Tried to set WASM backend, but current backend is: " + tf.getBackend() + ". WASM might not be supported or fully initialized.");
-                        }
-                    } catch (e_wasm) {
-                        console.warn("Failed to initialize WASM backend. Error:", e_wasm);
-                    }
-                }
-                
-                if (!backendInitialized) { 
-                    console.error("TensorFlow.js could not initialize a suitable backend (WebGL, CPU, or WASM). Advanced VTO will be disabled.");
-                    vtoStatus.textContent = "Lỗi: Không thể khởi tạo backend. Chuyển sang xem trước tĩnh.";
-                    advancedVtoAvailable = false;
-                    return null; 
-                }
-
-                console.log("Final backend in use for TF.js: " + tf.getBackend());
-                vtoStatus.textContent = `Đang tải model AI (sử dụng backend: ${tf.getBackend()})...`;
-                
-                if (typeof faceLandmarksDetection === 'undefined' || typeof faceLandmarksDetection.createDetector !== 'function' ||
-                    typeof faceLandmarksDetection.SupportedModels === 'undefined' || typeof faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh === 'undefined') {
-                    console.error("Thư viện faceLandmarksDetection không đúng cấu hình.");
-                    vtoStatus.textContent = "Lỗi: Thư viện nhận diện khuôn mặt không đúng. Chuyển sang xem trước tĩnh.";
-                    advancedVtoAvailable = false; return null;
-                }
-
-                // Use the modelConfig defined above
-                const detector = await faceLandmarksDetection.createDetector(
-                    faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh, 
-                    modelConfig 
+                const filesetResolver = await FilesetResolver.forVisionTasks(
+                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
                 );
-                console.log("Face landmarks detector created successfully (refineLandmarks: " + modelConfig.refineLandmarks + ").");
+                faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
+                    baseOptions: {
+                        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+                        delegate: "GPU" // Or "CPU"
+                    },
+                    outputFaceBlendshapes: false, // Not needed for simple lipstick
+                    outputFacialTransformationMatrixes: false, // Not needed
+                    runningMode: "VIDEO", // Important for video processing
+                    numFaces: 1
+                });
+                console.log("FaceLandmarker created successfully.");
                 advancedVtoAvailable = true;
-                return detector;
-
+                return true;
             } catch (error) {
-                 console.error("Lỗi nghiêm trọng khi khởi tạo AI hoặc tải model:", error);
-                 vtoStatus.textContent = "Lỗi nghiêm trọng khi tải model AI. Chuyển sang xem trước tĩnh.";
-                 advancedVtoAvailable = false;
-                 return null;
+                console.error("Lỗi khi tạo FaceLandmarker:", error);
+                vtoStatus.textContent = "Lỗi khởi tạo AI. Chuyển sang xem trước tĩnh.";
+                advancedVtoAvailable = false;
+                return false;
             }
         }
         
@@ -330,112 +273,131 @@
         function activateAdvancedPreview() {
             console.log("Attempting to activate advanced preview mode.");
             vtoFaceStatic.classList.add('hidden');
-            vtoLipsOverlay.classList.add('hidden');
+            vtoLipsOverlay.classList.add('hidden'); // Hide static overlay
             vtoVideo.classList.remove('hidden');
             vtoCanvas.classList.remove('hidden');
             vtoFallbackNote.classList.add('hidden');
+            vtoStatus.textContent = "Đang nhận diện..."; // Initial status
         }
 
-        function drawLipstick(predictions) {
+        function drawLipstick(landmarks) {
             vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
-            if (predictions && predictions.length > 0) {
-                const keypoints = predictions[0].keypoints;
-                if (!keypoints) {
-                    console.warn("Keypoints not found in prediction.");
-                    vtoStatus.textContent = "Không tìm thấy điểm mốc khuôn mặt.";
-                    vtoStatus.style.display = 'block';
-                    return;
-                }
-
-                vtoCtx.fillStyle = currentLipColor;
-
-                vtoCtx.beginPath();
-                const upperLipPoints = LIP_LANDMARKS.upperLip.map(idx => ({x: keypoints[idx].x, y: keypoints[idx].y}));
-                vtoCtx.moveTo(upperLipPoints[0].x, upperLipPoints[0].y);
-                for (let i = 1; i < upperLipPoints.length; i++) { vtoCtx.lineTo(upperLipPoints[i].x, upperLipPoints[i].y); }
-                vtoCtx.closePath(); vtoCtx.fill();
-
-                vtoCtx.beginPath();
-                const lowerLipPoints = LIP_LANDMARKS.lowerLip.map(idx => ({x: keypoints[idx].x, y: keypoints[idx].y}));
-                vtoCtx.moveTo(lowerLipPoints[0].x, lowerLipPoints[0].y);
-                for (let i = 1; i < lowerLipPoints.length; i++) { vtoCtx.lineTo(lowerLipPoints[i].x, lowerLipPoints[i].y); }
-                vtoCtx.closePath(); vtoCtx.fill();
-                
-                vtoStatus.style.display = 'none';
-            } else {
-                vtoStatus.textContent = "Không tìm thấy khuôn mặt.";
-                vtoStatus.style.display = 'block';
+            if (!landmarks || landmarks.length === 0) {
+                return;
             }
+
+            vtoCtx.fillStyle = currentLipColor;
+
+            // Draw Upper Lip - Adjusted for mirrored video
+            vtoCtx.beginPath();
+            const upperLipPoints = LIP_OUTLINE_UPPER.map(idx => ({
+                // Flip X coordinate: (1 - normalizedX) * canvasWidth
+                x: (1 - landmarks[idx].x) * vtoCanvas.width, 
+                y: landmarks[idx].y * vtoCanvas.height
+            }));
+            vtoCtx.moveTo(upperLipPoints[0].x, upperLipPoints[0].y);
+            for (let i = 1; i < upperLipPoints.length; i++) {
+                vtoCtx.lineTo(upperLipPoints[i].x, upperLipPoints[i].y);
+            }
+            vtoCtx.closePath();
+            vtoCtx.fill();
+
+            // Draw Lower Lip - Adjusted for mirrored video
+            vtoCtx.beginPath();
+            const lowerLipPoints = LIP_OUTLINE_LOWER.map(idx => ({
+                // Flip X coordinate: (1 - normalizedX) * canvasWidth
+                x: (1 - landmarks[idx].x) * vtoCanvas.width, 
+                y: landmarks[idx].y * vtoCanvas.height
+            }));
+            vtoCtx.moveTo(lowerLipPoints[0].x, lowerLipPoints[0].y);
+            for (let i = 1; i < lowerLipPoints.length; i++) {
+                vtoCtx.lineTo(lowerLipPoints[i].x, lowerLipPoints[i].y);
+            }
+            vtoCtx.closePath();
+            vtoCtx.fill();
+            
+            vtoStatus.style.display = 'none'; // Hide status if drawing is successful
         }
 
         async function detectionLoop() {
-            if (advancedVtoAvailable && faceLandmarksModel && vtoVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA && !vtoVideo.paused && !vtoVideo.ended) {
-                try {
-                    if (vtoVideo.videoWidth > 0 && vtoVideo.videoHeight > 0) { 
-                       const predictions = await faceLandmarksModel.estimateFaces(vtoVideo);
-                       console.log("Predictions:", predictions, " Backend:", tf.getBackend());
-                       drawLipstick(predictions);
-                    } else { console.warn("Video dimensions are zero, skipping estimation."); }
-                } catch (error) { 
-                    console.error("Error during face estimation:", error);
-                    vtoStatus.textContent = "Lỗi nhận diện. Chuyển sang xem trước tĩnh.";
-                    vtoStatus.style.display = 'block';
-                    advancedVtoAvailable = false; 
-                    activateStaticPreview(); 
+            if (!advancedVtoAvailable || !faceLandmarker) {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                if (!advancedVtoAvailable) activateStaticPreview();
+                return;
+            }
+
+            if (vtoVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA && !vtoVideo.paused && !vtoVideo.ended) {
+                if (vtoVideo.videoWidth > 0 && vtoVideo.videoHeight > 0) {
+                    if (vtoCanvas.width !== vtoVideo.videoWidth || vtoCanvas.height !== vtoVideo.videoHeight) {
+                        vtoCanvas.width = vtoVideo.videoWidth;
+                        vtoCanvas.height = vtoVideo.videoHeight;
+                        console.log(`Canvas dimensions updated to: ${vtoCanvas.width}x${vtoCanvas.height}`);
+                    }
+
+                    const currentTime = performance.now();
+                    if (vtoVideo.currentTime !== lastVideoTime) { 
+                        lastVideoTime = vtoVideo.currentTime;
+                        try {
+                            const faceLandmarkerResult = faceLandmarker.detectForVideo(vtoVideo, currentTime);
+                            
+                            if (faceLandmarkerResult && faceLandmarkerResult.faceLandmarks && faceLandmarkerResult.faceLandmarks.length > 0) {
+                                drawLipstick(faceLandmarkerResult.faceLandmarks[0]); 
+                                vtoStatus.style.display = 'none';
+                            } else {
+                                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); 
+                                vtoStatus.textContent = "Không tìm thấy khuôn mặt.";
+                                vtoStatus.style.display = 'block';
+                            }
+                        } catch (error) {
+                            console.error("Lỗi trong quá trình nhận diện khuôn mặt (MediaPipe):", error);
+                            vtoStatus.textContent = "Lỗi nhận diện. Thử lại.";
+                            vtoStatus.style.display = 'block';
+                        }
+                    }
                 }
             }
-            if (advancedVtoAvailable) { 
-                animationFrameId = requestAnimationFrame(detectionLoop);
-            }
+            animationFrameId = requestAnimationFrame(detectionLoop);
         }
 
         async function startVTO() {
-            advancedVtoAvailable = true;
-            faceLandmarksModel = await loadFaceLandmarksModel();
+            vtoStatus.textContent = "Đang tải...";
+            advancedVtoAvailable = await createFaceLandmarker();
 
-            if (!advancedVtoAvailable || !faceLandmarksModel) {
-                console.log("Advanced VTO not available. Activating static preview.");
+            if (!advancedVtoAvailable) {
+                console.log("Khởi tạo AI thất bại. Chuyển sang xem trước tĩnh.");
                 activateStaticPreview();
+                return;
+            }
+            
+            const webcamReady = await setupWebcam();
+            if (!webcamReady) {
+                console.log("Không thể khởi động webcam. Chuyển sang xem trước tĩnh.");
+                advancedVtoAvailable = false; 
+                activateStaticPreview(); 
                 return;
             }
             
             activateAdvancedPreview();
-            const webcamReady = await setupWebcam();
-            if (!webcamReady) {
-                if (!advancedVtoAvailable) activateStaticPreview(); 
-                return;
-            }
-
-            vtoVideo.play().catch(e => {
-                console.error("Error playing video:", e);
-                advancedVtoAvailable = false;
-                activateStaticPreview();
-            }); 
+            console.log("VTO nâng cao đã sẵn sàng. Bắt đầu vòng lặp nhận diện.");
             
-            vtoVideo.onloadeddata = () => { 
-                if (vtoVideo.videoWidth === 0 || vtoVideo.videoHeight === 0) {
-                    console.warn("Video metadata loaded but dimensions are zero. Fallback to static.");
-                    advancedVtoAvailable = false; activateStaticPreview(); return;
+            vtoVideo.oncanplay = () => {
+                if (advancedVtoAvailable) {
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId); 
+                    lastVideoTime = -1; 
+                    detectionLoop();
                 }
-                vtoCanvas.width = vtoVideo.videoWidth;
-                vtoCanvas.height = vtoVideo.videoHeight;
-                console.log(`Canvas dimensions set to: ${vtoCanvas.width}x${vtoCanvas.height}`);
-                
-                if (animationFrameId) cancelAnimationFrame(animationFrameId);
-                vtoStatus.textContent = "Đang nhận diện...";
-                
-                setTimeout(() => { 
-                    if (advancedVtoAvailable) {
-                       detectionLoop();
-                    }
-                }, 500);
             };
-            if (vtoVideo.readyState >= HTMLMediaElement.HAVE_LOADED_METADATA) {
-                 if(vtoVideo.onloadeddata && typeof vtoVideo.onloadeddata === 'function') vtoVideo.onloadeddata(); 
+            if (vtoVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA && !vtoVideo.paused) {
+                 if (advancedVtoAvailable) {
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                    lastVideoTime = -1;
+                    detectionLoop();
+                }
             }
         }
         
-        startVTO();
+        setTimeout(startVTO, 100);
+
     </script>
 </body>
 </html>
