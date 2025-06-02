@@ -195,7 +195,7 @@
                 </div>
 
                 <div class="mt-16 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8" id="product-list">
-                </div>
+                    </div>
 
                 <div class="mt-12 text-center">
                      <a href="thu_son_ao.html" class="inline-block bg-white text-brand font-bold py-3 px-8 rounded-full shadow-lg border border-brand-light hover:bg-brand-light hover:text-white transition-all transform hover:scale-105">
@@ -212,7 +212,7 @@
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi tin vào vẻ đẹp không che giấu. Khám phá câu chuyện đằng sau mỗi thành phần làm nên thỏi son của bạn.</p>
                 </div>
                 <div id="ingredient-accordion" class="mt-12 max-w-3xl mx-auto space-y-4">
-                </div>
+                    </div>
             </div>
         </section>
 
@@ -224,7 +224,7 @@
                 </div>
                 <div class="mt-16 relative">
                     <div id="testimonial-slider" class="testimonial-container">
-                    </div>
+                        </div>
                     <button id="prev-testimonial" class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white/70 hover:bg-white text-brand p-3 rounded-full shadow-md z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -266,7 +266,7 @@
                 <div class="pt-4 md:pt-0">
                     <h4 class="font-semibold text-gray-700 mb-2">Chọn màu son của bạn:</h4>
                     <div id="vto-color-options" class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                    </div>
+                        </div>
                     <div class="mt-4 p-3 bg-amber-100 border-l-4 border-amber-500 text-amber-700 text-sm">
                         <p><strong>Lưu ý:</strong> Để có kết quả tốt nhất, hãy đảm bảo khuôn mặt bạn được chiếu sáng đủ và nhìn thẳng vào webcam.</p>
                     </div>
@@ -277,6 +277,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
@@ -284,17 +285,20 @@
                 mobileMenu.classList.toggle('hidden');
             });
             
+            // Smooth scroll for anchor links and close mobile menu on click
             document.querySelectorAll('#mobile-menu a, header a[href^="#"]').forEach(link => {
                 link.addEventListener('click', (e) => {
-                    if (link.closest('#mobile-menu')) mobileMenu.classList.add('hidden');
+                    if (link.closest('#mobile-menu')) mobileMenu.classList.add('hidden'); // Close mobile menu
                     const targetId = link.getAttribute('href');
-                    if (targetId.startsWith('#')) {
+                    if (targetId.startsWith('#')) { // Check if it's an anchor link
                         e.preventDefault();
                         document.querySelector(targetId).scrollIntoView({ behavior: 'smooth'});
                     }
+                    // If it's not an anchor link (e.g., href="thu_son_ao.html"), let the default behavior happen
                 });
             });
 
+            // Comparison Chart
             const comparisonChartCtx = document.getElementById('comparisonChart').getContext('2d');
             new Chart(comparisonChartCtx, {
                 type: 'bar',
@@ -302,27 +306,58 @@
                     labels: ['Thành Phần', 'Bao Bì', 'Thử Nghiệm Động Vật', 'Minh Bạch Nguồn Gốc', 'Hiệu Suất'],
                     datasets: [{
                         label: 'Son Truyền Thống',
-                        data: [4, 2, 3, 2, 8],
-                        backgroundColor: '#D7CCC8',
+                        data: [4, 2, 3, 2, 8], // Example scores
+                        backgroundColor: '#D7CCC8', // bg-brand-light
                         borderColor: '#C8BDBA',
                         borderWidth: 1
                     }, {
                         label: 'Sắc Mộc',
-                        data: [9, 8, 10, 10, 9],
-                        backgroundColor: '#8D6E63',
+                        data: [9, 8, 10, 10, 9], // Example scores for Sac Moc
+                        backgroundColor: '#8D6E63', // bg-brand
                         borderColor: '#795548',
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    indexAxis: 'y',
+                    indexAxis: 'y', // Horizontal bar chart
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: {x: {beginAtZero: true,max: 10}, y: {ticks: {font: {size: 12}}}},
-                    plugins: {legend: {position: 'top'}, tooltip: {callbacks: {label: (ctx) => `${ctx.dataset.label || ''}: ${ctx.parsed.x}/10 điểm`}}}
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 10 // Assuming scores are out of 10
+                        },
+                        y: {
+                            ticks: {
+                                font: {
+                                    size: 12 // Adjust font size if needed
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + '/10 điểm';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
                 }
             });
 
+            // Products Data
             const products = [
                 { name: 'Đỏ Đất - 01', color: '#B95C50', hexOpacity: 'B95C50B3', image: 'https://placehold.co/400x400/B95C50/FFFFFF?text=Đỏ+Đất'},
                 { name: 'Cam Cháy - 02', color: '#D87C4F', hexOpacity: 'D87C4FB3', image: 'https://placehold.co/400x400/D87C4F/FFFFFF?text=Cam+Cháy'},
@@ -331,6 +366,7 @@
                 { name: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3', image: 'https://placehold.co/400x400/C68582/FFFFFF?text=Hồng+Đất'}
             ];
 
+            // Populate Product List
             const productList = document.getElementById('product-list');
             products.forEach(p => {
                 productList.innerHTML += `
@@ -344,6 +380,7 @@
                 `;
             });
 
+            // Ingredients Accordion Data
             const ingredientsData = [
                 { name: 'Dầu Jojoba Hữu Cơ', description: 'Giàu Vitamin E, hoạt động như một chất dưỡng ẩm tự nhiên, giúp môi mềm mại và căng mọng. Nguồn gốc từ các trang trại hữu cơ bền vững.' },
                 { name: 'Bơ Hạt Mỡ', description: 'Cung cấp độ ẩm sâu, làm dịu và phục hồi đôi môi khô, nứt nẻ. Được thu mua công bằng từ các hợp tác xã phụ nữ ở Tây Phi.' },
@@ -351,8 +388,9 @@
                 { name: 'Màu Khoáng Thiên Nhiên', description: 'Sử dụng oxit sắt và mica được khai thác có đạo đức thay cho thuốc nhuộm tổng hợp, đảm bảo màu sắc an toàn và rực rỡ.'}
             ];
 
+            // Populate Ingredient Accordion
             const accordion = document.getElementById('ingredient-accordion');
-            ingredientsData.forEach((ing) => {
+            ingredientsData.forEach((ing, index) => {
                 const item = document.createElement('div');
                 item.className = 'border border-gray-200 rounded-lg overflow-hidden';
                 item.innerHTML = `
@@ -367,6 +405,7 @@
                 accordion.appendChild(item);
             });
             
+            // Accordion Functionality
             accordion.addEventListener('click', function(e) {
                 const button = e.target.closest('.accordion-button');
                 if (button) {
@@ -374,6 +413,7 @@
                     const icon = button.querySelector('.accordion-icon');
                     const isHidden = content.classList.contains('hidden');
                     
+                    // Optional: Close other accordions when one is opened
                     document.querySelectorAll('#ingredient-accordion .accordion-content').forEach(c => c.classList.add('hidden'));
                     document.querySelectorAll('#ingredient-accordion .accordion-icon').forEach(i => i.textContent = '+');
                     
@@ -381,9 +421,11 @@
                         content.classList.remove('hidden');
                         icon.textContent = '-';
                     }
+                    // If it was already open and clicked again, it will close due to the above lines.
                 }
             });
 
+            // Testimonials Data
             const testimonials = [
                 { text: "Lần đầu tiên mình tìm được một thỏi son vừa đẹp, vừa lâu trôi mà lại an tâm về thành phần. Yêu Sắc Mộc!", author: "An Nhiên, TP.HCM" },
                 { text: "Mình đang mang thai nên rất kỹ tính. Sắc Mộc là cứu tinh, giúp mình vẫn xinh đẹp mà không lo ảnh hưởng đến bé.", author: "Minh Thư, Hà Nội" },
@@ -392,32 +434,63 @@
                 { text: "Tìm kiếm mãi mới được một brand son 'sạch' đúng nghĩa. Rất hài lòng với chất lượng sản phẩm.", author: "Thu Trang, Cần Thơ" },
                 { text: "Từ ngày dùng Sắc Mộc, mình không còn lo lắng về chì hay hóa chất độc hại nữa. Cảm ơn thương hiệu!", author: "Phương Vy, Bình Dương" }
             ];
+
+            // Populate Testimonial Slider
             const testimonialSlider = document.getElementById('testimonial-slider');
             testimonials.forEach(t => {
                 const card = document.createElement('div');
-                card.className = 'testimonial-card p-4 md:p-6';
-                card.innerHTML = `<div class="bg-white p-6 rounded-xl shadow-sm text-center h-full flex flex-col justify-center card-hover"><p class="text-gray-600 italic text-lg">"${t.text}"</p><h4 class="mt-4 font-bold text-brand">- ${t.author}</h4></div>`;
+                card.className = 'testimonial-card p-4 md:p-6'; // Added padding for spacing
+                card.innerHTML = `
+                    <div class="bg-white p-6 rounded-xl shadow-sm text-center h-full flex flex-col justify-center card-hover">
+                        <p class="text-gray-600 italic text-lg">"${t.text}"</p>
+                        <h4 class="mt-4 font-bold text-brand">- ${t.author}</h4>
+                    </div>
+                `;
                 testimonialSlider.appendChild(card);
             });
+
+            // Testimonial Slider Functionality
             const prevTestimonialBtn = document.getElementById('prev-testimonial');
             const nextTestimonialBtn = document.getElementById('next-testimonial');
             let currentTestimonialIndex = 0;
-            function getVisibleCardsCount() { return window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1); }
+
+            function getVisibleCardsCount() {
+                if (window.innerWidth >= 1024) return 3; // lg
+                if (window.innerWidth >= 768) return 2; // md
+                return 1; // sm and smaller
+            }
+
             function showTestimonials() {
                 const cardWidth = testimonialSlider.querySelector('.testimonial-card').offsetWidth;
                 testimonialSlider.style.transform = `translateX(-${currentTestimonialIndex * cardWidth}px)`;
                 prevTestimonialBtn.disabled = currentTestimonialIndex === 0;
                 nextTestimonialBtn.disabled = currentTestimonialIndex >= testimonials.length - getVisibleCardsCount();
             }
-            nextTestimonialBtn.addEventListener('click', () => { if (currentTestimonialIndex < testimonials.length - getVisibleCardsCount()) currentTestimonialIndex++; showTestimonials(); });
-            prevTestimonialBtn.addEventListener('click', () => { if (currentTestimonialIndex > 0) currentTestimonialIndex--; showTestimonials(); });
-            window.addEventListener('resize', () => { currentTestimonialIndex = 0; showTestimonials(); });
-            showTestimonials();
+
+            nextTestimonialBtn.addEventListener('click', () => {
+                if (currentTestimonialIndex < testimonials.length - getVisibleCardsCount()) {
+                    currentTestimonialIndex++;
+                    showTestimonials();
+                }
+            });
+            prevTestimonialBtn.addEventListener('click', () => {
+                if (currentTestimonialIndex > 0) {
+                    currentTestimonialIndex--;
+                    showTestimonials();
+                }
+            });
+            window.addEventListener('resize', () => {
+                currentTestimonialIndex = 0; // Reset on resize for simplicity or recalculate
+                showTestimonials();
+            });
+            showTestimonials(); // Initial call
 
 
-            // VTO Enhanced Logic
+            // VTO (Virtual Try-On) Modal Logic
             const vtoModal = document.getElementById('vto-modal');
-            const openVtoModalBtn = document.getElementById('open-vto-modal'); // Nút này có thể không còn tồn tại với ID này
+            // The button to open the VTO modal is the "Trải Nghiệm Thử Son Ảo (Live)" link.
+            // We will attach the event listener to that link specifically.
+            const openVtoModalLink = document.querySelector('a[href="thu_son_ao.html"]'); 
             const closeVtoModalBtn = document.getElementById('close-vto-modal');
             const vtoVideo = document.getElementById('vto-video');
             const vtoCanvas = document.getElementById('vto-canvas');
@@ -426,13 +499,18 @@
             const vtoStatus = document.getElementById('vto-status');
 
             let faceLandmarksModel;
-            let currentLipColor = 'rgba(185, 92, 80, 0.7)'; 
+            let currentLipColor = 'rgba(185, 92, 80, 0.7)'; // Default: Đỏ Đất with opacity
             let videoStream;
             let animationFrameId;
 
+            // Precise lip landmark indices for TensorFlow.js Face Landmarks Detection model
             const LIP_LANDMARKS = {
-                upperLip: [61,185,40,39,37,0,267,269,270,409,291,308,415,310,311,312,13,82,81,80,191,78],
-                lowerLip: [61,146,91,181,84,17,314,405,321,375,291,324,318,402,317,14,87,178,88,95,78]
+                // Outer contour of the lips
+                upperLipOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
+                lowerLipOuter: [291, 375, 321, 405, 314, 17, 84, 181, 91, 146, 61],
+                // Inner contour of the lips (can be used for more detailed rendering)
+                upperLipInner: [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308],
+                lowerLipInner: [308, 324, 318, 402, 317, 14, 87, 178, 88, 95, 78]
             };
 
 
@@ -453,10 +531,10 @@
             async function loadFaceLandmarksModel() {
                 vtoStatus.textContent = "Đang tải model AI...";
                 try {
-                    await tf.setBackend('webgl'); 
+                    await tf.setBackend('webgl'); // Ensure WebGL backend is used for performance
                     faceLandmarksModel = await faceLandmarksDetection.load(
                         faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-                        { maxFaces: 1, shouldLoadIrisModel: false } 
+                        { maxFaces: 1, shouldLoadIrisModel: false } // Iris model not needed for lips
                     );
                     vtoStatus.textContent = "Model đã sẵn sàng. Đang chờ webcam...";
                 } catch (error) {
@@ -465,39 +543,44 @@
                 }
             }
             
-            function hexToRgba(hex, alpha = 0.7) { 
-                const r = parseInt(hex.slice(1, 3), 16);
-                const g = parseInt(hex.slice(3, 5), 16);
-                const b = parseInt(hex.slice(5, 7), 16);
-                return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+            function hexToRgbaWithOpacity(hexWithOpacity) {
+                // Assuming hexWithOpacity is like 'B95C50B3' (RRGGBBAA)
+                const r = parseInt(hexWithOpacity.slice(0, 2), 16);
+                const g = parseInt(hexWithOpacity.slice(2, 4), 16);
+                const b = parseInt(hexWithOpacity.slice(4, 6), 16);
+                const a = parseInt(hexWithOpacity.slice(6, 8), 16) / 255; // Convert AA to 0-1 alpha
+                return `rgba(${r}, ${g}, ${b}, ${a})`;
             }
 
             function drawLipstick(predictions) {
-                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
+                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); // Clear previous frame
                 if (predictions && predictions.length > 0) {
-                    const keypoints = predictions[0].scaledMesh; 
+                    const keypoints = predictions[0].scaledMesh; // Use scaledMesh for coordinates relative to video size
                     
                     vtoCtx.fillStyle = currentLipColor;
                     
-                    vtoCtx.beginPath();
-                    const upperLipPoints = LIP_LANDMARKS.upperLip.map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]}));
-                    vtoCtx.moveTo(upperLipPoints[0].x, upperLipPoints[0].y);
-                    for (let i = 1; i < upperLipPoints.length; i++) {
-                        vtoCtx.lineTo(upperLipPoints[i].x, upperLipPoints[i].y);
+                    // Combine upper and lower lip outer contours for a single filled path
+                    const lipPath = new Path2D();
+                    
+                    // Upper lip outer
+                    const upperOuterPoints = LIP_LANDMARKS.upperLipOuter.map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]}));
+                    lipPath.moveTo(upperOuterPoints[0].x, upperOuterPoints[0].y);
+                    for (let i = 1; i < upperOuterPoints.length; i++) {
+                        lipPath.lineTo(upperOuterPoints[i].x, upperOuterPoints[i].y);
                     }
-                    vtoCtx.closePath();
-                    vtoCtx.fill();
 
-                    vtoCtx.beginPath();
-                    const lowerLipPoints = LIP_LANDMARKS.lowerLip.map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]}));
-                    vtoCtx.moveTo(lowerLipPoints[0].x, lowerLipPoints[0].y);
-                    for (let i = 1; i < lowerLipPoints.length; i++) {
-                        vtoCtx.lineTo(lowerLipPoints[i].x, lowerLipPoints[i].y);
+                    // Lower lip outer (connects from the end of upperLipOuter)
+                    // Ensure smooth connection. The last point of upperLipOuter (291) is the first of lowerLipOuter.
+                    const lowerOuterPoints = LIP_LANDMARKS.lowerLipOuter.slice(1).map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]})); // slice(1) to avoid repeating point 291
+                    for (let i = 0; i < lowerOuterPoints.length; i++) {
+                        lipPath.lineTo(lowerOuterPoints[i].x, lowerOuterPoints[i].y);
                     }
-                    vtoCtx.closePath();
-                    vtoCtx.fill();
-                    vtoStatus.style.display = 'none'; 
+                    lipPath.closePath(); // Close the path to form a complete shape
+                    vtoCtx.fill(lipPath);
+
+                    vtoStatus.style.display = 'none'; // Hide status if drawing is successful
                 } else {
+                    // No face detected
                     vtoStatus.textContent = "Không tìm thấy khuôn mặt.";
                     vtoStatus.style.display = 'block';
                 }
@@ -512,96 +595,109 @@
             }
 
             async function startVTO() {
-                if (!faceLandmarksModel) {
+                // This function is called when the modal opens
+                if (!faceLandmarksModel) { // Load model only if not already loaded
                     await loadFaceLandmarksModel();
-                    if (!faceLandmarksModel) return; 
+                    if (!faceLandmarksModel) return; // Exit if model loading failed
                 }
                 
                 const webcamReady = await setupWebcam();
                 if (!webcamReady) return;
 
                 vtoVideo.play();
-                // Đảm bảo kích thước canvas được đặt sau khi video có metadata
+                // Ensure canvas dimensions are set once video metadata is loaded
                 vtoVideo.onloadedmetadata = () => {
                     vtoCanvas.width = vtoVideo.videoWidth;
                     vtoCanvas.height = vtoVideo.videoHeight;
                     vtoStatus.textContent = "Đang nhận diện...";
-                    if (animationFrameId) cancelAnimationFrame(animationFrameId); // Hủy frame cũ nếu có
-                    detectionLoop();
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId); // Cancel any existing loop
+                    detectionLoop(); // Start the detection loop
                 };
-                // Nếu metadata đã được load, chạy trực tiếp
+                // If metadata is already loaded (e.g., webcam was previously used)
                 if (vtoVideo.readyState >= HTMLMediaElement.HAVE_METADATA) {
-                   if(vtoVideo.onloadedmetadata && typeof vtoVideo.onloadeddata === 'function') vtoVideo.onloadedmetadata();
+                   if(vtoVideo.onloadedmetadata && typeof vtoVideo.onloadedmetadata === 'function') vtoVideo.onloadedmetadata();
                 }
             }
 
             function stopVTO() {
+                // This function is called when the modal closes
                 if (animationFrameId) {
                     cancelAnimationFrame(animationFrameId);
                     animationFrameId = null;
                 }
                 if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop());
+                    videoStream.getTracks().forEach(track => track.stop()); // Stop webcam tracks
                     videoStream = null;
                 }
-                vtoVideo.srcObject = null;
-                if (vtoCtx) { // Kiểm tra vtoCtx trước khi sử dụng
-                    vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
+                vtoVideo.srcObject = null; // Release video object
+                if (vtoCtx) { 
+                    vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); // Clear canvas
                 }
-                vtoStatus.textContent = "Đang tải model và khởi động webcam..."; 
+                vtoStatus.textContent = "Đang tải model và khởi động webcam..."; // Reset status
                 vtoStatus.style.display = 'block';
             }
 
-            // THAY ĐỔI Ở ĐÂY: Thêm kiểm tra null cho openVtoModalBtn
-            if (openVtoModalBtn) { 
-                openVtoModalBtn.addEventListener('click', () => {
-                    vtoModal.classList.remove('hidden');
-                    setTimeout(() => {
-                        if (vtoModal.querySelector('div')) { // Kiểm tra null cho querySelector
-                           vtoModal.querySelector('div').classList.remove('scale-95');
-                        }
-                    }, 10);
-                    startVTO();
-                });
-            }
+            // Event listener for the "Trải Nghiệm Thử Son Ảo (Live)" link
+            // This link will NOT open the modal, it will navigate to thu_son_ao.html
+            // The VTO modal functionality is self-contained and was intended for a modal on *this* page.
+            // Since the user's request is to navigate to thu_son_ao.html, the modal logic here
+            // might be redundant if the primary VTO experience is on the separate page.
+            // For now, I will leave the modal logic as it was, assuming it might be used
+            // for a quick preview on this page if a button *was* to open it.
+            // The actual link `a[href="thu_son_ao.html"]` will perform its default navigation.
 
-            if (closeVtoModalBtn) { // Kiểm tra null cho closeVtoModalBtn
+            // If there was a button to open THIS modal (e.g., <button id="open-vto-modal-on-index">...):
+            // const openThisModalButton = document.getElementById('open-vto-modal-on-index');
+            // if (openThisModalButton) {
+            //     openThisModalButton.addEventListener('click', (e) => {
+            //         e.preventDefault(); // Prevent default if it's a link/button that might navigate
+            //         vtoModal.classList.remove('hidden');
+            //         vtoModal.querySelector('div').classList.remove('scale-95'); // Animate in
+            //         startVTO();
+            //     });
+            // }
+            
+            // Close modal button
+            if (closeVtoModalBtn) { 
                 closeVtoModalBtn.addEventListener('click', () => {
-                    if (vtoModal.querySelector('div')) { // Kiểm tra null cho querySelector
-                        vtoModal.querySelector('div').classList.add('scale-95');
+                    if (vtoModal.querySelector('div')) { 
+                        vtoModal.querySelector('div').classList.add('scale-95'); // Animate out
                     }
                     setTimeout(() => vtoModal.classList.add('hidden'), 300);
                     stopVTO();
                 });
             }
             
-            if (vtoModal) { // Kiểm tra null cho vtoModal
+            // Close modal if clicking outside content
+            if (vtoModal) { 
                 vtoModal.addEventListener('click', function(e) { 
-                    if(e.target === vtoModal){
-                        if (closeVtoModalBtn) closeVtoModalBtn.click(); // Kiểm tra null trước khi click
+                    if(e.target === vtoModal){ // Check if the click is on the backdrop
+                        if (closeVtoModalBtn) closeVtoModalBtn.click(); 
                     }
                 });
             }
 
+            // Populate VTO color options (for the modal on this page)
             products.forEach(p => {
                 const colorBtn = document.createElement('button');
                 colorBtn.className = 'vto-color-btn w-full h-12 sm:h-16 rounded-lg border-2 border-transparent hover:border-brand focus:border-brand focus:ring-2 focus:ring-brand-light outline-none';
-                colorBtn.style.backgroundColor = p.color;
-                colorBtn.dataset.color = p.color;
+                colorBtn.style.backgroundColor = p.color; // Use the solid color for the button itself
+                colorBtn.dataset.colorHexOpacity = p.hexOpacity; // Store the color with opacity for drawing
                 colorBtn.setAttribute('aria-label', `Thử màu ${p.name}`);
                 colorBtn.addEventListener('click', () => {
-                    currentLipColor = hexToRgba(p.color, 0.6); 
-                     document.querySelectorAll('.vto-color-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand'));
-                     colorBtn.classList.add('ring-2', 'ring-brand');
+                    currentLipColor = hexToRgbaWithOpacity(p.hexOpacity); // Update the drawing color
+                     document.querySelectorAll('#vto-color-options .vto-color-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand'));
+                     colorBtn.classList.add('ring-2', 'ring-brand'); // Highlight selected button
                 });
-                if (vtoColorOptions) { // Kiểm tra null cho vtoColorOptions
+                if (vtoColorOptions) { 
                     vtoColorOptions.appendChild(colorBtn);
                 }
             });
             
-            if (vtoColorOptions) { // Kiểm tra null cho vtoColorOptions
+            // Select the first color by default for the modal
+            if (vtoColorOptions) { 
                 const firstColorButton = vtoColorOptions.firstElementChild;
-                if (firstColorButton && typeof firstColorButton.click === 'function') {  // Kiểm tra firstColorButton và phương thức click
+                if (firstColorButton && typeof firstColorButton.click === 'function') {  
                     firstColorButton.click();
                 }
             }
@@ -609,4 +705,3 @@
     </script>
 </body>
 </html>
-    
