@@ -139,7 +139,7 @@
                  <div class="md:hidden">
                     <button id="mobile-menu-button" class="text-gray-600 hover:text-brand focus:outline-none">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
                         </svg>
                     </button>
                 </div>
@@ -169,7 +169,7 @@
             </div>
         </section>
 
-        <section id="philosophy" class="py-20 bg-[#F5F5DC]">
+        <section id="philosophy" class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <h2 class="text-3xl font-bold text-brand font-heading">Triết Lý Sắc Mộc</h2> <!-- Applied font-heading here -->
@@ -382,18 +382,16 @@
             const productList = document.getElementById('product-list');
             productList.innerHTML = ''; // Xóa nội dung cũ trước khi thêm mới
             products.forEach(p => {
-                productList.innerHTML += `
-                    <div class="text-center group">
-                        <!-- Đây là ô màu son chính, với tên màu được đặt bên trong dưới dạng văn bản HTML -->
-                        <div class="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden card-hover flex items-center justify-center" style="background-color: ${p.color};">
-                            <h3 class="text-white text-3xl font-bold font-heading">${p.displayName}</h3> 
-                        </div>
-                        <!-- Tên đầy đủ của son (ví dụ: Đỏ Đất - 01) nằm bên dưới -->
-                        <h4 class="mt-4 font-semibold text-gray-800">${p.fullName}</h4>
-                        <!-- Vòng tròn màu nhỏ nằm bên dưới cùng -->
-                        <div class="w-6 h-6 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};"></div>
+                const card = document.createElement('div');
+                card.className = 'text-center group'; // Added padding for spacing
+                card.innerHTML = `
+                    <div class="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden card-hover flex items-center justify-center" style="background-color: ${p.color};">
+                        <h3 class="text-white text-3xl font-bold font-heading">${p.displayName}</h3> 
                     </div>
+                    <h4 class="mt-4 font-semibold text-gray-800">${p.fullName}</h4>
+                    <div class="w-6 h-6 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};"></div>
                 `;
+                productList.appendChild(card);
             });
 
             // Ingredients Accordion Data
@@ -761,7 +759,7 @@
                 colorBtn.addEventListener('click', () => {
                     currentLipColor = hexToRgbaWithOpacity(p.hexOpacity); // Update the drawing color
                      document.querySelectorAll('#vto-color-options .vto-color-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand'));
-                     colorBtn.classList.add('ring-2', 'ring-brand'); // Highlight selected button
+                     colorBtn.classList.add('ring-2', 'ring-brand'); // Highlight selected selected
                 });
                 if (vtoColorOptions) { 
                     vtoColorOptions.appendChild(colorBtn);
