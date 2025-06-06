@@ -19,8 +19,8 @@
         body {
             /* Changed font-family to Open Sans for general text */
             font-family: 'Open Sans', sans-serif;
-            /* Reverted background-color back to white as requested */
-            background-color: #FFFFFF; 
+            /* Changed background-color to beige */
+            background-color: #F5F5DC;
             color: #4A4A4A;
         }
         /* New custom class for headings to use Merriweather Sans */
@@ -62,27 +62,33 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .testimonial-container {
+        
+        /* New CSS for testimonial carousel structure */
+        .testimonial-viewport {
+            overflow: hidden; /* This creates the visible window for testimonials */
+            position: relative;
+            width: 100%;
+            /* Removed scroll-snap-type as it conflicts with JS controlled sliding */
+        }
+
+        #testimonial-slider { 
             display: flex;
-            overflow-x: hidden;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
+            transition: transform 0.5s ease-in-out; /* Apply transition to the element being transformed */
+            flex-wrap: nowrap; /* Ensure items don't wrap to the next line */
+            -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+            /* Width will be set dynamically by JS */
         }
+        
         .testimonial-card {
-            flex: 0 0 100%;
-            scroll-snap-align: start;
-            transition: transform 0.5s ease-in-out;
+            /* flex-shrink and flex-grow will be set by JS */
+            /* width will be set dynamically by JS to ensure proper sizing */
+            /* Removed flex-basis and media queries as JS will handle sizing */
         }
-         @media (min-width: 768px) {
-            .testimonial-card {
-                flex: 0 0 50%;
-            }
-        }
-        @media (min-width: 1024px) {
-            .testimonial-card {
-                flex: 0 0 33.3333%;
-            }
-        }
+         /* PADDING is still relevant for inside the cards */
+         .testimonial-card .bg-white {
+            padding: 1.5rem; /* Equivalent to p-6 Tailwind class */
+         }
+
         #vto-video-container {
             position: relative;
             width: 100%;
@@ -151,9 +157,11 @@
 
     <main>
         <section id="hero" class="pt-16 h-screen flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1590431305265-538183495a43?q=80&w=2070&auto=format&fit=crop');">
-            <div class="absolute inset-0 bg-white/50"></div>
+            <!-- Changed overlay to a more transparent beige to blend with the new background -->
+            <div class="absolute inset-0 bg-[#F5F5DC]/50"></div>
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold text-brand tracking-tight font-heading">Vẻ Đẹp Có Trách Nhiệm</h1> <!-- Applied font-heading here -->
+                <!-- Increased font size for the main heading on the banner -->
+                <h1 class="text-5xl md:text-7xl font-extrabold text-brand tracking-tight font-heading">Vẻ Đẹp Có Trách Nhiệm</h1> <!-- Applied font-heading here -->
                 <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-700">Sắc Mộc không chỉ là son môi. Đó là một lựa chọn an toàn cho bạn, tử tế với hành tinh và cam kết cho một vẻ đẹp minh bạch.</p>
                 <div class="mt-8">
                     <a href="#philosophy" class="inline-block bg-brand text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105">Khám Phám Câu Chuyện</a>
@@ -161,7 +169,7 @@
             </div>
         </section>
 
-        <section id="philosophy" class="py-20 bg-white">
+        <section id="philosophy" class="py-20 bg-[#F5F5DC]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <h2 class="text-3xl font-bold text-brand font-heading">Triết Lý Sắc Mộc</h2> <!-- Applied font-heading here -->
@@ -222,7 +230,7 @@
             </div>
         </section>
 
-        <section id="transparency" class="py-20 bg-white">
+        <section id="transparency" class="py-20 bg-[#F5F5DC]">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <h2 class="text-3xl font-bold text-brand font-heading">Trung Tâm Minh Bạch</h2> <!-- Applied font-heading here -->
@@ -241,8 +249,10 @@
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tham gia cùng hàng ngàn phụ nữ Việt đã lựa chọn vẻ đẹp có ý thức. Chia sẻ khoảnh khắc của bạn với #SacMocBeauty.</p>
                 </div>
                 <div class="mt-16 relative">
-                    <div id="testimonial-slider" class="testimonial-container">
-                        <!-- Testimonial cards will be dynamically inserted here by JavaScript -->
+                    <div class="testimonial-viewport"> <!-- Wrapper for overflow and snap -->
+                        <div id="testimonial-slider"> <!-- This now acts as the flex container for cards -->
+                            <!-- Testimonial cards will be dynamically inserted here by JavaScript -->
+                        </div>
                     </div>
                     <button id="prev-testimonial" class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white/70 hover:bg-white text-brand p-3 rounded-full shadow-md z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
@@ -273,7 +283,8 @@
     </footer>
 
     <div id="vto-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl relative transform transition-all duration-300 scale-95">
+        <!-- Changed modal background to beige -->
+        <div class="bg-[#F5F5DC] rounded-lg shadow-xl p-6 w-full max-w-4xl relative transform transition-all duration-300 scale-95">
             <button id="close-vto-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 z-10">&times;</button>
             <h3 class="text-2xl font-bold text-brand text-center mb-4 font-heading">Trải Nghiệm Thử Son Ảo</h3> <!-- Applied font-heading here -->
             <div class="grid md:grid-cols-2 gap-6 items-start">
@@ -354,25 +365,6 @@
                                 }
                             }
                         }
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.x !== null) {
-                                        label += context.parsed.x + '/10 điểm';
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
                     }
                 }
             });
@@ -423,7 +415,7 @@
                         <span class="font-semibold text-brand">${ing.name}</span>
                         <span class="accordion-icon text-brand font-bold">+</span>
                     </button>
-                    <div class="accordion-content hidden p-4 bg-white">
+                    <div class="accordion-content hidden p-4 bg-[#F5F5DC]">
                         <p class="text-gray-600">${ing.description}</p>
                     </div>
                 `;
@@ -450,7 +442,7 @@
                 }
             });
 
-            // Testimonials Data - Added more testimonials here
+            // Testimonials Data - Added more testimonials here for a better loop experience
             const testimonials = [
                 { text: "Lần đầu tiên mình tìm được một thỏi son vừa đẹp, vừa lâu trôi mà lại an tâm về thành phần. Yêu Sắc Mộc!", author: "An Nhiên, TP.HCM" },
                 { text: "Mình đang mang thai nên rất kỹ tính. Sắc Mộc là cứu tinh, giúp mình vẫn xinh đẹp mà không lo ảnh hưởng đến bé.", author: "Minh Thư, Hà Nội" },
@@ -467,7 +459,17 @@
                 { text: "Rất ấn tượng với cam kết minh bạch thành phần của Sắc Mộc. Giờ đây mình có thể yên tâm sử dụng mỗi ngày.", author: "Diệu Hoa, Nghệ An" },
                 { text: "Màu sắc rất trendy và đa dạng, mình có thể tìm thấy mọi tông màu yêu thích tại Sắc Mộc.", author: "Mai Phương, Huế" },
                 { text: "Mình đã giới thiệu Sắc Mộc cho tất cả bạn bè và mọi người đều rất hài lòng. Sản phẩm chất lượng cao và an toàn.", author: "Khánh Ly, Thái Bình" , image: "https://placehold.co/150x150/A2B99C/FFFFFF?text=Khánh+Ly"},
-                { text: "Yêu thích sự tự nhiên và dịu nhẹ của Sắc Mộc. Không hề gây kích ứng hay nặng môi như các loại son khác.", author: "Trang Anh, Phú Thọ" , image: "https://placehold.co/150x150/A2B99C/FFFFFF?text=Trang+Anh"}
+                { text: "Yêu thích sự tự nhiên và dịu nhẹ của Sắc Mộc. Không hề gây kích ứng hay nặng môi như các loại son khác.", author: "Trang Anh, Phú Thọ" , image: "https://placehold.co/150x150/A2B99C/FFFFFF?text=Trang+Anh"},
+                { text: "Son môi của Sắc Mộc có mùi thơm nhẹ nhàng, không gây khó chịu, rất phù hợp cho những ai nhạy cảm với mùi hương.", author: "Linh Chi, Vĩnh Phúc" },
+                { text: "Mình rất thích cách Sắc Mộc chú trọng đến nguyên liệu tự nhiên. Son dùng an toàn mà vẫn giữ được màu sắc tươi tắn.", author: "Quỳnh Hương, Bắc Ninh" },
+                { text: "Thiết kế bao bì sang trọng và tinh tế, cầm rất chắc tay. Sắc Mộc không chỉ là son mà còn là phụ kiện thời trang.", author: "Nguyệt Ánh, Thanh Hóa" },
+                { text: "Chất lượng son vượt trội so với mức giá. Mình đã thử nhiều loại son tự nhiên nhưng Sắc Mộc thực sự khác biệt.", author: "Hồng Nhung, Nam Định" },
+                { text: "Sắc Mộc đã thay đổi quan điểm của mình về son môi. Vừa đẹp, vừa an toàn, không còn phải lo lắng về tác động xấu nữa.", author: "Thanh Trúc, Bình Định" },
+                { text: "Mình rất ấn tượng với dịch vụ chăm sóc khách hàng của Sắc Mộc. Họ rất nhiệt tình và chu đáo.", author: "Thu Thảo, Vĩnh Long" },
+                { text: "Màu son lên rất tự nhiên, giúp mình tự tin hơn mỗi ngày. Sắc Mộc là lựa chọn hoàn hảo cho phong cách 'no makeup' của mình.", author: "Mỹ Linh, Tiền Giang" },
+                { text: "Đây là thỏi son đầu tiên mình dùng hết. Rất yêu thích chất son và màu sắc của Sắc Mộc.", author: "Kim Ngân, Bến Tre" },
+                { text: "Sản phẩm thuần chay, không thử nghiệm trên động vật là điều mình đánh giá cao nhất ở Sắc Mộc. Vẻ đẹp có trách nhiệm thực sự!", author: "Gia Hân, Đồng Tháp" },
+                { text: "Chất son mềm mịn, không gây bết dính. Mình có thể dùng Sắc Mộc cả ngày mà không lo khô môi.", author: "Hải Yến, An Giang" }
             ];
 
             // Populate Testimonial Slider
@@ -497,30 +499,67 @@
             }
 
             function showTestimonials() {
-                const cardWidth = testimonialSlider.querySelector('.testimonial-card').offsetWidth;
-                testimonialSlider.style.transform = `translateX(-${currentTestimonialIndex * cardWidth}px)`;
-                prevTestimonialBtn.disabled = currentTestimonialIndex === 0;
-                nextTestimonialBtn.disabled = currentTestimonialIndex >= testimonials.length - getVisibleCardsCount();
+                if (testimonials.length === 0) {
+                    testimonialSlider.style.transform = `translateX(0px)`;
+                    return;
+                }
+                
+                const visibleCards = getVisibleCardsCount();
+                const viewportWidth = testimonialSlider.parentElement.offsetWidth; // Get the width of the .testimonial-viewport
+                
+                // Calculate the width for each individual card to fit precisely within the viewport
+                const individualCardDisplayWidth = viewportWidth / visibleCards;
+
+                // Apply calculated width to each testimonial card and ensure it doesn't shrink
+                testimonialSlider.querySelectorAll('.testimonial-card').forEach(card => {
+                    card.style.width = `${individualCardDisplayWidth}px`;
+                    card.style.flexShrink = '0'; 
+                });
+
+                // Set the total width of the slider to accommodate all cards side-by-side
+                testimonialSlider.style.width = `${testimonials.length * individualCardDisplayWidth}px`;
+
+                // Apply the transform to slide the cards
+                testimonialSlider.style.transform = `translateX(-${currentTestimonialIndex * individualCardDisplayWidth}px)`;
+                
+                // Buttons are always enabled for infinite loop
+                prevTestimonialBtn.disabled = false;
+                nextTestimonialBtn.disabled = false;
             }
 
             nextTestimonialBtn.addEventListener('click', () => {
-                if (currentTestimonialIndex < testimonials.length - getVisibleCardsCount()) {
+                const totalCards = testimonials.length;
+                const visibleCards = getVisibleCardsCount();
+                // If at the end, loop back to the start
+                if (currentTestimonialIndex >= totalCards - visibleCards) {
+                    currentTestimonialIndex = 0;
+                } else {
                     currentTestimonialIndex++;
-                    showTestimonials();
                 }
-            });
-            prevTestimonialBtn.addEventListener('click', () => {
-                if (currentTestimonialIndex > 0) {
-                    currentTestimonialIndex--;
-                    showTestimonials();
-                }
-            });
-            window.addEventListener('resize', () => {
-                currentTestimonialIndex = 0; // Reset on resize for simplicity or recalculate
                 showTestimonials();
             });
-            showTestimonials(); // Initial call
-
+            prevTestimonialBtn.addEventListener('click', () => {
+                const totalCards = testimonials.length;
+                const visibleCards = getVisibleCardsCount();
+                // If at the beginning, loop to the end
+                if (currentTestimonialIndex === 0) {
+                    currentTestimonialIndex = totalCards - visibleCards;
+                    // Ensure index is not negative if totalCards is less than visibleCards
+                    if (currentTestimonialIndex < 0) currentTestimonialIndex = 0;
+                } else {
+                    currentTestimonialIndex--;
+                }
+                showTestimonials();
+            });
+            window.addEventListener('resize', () => {
+                // Reset index on resize to prevent awkward jumps if number of visible cards changes
+                currentTestimonialIndex = 0;
+                showTestimonials();
+            });
+            
+            // Call showTestimonials after all DOM content is loaded and cards are rendered
+            // Using a short timeout to ensure card widths are fully calculated by browser
+            setTimeout(showTestimonials, 100);
 
             // VTO (Virtual Try-On) Modal Logic
             const vtoModal = document.getElementById('vto-modal');
