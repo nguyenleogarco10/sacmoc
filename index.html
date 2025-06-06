@@ -19,8 +19,8 @@
         body {
             /* Changed font-family to Open Sans for general text */
             font-family: 'Open Sans', sans-serif;
-            /* Updated background-color to a warm beige */
-            background-color: #F8F4E3; 
+            /* Reverted background-color back to white as requested */
+            background-color: #FFFFFF; 
             color: #4A4A4A;
         }
         /* New custom class for headings to use Merriweather Sans */
@@ -109,6 +109,7 @@
 </head>
 <body class="antialiased">
 
+    <!-- Header section - Changed 'fixed' to 'relative' to allow scrolling -->
     <header id="header" class="bg-white/80 backdrop-blur-md relative top-0 left-0 right-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Adjusted header height to accommodate a larger logo -->
@@ -208,8 +209,10 @@
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tìm kiếm sắc màu hoàn hảo chưa bao giờ dễ dàng hơn. Hãy thử ngay những gam màu lấy cảm hứng từ thiên nhiên của chúng tôi.</p>
                 </div>
 
-                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 lg:gap-8" id="product-list">
-                    </div>
+                <!-- Product list layout adjusted for larger squares -->
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8" id="product-list">
+                    <!-- Product items will be dynamically inserted here by JavaScript -->
+                </div>
 
                 <div class="mt-12 text-center">
                      <a href="thu_son_ao.html" class="inline-block bg-white text-brand font-bold py-3 px-8 rounded-full shadow-lg border border-brand-light hover:bg-brand-light hover:text-white transition-all transform hover:scale-105">
@@ -226,7 +229,8 @@
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi tin vào vẻ đẹp không che giấu. Khám phá câu chuyện đằng sau mỗi thành phần làm nên thỏi son của bạn.</p>
                 </div>
                 <div id="ingredient-accordion" class="mt-12 max-w-3xl mx-auto space-y-4">
-                    </div>
+                    <!-- Ingredient accordion items will be dynamically inserted here by JavaScript -->
+                </div>
             </div>
         </section>
 
@@ -238,7 +242,8 @@
                 </div>
                 <div class="mt-16 relative">
                     <div id="testimonial-slider" class="testimonial-container">
-                        </div>
+                        <!-- Testimonial cards will be dynamically inserted here by JavaScript -->
+                    </div>
                     <button id="prev-testimonial" class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-white/70 hover:bg-white text-brand p-3 rounded-full shadow-md z-10">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
@@ -280,7 +285,8 @@
                 <div class="pt-4 md:pt-0">
                     <h4 class="font-semibold text-gray-700 mb-2">Chọn màu son của bạn:</h4>
                     <div id="vto-color-options" class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-                        </div>
+                        <!-- Color options will be dynamically inserted here by JavaScript -->
+                    </div>
                     <div class="mt-4 p-3 bg-amber-100 border-l-4 border-amber-500 text-amber-700 text-sm">
                         <p><strong>Lưu ý:</strong> Để có kết quả tốt nhất, hãy đảm bảo khuôn mặt bạn được chiếu sáng đủ và nhìn thẳng vào webcam.</p>
                     </div>
@@ -371,24 +377,28 @@
                 }
             });
 
-            // Products Data
+            // Products Data - Cấu trúc dữ liệu đã được cập nhật
             const products = [
-                { name: 'Đỏ Đất - 01', color: '#B95C50', hexOpacity: 'B95C50B3', image: 'https://placehold.co/400x400/B95C50/FFFFFF?text=Đỏ+Đất'},
-                { name: 'Cam Cháy - 02', color: '#D87C4F', hexOpacity: 'D87C4FB3', image: 'https://placehold.co/400x400/D87C4F/FFFFFF?text=Cam+Cháy'},
-                { name: 'Hồng Đào - 03', color: '#E48F82', hexOpacity: 'E48F82B3', image: 'https://placehold.co/400x400/E48F82/FFFFFF?text=Hồng+Đào'},
-                { name: 'Nâu Gỗ - 04', color: '#8C5A4D', hexOpacity: '8C5A4DB3', image: 'https://placehold.co/400x400/8C5A4D/FFFFFF?text=Nâu+Gỗ'},
-                { name: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3', image: 'https://placehold.co/400x400/C68582/FFFFFF?text=Hồng+Đất'}
+                { displayName: 'Đỏ Đất', fullName: 'Đỏ Đất - 01', color: '#B95C50', hexOpacity: 'B95C50B3' },
+                { displayName: 'Cam Cháy', fullName: 'Cam Cháy - 02', color: '#D87C4F', hexOpacity: 'D87C4FB3' },
+                { displayName: 'Hồng Đào', fullName: 'Hồng Đào - 03', color: '#E48F82', hexOpacity: 'E48F82B3' },
+                { displayName: 'Nâu Gỗ', fullName: 'Nâu Gỗ - 04', color: '#8C5A4D', hexOpacity: '8C5A4DB3' },
+                { displayName: 'Hồng Đất', fullName: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3' }
             ];
 
-            // Populate Product List
+            // Populate Product List - Logic hiển thị sản phẩm đã được cập nhật
             const productList = document.getElementById('product-list');
+            productList.innerHTML = ''; // Xóa nội dung cũ trước khi thêm mới
             products.forEach(p => {
                 productList.innerHTML += `
                     <div class="text-center group">
-                        <div class="relative w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden card-hover">
-                            <img src="${p.image}" alt="${p.name}" class="w-full h-full object-center object-cover" onerror="this.src='https://placehold.co/400x400/EFEBE9/8D6E63?text=Ảnh+Lỗi'">
+                        <!-- Đây là ô màu son chính, với tên màu được đặt bên trong dưới dạng văn bản HTML -->
+                        <div class="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden card-hover flex items-center justify-center" style="background-color: ${p.color};">
+                            <h3 class="text-white text-3xl font-bold font-heading">${p.displayName}</h3> 
                         </div>
-                        <h4 class="mt-4 font-semibold text-gray-800">${p.name}</h4>
+                        <!-- Tên đầy đủ của son (ví dụ: Đỏ Đất - 01) nằm bên dưới -->
+                        <h4 class="mt-4 font-semibold text-gray-800">${p.fullName}</h4>
+                        <!-- Vòng tròn màu nhỏ nằm bên dưới cùng -->
                         <div class="w-6 h-6 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};"></div>
                     </div>
                 `;
@@ -404,6 +414,7 @@
 
             // Populate Ingredient Accordion
             const accordion = document.getElementById('ingredient-accordion');
+            accordion.innerHTML = ''; // Clear existing content
             ingredientsData.forEach((ing, index) => {
                 const item = document.createElement('div');
                 item.className = 'border border-gray-200 rounded-lg overflow-hidden';
@@ -455,12 +466,13 @@
                 { text: "Chất son mịn màng như bơ, không gây khô môi chút nào. Sắc Mộc là lựa chọn hoàn hảo cho những cô nàng bận rộn.", author: "Thùy Linh, Vũng Tàu" },
                 { text: "Rất ấn tượng với cam kết minh bạch thành phần của Sắc Mộc. Giờ đây mình có thể yên tâm sử dụng mỗi ngày.", author: "Diệu Hoa, Nghệ An" },
                 { text: "Màu sắc rất trendy và đa dạng, mình có thể tìm thấy mọi tông màu yêu thích tại Sắc Mộc.", author: "Mai Phương, Huế" },
-                { text: "Mình đã giới thiệu Sắc Mộc cho tất cả bạn bè và mọi người đều rất hài lòng. Sản phẩm chất lượng cao và an toàn.", author: "Khánh Ly, Thái Bình" },
-                { text: "Yêu thích sự tự nhiên và dịu nhẹ của Sắc Mộc. Không hề gây kích ứng hay nặng môi như các loại son khác.", author: "Trang Anh, Phú Thọ" }
+                { text: "Mình đã giới thiệu Sắc Mộc cho tất cả bạn bè và mọi người đều rất hài lòng. Sản phẩm chất lượng cao và an toàn.", author: "Khánh Ly, Thái Bình" , image: "https://placehold.co/150x150/A2B99C/FFFFFF?text=Khánh+Ly"},
+                { text: "Yêu thích sự tự nhiên và dịu nhẹ của Sắc Mộc. Không hề gây kích ứng hay nặng môi như các loại son khác.", author: "Trang Anh, Phú Thọ" , image: "https://placehold.co/150x150/A2B99C/FFFFFF?text=Trang+Anh"}
             ];
 
             // Populate Testimonial Slider
             const testimonialSlider = document.getElementById('testimonial-slider');
+            testimonialSlider.innerHTML = ''; // Clear existing content
             testimonials.forEach(t => {
                 const card = document.createElement('div');
                 card.className = 'testimonial-card p-4 md:p-6'; // Added padding for spacing
@@ -700,12 +712,13 @@
             }
 
             // Populate VTO color options (for the modal on this page)
+            // Lặp qua các sản phẩm đã được cấu trúc lại để tạo nút chọn màu
             products.forEach(p => {
                 const colorBtn = document.createElement('button');
                 colorBtn.className = 'vto-color-btn w-full h-12 sm:h-16 rounded-lg border-2 border-transparent hover:border-brand focus:border-brand focus:ring-2 focus:ring-brand-light outline-none';
                 colorBtn.style.backgroundColor = p.color; // Use the solid color for the button itself
                 colorBtn.dataset.colorHexOpacity = p.hexOpacity; // Store the color with opacity for drawing
-                colorBtn.setAttribute('aria-label', `Thử màu ${p.name}`);
+                colorBtn.setAttribute('aria-label', `Thử màu ${p.displayName}`); // Sử dụng displayName cho aria-label
                 colorBtn.addEventListener('click', () => {
                     currentLipColor = hexToRgbaWithOpacity(p.hexOpacity); // Update the drawing color
                      document.querySelectorAll('#vto-color-options .vto-color-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand'));
