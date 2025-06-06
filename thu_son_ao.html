@@ -76,9 +76,22 @@
         }
         #vto-color-options {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            /* Changed to 6 columns for desktop, and adjusted for smaller screens */
+            grid-template-columns: repeat(6, minmax(0, 1fr)); 
             gap: 0.75rem;
             width: 100%;
+        }
+        /* Responsive adjustment for tablets (2 columns) */
+        @media (max-width: 768px) {
+            #vto-color-options {
+                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Fallback to auto-fit for smaller screens if needed */
+            }
+        }
+        /* Further adjust for mobile (3 columns) */
+        @media (max-width: 480px) {
+            #vto-color-options {
+                grid-template-columns: repeat(3, minmax(0, 1fr)); 
+            }
         }
         .vto-color-btn {
             width: 100%;
@@ -168,7 +181,7 @@
             { name: 'Hồng Fuchsia - 09', color: '#C154C1' },
             { name: 'Nude Đào - 10', color: '#F7CAC9' },
             { name: 'Mận Chín - 11', color: '#8E4585' },
-            { name: 'Hồng Tím - 12', color: '#C8A2C8' } // Added new color
+            { name: 'Hồng Tím - 12', color: '#C8A2C8' } 
         ];
 
         products.forEach(p => {
