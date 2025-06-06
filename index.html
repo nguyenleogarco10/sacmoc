@@ -375,7 +375,14 @@
                 { displayName: 'Cam Cháy', fullName: 'Cam Cháy - 02', color: '#D87C4F', hexOpacity: 'D87C4FB3' },
                 { displayName: 'Hồng Đào', fullName: 'Hồng Đào - 03', color: '#E48F82', hexOpacity: 'E48F82B3' },
                 { displayName: 'Nâu Gỗ', fullName: 'Nâu Gỗ - 04', color: '#8C5A4D', hexOpacity: '8C5A4DB3' },
-                { displayName: 'Hồng Đất', fullName: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3' }
+                { displayName: 'Hồng Đất', fullName: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3' },
+                { displayName: 'Đỏ Ruby', fullName: 'Đỏ Ruby - 06', color: '#9B1C1C', hexOpacity: '9B1C1CB3' },
+                { displayName: 'Hồng Cam', fullName: 'Hồng Cam - 07', color: '#FF7F50', hexOpacity: 'FF7F50B3' },
+                { displayName: 'Đỏ Rượu Vang', fullName: 'Đỏ Rượu Vang - 08', color: '#800020', hexOpacity: '800020B3' },
+                { displayName: 'Hồng Fuchsia', fullName: 'Hồng Fuchsia - 09', color: '#C154C1', hexOpacity: 'C154C1B3' },
+                { displayName: 'Nude Đào', fullName: 'Nude Đào - 10', color: '#F7CAC9', hexOpacity: 'F7CAC9B3' },
+                { displayName: 'Mận Chín', fullName: 'Mận Chín - 11', color: '#8E4585', hexOpacity: '8E4585B3' },
+                { displayName: 'Hồng Tím', fullName: 'Hồng Tím - 12', color: '#C8A2C8', hexOpacity: 'C8A2C8B3' } // Added new color
             ];
 
             // Populate Product List - Logic hiển thị sản phẩm đã được cập nhật
@@ -711,22 +718,9 @@
             // Event listener for the "Trải Nghiệm Thử Son Ảo (Live)" link
             // This link will NOT open the modal, it will navigate to thu_son_ao.html
             // The VTO modal functionality is self-contained and was intended for a modal on *this* page.
-            // Since the user's request is to navigate to thu_son_ao.html, the modal logic here
-            // might be redundant if the primary VTO experience is on the separate page.
             // For now, I will leave the modal logic as it was, assuming it might be used
             // for a quick preview on this page if a button *was* to open it.
             // The actual link `a[href="thu_son_ao.html"]` will perform its default navigation.
-
-            // If there was a button to open THIS modal (e.g., <button id="open-vto-modal-on-index">...):
-            // const openThisModalButton = document.getElementById('open-vto-modal-on-index');
-            // if (openThisModalButton) {
-            //     openThisModalButton.addEventListener('click', (e) => {
-            //         e.preventDefault(); // Prevent default if it's a link/button that might navigate
-            //         vtoModal.classList.remove('hidden');
-            //         vtoModal.querySelector('div').classList.remove('scale-95'); // Animate in
-            //         startVTO();
-            //     });
-            // }
             
             // Close modal button
             if (closeVtoModalBtn) { 
