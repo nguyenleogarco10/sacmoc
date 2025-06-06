@@ -218,7 +218,8 @@
                 </div>
 
                 <!-- Product list layout adjusted for larger squares -->
-                <div class="mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 lg:gap-8" id="product-list">
+                <!-- Changed to 6 columns for large screens to make squares smaller and match thu_son_ao.html -->
+                <div class="mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-8" id="product-list">
                     <!-- Product items will be dynamically inserted here by JavaScript -->
                 </div>
 
@@ -382,7 +383,7 @@
                 { displayName: 'Hồng Fuchsia', fullName: 'Hồng Fuchsia - 09', color: '#C154C1', hexOpacity: 'C154C1B3' },
                 { displayName: 'Nude Đào', fullName: 'Nude Đào - 10', color: '#F7CAC9', hexOpacity: 'F7CAC9B3' },
                 { displayName: 'Mận Chín', fullName: 'Mận Chín - 11', color: '#8E4585', hexOpacity: '8E4585B3' },
-                { displayName: 'Hồng Tím', fullName: 'Hồng Tím - 12', color: '#C8A2C8', hexOpacity: 'C8A2C8B3' } // Added new color
+                { displayName: 'Hồng Tím', fullName: 'Hồng Tím - 12', color: '#C8A2C8', hexOpacity: 'C8A2C8B3' } 
             ];
 
             // Populate Product List - Logic hiển thị sản phẩm đã được cập nhật
@@ -390,13 +391,17 @@
             productList.innerHTML = ''; // Xóa nội dung cũ trước khi thêm mới
             products.forEach(p => {
                 const card = document.createElement('div');
-                card.className = 'text-center group'; // Added padding for spacing
+                card.className = 'group text-center'; // Container for each product card, centered text
                 card.innerHTML = `
-                    <div class="relative w-full aspect-w-1 aspect-h-1 rounded-lg overflow-hidden card-hover flex items-center justify-center" style="background-color: ${p.color};">
-                        <h3 class="text-white text-3xl font-bold font-heading">${p.displayName}</h3> 
+                    <div class="relative w-full aspect-square rounded-lg overflow-hidden card-hover">
+                        <div class="absolute inset-0 flex items-center justify-center" style="background-color: ${p.color};">
+                            <h3 class="text-white text-2xl font-bold font-heading px-2 py-1">${p.displayName}</h3> 
+                        </div>
                     </div>
-                    <h4 class="mt-4 font-semibold text-gray-800">${p.fullName}</h4>
-                    <div class="w-6 h-6 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};"></div>
+                    <div class="mt-3"> <!-- Container for full name and small color circle, with top margin -->
+                        <h4 class="font-semibold text-gray-800">${p.fullName}</h4>
+                        <div class="w-5 h-5 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};"></div>
+                    </div>
                 `;
                 productList.appendChild(card);
             });
