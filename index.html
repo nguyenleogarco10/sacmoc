@@ -9,23 +9,30 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@3.18.0/dist/tf-core.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@3.18.0/dist/tf-converter.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl@3.18.0/dist/tf-backend-webgl.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2/dist/face-landmarks-detection.min.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <!-- Updated font to be more in harmony with the logo - 'Merriweather Sans' for headings and 'Open Sans' for body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Quicksand', sans-serif;
+            /* Changed font-family to Open Sans for general text */
+            font-family: 'Open Sans', sans-serif;
             background-color: #FDFBF8;
             color: #4A4A4A;
         }
-        .text-brand { color: #8D6E63; }
-        .bg-brand { background-color: #8D6E63; }
-        .bg-brand-light { background-color: #D7CCC8; }
-        .bg-brand-superlight { background-color: #EFEBE9; }
-        .border-brand { border-color: #8D6E63; }
+        /* New custom class for headings to use Merriweather Sans */
+        .font-heading {
+            font-family: 'Merriweather Sans', sans-serif;
+        }
+        /* Updated brand colors to be closer to the logo's green/brown tones */
+        .text-brand { color: #5D7A4D; } /* A darker, earthy green */
+        .bg-brand { background-color: #5D7A4D; }
+        .bg-brand-light { background-color: #A2B99C; } /* A lighter green */
+        .bg-brand-superlight { background-color: #E6EDE4; } /* Very light green */
+        .border-brand { border-color: #5D7A4D; }
+        
         .chart-container {
             position: relative;
             width: 100%;
@@ -45,7 +52,7 @@
             transition: color 0.3s ease;
         }
         .nav-link:hover {
-            color: #8D6E63;
+            color: #5D7A4D; /* Updated hover color */
         }
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -104,8 +111,11 @@
     <header id="header" class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex-shrink-0">
-                    <a href="#hero" class="text-2xl font-bold text-brand">Sắc Mộc</a>
+                <div class="flex-shrink-0 flex items-center">
+                    <!-- Logo image only, "Sắc Mộc" text removed as per user's request -->
+                    <a href="#hero" class="flex items-center">
+                        <img src="Logo.png" alt="Sắc Mộc Logo" class="h-10 w-auto"> <!-- Adjust h-10 as needed for size -->
+                    </a>
                 </div>
                 <div class="hidden md:block">
                     <nav class="flex items-center space-x-8">
@@ -138,10 +148,10 @@
         <section id="hero" class="pt-16 h-screen flex items-center bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1590431305265-538183495a43?q=80&w=2070&auto=format&fit=crop');">
             <div class="absolute inset-0 bg-white/50"></div>
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold text-brand tracking-tight">Vẻ Đẹp Có Trách Nhiệm</h1>
+                <h1 class="text-4xl md:text-6xl font-extrabold text-brand tracking-tight font-heading">Vẻ Đẹp Có Trách Nhiệm</h1> <!-- Applied font-heading here -->
                 <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-gray-700">Sắc Mộc không chỉ là son môi. Đó là một lựa chọn an toàn cho bạn, tử tế với hành tinh và cam kết cho một vẻ đẹp minh bạch.</p>
                 <div class="mt-8">
-                    <a href="#philosophy" class="inline-block bg-brand text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105">Khám Phá Câu Chuyện</a>
+                    <a href="#philosophy" class="inline-block bg-brand text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105">Khám Phám Câu Chuyện</a>
                 </div>
             </div>
         </section>
@@ -149,35 +159,35 @@
         <section id="philosophy" class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold text-brand">Triết Lý Sắc Mộc</h2>
+                    <h2 class="text-3xl font-bold text-brand font-heading">Triết Lý Sắc Mộc</h2> <!-- Applied font-heading here -->
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi ra đời để giải quyết những lo ngại về sức khỏe và môi trường trong ngành mỹ phẩm. Sắc Mộc là câu trả lời cho nhu cầu về một vẻ đẹp không chỉ rạng rỡ bên ngoài mà còn an tâm từ bên trong.</p>
                 </div>
                 <div class="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
                     <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">🌿</div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand">An Toàn & Tinh Khiết</h3>
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">An Toàn & Tinh Khiết</h3> <!-- Applied font-heading here -->
                         <p class="mt-2 text-gray-600">Công thức với hơn 95% thành phần tự nhiên, không chứa kim loại nặng, parabens hay hóa chất độc hại.</p>
                     </div>
                     <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">🌍</div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand">Bền Vững & Ý Thức</h3>
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Bền Vững & Ý Thức</h3> <!-- Applied font-heading here -->
                         <p class="mt-2 text-gray-600">Bao bì thân thiện môi trường, tái chế được và nguồn nguyên liệu khai thác có đạo đức.</p>
                     </div>
                     <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
                          <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">💖</div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand">Minh Bạch & Đạo Đức</h3>
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Minh Bạch & Đạo Đức</h3> <!-- Applied font-heading here -->
                         <p class="mt-2 text-gray-600">Cam kết 100% không thử nghiệm trên động vật và công khai toàn bộ thành phần sản phẩm.</p>
                     </div>
                      <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover">
                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">✨</div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand">Hiệu Suất Vượt Trội</h3>
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Hiệu Suất Vượt Trội</h3> <!-- Applied font-heading here -->
                         <p class="mt-2 text-gray-600">Màu sắc rực rỡ, lâu trôi và chất son mềm mịn. Vẻ đẹp "sạch" không có nghĩa là phải thỏa hiệp.</p>
                     </div>
                 </div>
 
                 <div class="mt-20">
                     <div class="text-center">
-                        <h3 class="text-2xl font-bold text-brand">So Sánh Trực Quan</h3>
+                        <h3 class="text-2xl font-bold text-brand font-heading">So Sánh Trực Quan</h3> <!-- Applied font-heading here -->
                         <p class="mt-2 max-w-2xl mx-auto text-md text-gray-600">Một cái nhìn nhanh để thấy sự khác biệt mà Sắc Mộc mang lại cho bạn và cho hành tinh.</p>
                     </div>
                     <div class="mt-8 chart-container">
@@ -190,7 +200,7 @@
         <section id="products" class="py-20 bg-brand-superlight">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold text-brand">Khám Phá Màu Son Của Bạn</h2>
+                    <h2 class="text-3xl font-bold text-brand font-heading">Khám Phá Màu Son Của Bạn</h2> <!-- Applied font-heading here -->
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tìm kiếm sắc màu hoàn hảo chưa bao giờ dễ dàng hơn. Hãy thử ngay những gam màu lấy cảm hứng từ thiên nhiên của chúng tôi.</p>
                 </div>
 
@@ -208,7 +218,7 @@
         <section id="transparency" class="py-20 bg-white">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold text-brand">Trung Tâm Minh Bạch</h2>
+                    <h2 class="text-3xl font-bold text-brand font-heading">Trung Tâm Minh Bạch</h2> <!-- Applied font-heading here -->
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi tin vào vẻ đẹp không che giấu. Khám phá câu chuyện đằng sau mỗi thành phần làm nên thỏi son của bạn.</p>
                 </div>
                 <div id="ingredient-accordion" class="mt-12 max-w-3xl mx-auto space-y-4">
@@ -219,7 +229,7 @@
         <section id="community" class="py-20 bg-brand-superlight">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold text-brand">Cộng Đồng Sắc Mộc</h2>
+                    <h2 class="text-3xl font-bold text-brand font-heading">Cộng Đồng Sắc Mộc</h2> <!-- Applied font-heading here -->
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tham gia cùng hàng ngàn phụ nữ Việt đã lựa chọn vẻ đẹp có ý thức. Chia sẻ khoảnh khắc của bạn với #SacMocBeauty.</p>
                 </div>
                 <div class="mt-16 relative">
@@ -242,7 +252,7 @@
 
     <footer class="bg-gray-800 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h3 class="text-2xl font-bold">Sắc Mộc</h3>
+            <h3 class="text-2xl font-bold font-heading">Sắc Mộc</h3> <!-- Applied font-heading here -->
             <p class="mt-2">Vẻ Đẹp Có Trách Nhiệm</p>
             <div class="mt-6 flex justify-center space-x-6">
                 <a href="#" class="hover:text-brand-light">Facebook</a>
@@ -256,7 +266,7 @@
     <div id="vto-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-4xl relative transform transition-all duration-300 scale-95">
             <button id="close-vto-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 z-10">&times;</button>
-            <h3 class="text-2xl font-bold text-brand text-center mb-4">Trải Nghiệm Thử Son Ảo</h3>
+            <h3 class="text-2xl font-bold text-brand text-center mb-4 font-heading">Trải Nghiệm Thử Son Ảo</h3> <!-- Applied font-heading here -->
             <div class="grid md:grid-cols-2 gap-6 items-start">
                 <div id="vto-video-container" class="bg-gray-200 rounded-lg flex items-center justify-center">
                     <video id="vto-video" playsinline autoplay muted class="rounded-lg"></video>
@@ -307,14 +317,14 @@
                     datasets: [{
                         label: 'Son Truyền Thống',
                         data: [4, 2, 3, 2, 8], // Example scores
-                        backgroundColor: '#D7CCC8', // bg-brand-light
-                        borderColor: '#C8BDBA',
+                        backgroundColor: '#A2B99C', // bg-brand-light
+                        borderColor: '#8CA786',
                         borderWidth: 1
                     }, {
                         label: 'Sắc Mộc',
                         data: [9, 8, 10, 10, 9], // Example scores for Sac Moc
-                        backgroundColor: '#8D6E63', // bg-brand
-                        borderColor: '#795548',
+                        backgroundColor: '#5D7A4D', // bg-brand
+                        borderColor: '#4D643E',
                         borderWidth: 1
                     }]
                 },
@@ -425,14 +435,24 @@
                 }
             });
 
-            // Testimonials Data
+            // Testimonials Data - Added more testimonials here
             const testimonials = [
                 { text: "Lần đầu tiên mình tìm được một thỏi son vừa đẹp, vừa lâu trôi mà lại an tâm về thành phần. Yêu Sắc Mộc!", author: "An Nhiên, TP.HCM" },
                 { text: "Mình đang mang thai nên rất kỹ tính. Sắc Mộc là cứu tinh, giúp mình vẫn xinh đẹp mà không lo ảnh hưởng đến bé.", author: "Minh Thư, Hà Nội" },
                 { text: "Thích nhất là bao bì! Vừa đẹp vừa thân thiện môi trường. Một thương hiệu Việt Nam quá tự hào.", author: "Quỳnh Anh, Đà Nẵng" },
                 { text: "Màu son lên chuẩn, chất son mềm mịn không gây khô môi. Sẽ ủng hộ Sắc Mộc dài dài.", author: "Ngọc Hà, Hải Phòng" },
                 { text: "Tìm kiếm mãi mới được một brand son 'sạch' đúng nghĩa. Rất hài lòng với chất lượng sản phẩm.", author: "Thu Trang, Cần Thơ" },
-                { text: "Từ ngày dùng Sắc Mộc, mình không còn lo lắng về chì hay hóa chất độc hại nữa. Cảm ơn thương hiệu!", author: "Phương Vy, Bình Dương" }
+                { text: "Từ ngày dùng Sắc Mộc, mình không còn lo lắng về chì hay hóa chất độc hại nữa. Cảm ơn thương hiệu!", author: "Phương Vy, Bình Dương" },
+                { text: "Son Sắc Mộc màu lên chuẩn, mềm môi, không hề gây bết dính. Dùng hàng ngày rất tiện lợi và an toàn.", author: "Hoàng Yến, Cần Thơ" },
+                { text: "Trước giờ mình luôn tìm kiếm sản phẩm thuần chay, và Sắc Mộc đã vượt xa mong đợi của mình. Chất lượng tuyệt vời!", author: "Vân Anh, Long An" },
+                { text: "Thực sự bất ngờ với độ bền màu và dưỡng ẩm của son Sắc Mộc. Rất đáng để thử!", author: "Kim Chi, Khánh Hòa" },
+                { text: "Bao bì thân thiện môi trường là điểm cộng lớn. Mình rất vui khi ủng hộ một thương hiệu có trách nhiệm.", author: "Thanh Mai, Bình Thuận" },
+                { text: "Son lên màu tự nhiên, phù hợp để đi làm hoặc đi chơi. Rất thích sự nhẹ nhàng và an toàn của sản phẩm.", author: "Hương Giang, Đồng Nai" },
+                { text: "Chất son mịn màng như bơ, không gây khô môi chút nào. Sắc Mộc là lựa chọn hoàn hảo cho những cô nàng bận rộn.", author: "Thùy Linh, Vũng Tàu" },
+                { text: "Rất ấn tượng với cam kết minh bạch thành phần của Sắc Mộc. Giờ đây mình có thể yên tâm sử dụng mỗi ngày.", author: "Diệu Hoa, Nghệ An" },
+                { text: "Màu sắc rất trendy và đa dạng, mình có thể tìm thấy mọi tông màu yêu thích tại Sắc Mộc.", author: "Mai Phương, Huế" },
+                { text: "Mình đã giới thiệu Sắc Mộc cho tất cả bạn bè và mọi người đều rất hài lòng. Sản phẩm chất lượng cao và an toàn.", author: "Khánh Ly, Thái Bình" },
+                { text: "Yêu thích sự tự nhiên và dịu nhẹ của Sắc Mộc. Không hề gây kích ứng hay nặng môi như các loại son khác.", author: "Trang Anh, Phú Thọ" }
             ];
 
             // Populate Testimonial Slider
@@ -488,8 +508,6 @@
 
             // VTO (Virtual Try-On) Modal Logic
             const vtoModal = document.getElementById('vto-modal');
-            // The button to open the VTO modal is the "Trải Nghiệm Thử Son Ảo (Live)" link.
-            // We will attach the event listener to that link specifically.
             const openVtoModalLink = document.querySelector('a[href="thu_son_ao.html"]'); 
             const closeVtoModalBtn = document.getElementById('close-vto-modal');
             const vtoVideo = document.getElementById('vto-video');
