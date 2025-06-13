@@ -143,7 +143,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); /* Căn giữa hoàn hảo */
             z-index: 10;
             font-size: 1rem;
             color: #555;
@@ -168,6 +168,8 @@
             display: inline-block;
             vertical-align: middle;
             margin-right: 8px;
+            /* Đảm bảo spinner không bị biến dạng */
+            flex-shrink: 0; 
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
@@ -274,9 +276,10 @@
             width: 100%;
             gap: 0.5rem;
             margin-top: 1rem; /* Space from assistant message */
+            align-items: center; /* Căn giữa các item theo chiều dọc */
         }
         #user-chat-input {
-            flex-grow: 1;
+            flex-grow: 1; /* Cho phép input chiếm hết không gian có thể */
             padding: 0.75rem 1rem;
             border: 1px solid #b0c7d8;
             border-radius: 0.75rem;
@@ -285,6 +288,7 @@
             background-color: #fcfdfe;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            min-width: 0; /* Cho phép input co lại nếu cần */
         }
         #user-chat-input:focus {
             outline: none;
@@ -300,6 +304,7 @@
             cursor: pointer;
             font-weight: 600;
             transition: background-color 0.2s ease, transform 0.1s ease;
+            flex-shrink: 0; /* Ngăn nút co lại */
         }
         #send-chat-btn:hover {
             background-color: #7A5D4D;
@@ -878,7 +883,7 @@
         async function recommendLipstick(skinTone) {
             const productNames = products.map(p => p.name).join(', ');
             // Updated prompt to explicitly ask for "Giải thích:" and bolding/alignment rules
-            const prompt = `Tôi có sắc tố da mặt là "${skinTone}". Hãy gợi ý cho tôi 3 màu son trong danh sách sau đây (${productNames}) mà phù hợp nhất với sắc tố da của tôi. Ngoài ra, hãy gợi ý thêm một phong cách trang điểm hoặc phối đồ phù hợp với mỗi màu son đó, và một dịp sử dụng thích hợp. Định dạng câu trả lời của bạn là một danh sách được đánh số rõ ràng, mỗi mục là một màu son gợi ý. Đảm bảo các tiêu đề con như "Giải thích:", "Phong cách trang điểm:", "Phối đồ:", "Dịp sử dụng:", "Lưu ý:" được in đậm và gióng thẳng hàng với số mục chính. Các ý con trong "Phong cách trang điểm:" và "Phối đồ:" hãy bắt đầu bằng dấu gạch ngang "-". Đảm bảo có đủ dấu cách giữa các từ.`;
+            const prompt = `Tôi có sắc tố da mặt là "${skinTone}". Hãy gợi ý cho tôi 3 màu son trong danh sách sau đây (${productNames}) mà phù hợp nhất với sắc tố da của tôi. Ngoài ra, hãy gợi ý thêm một phong cách trang điểm hoặc phối đồ phù hợp với mỗi màu son đó, và một dịp sử dụng thích hợp. Định dạng câu trả lời của bạn là một danh sách được đánh số rõ ràng, mỗi mục là một màu son gợi ý. Đảm bảo toàn bộ dòng của mục được đánh số (ví dụ: "1. Tên Son - Mã số:") được in đậm. Chỉ riêng từ "Giải thích:" (hoặc "Lý do:", "Phong cách trang điểm:", "Phối đồ:", "Dịp sử dụng:", "Lưu ý:") được in đậm mà không phải toàn bộ phần nội dung theo sau. Các tiêu đề con này cũng phải gióng thẳng hàng với số mục chính. Các ý con trong "Phong cách trang điểm:" và "Phối đồ:" hãy bắt đầu bằng dấu gạch ngang "-". Đảm bảo có đủ dấu cách giữa các từ.`;
             assistantChatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             let recommendation = await getGeminiResponse(prompt);
             
@@ -917,12 +922,7 @@
                         const boldPart = headerMatch[1]; // e.g., "Giải thích:"
                         const restOfLine = headerMatch[2]; // e.g., "Hồng đất là màu son dễ tính..."
 
-                        // If it's "Giải thích:", bold only that part. Otherwise, bold the whole header line.
-                        if (boldPart === "Giải thích:") {
-                            formattedHtml += `<p class="main-item"><strong>${boldPart}</strong>${restOfLine ? ' ' + restOfLine : ''}</p>`;
-                        } else {
-                            formattedHtml += `<p class="main-item"><strong>${trimmedLine}</strong></p>`;
-                        }
+                        formattedHtml += `<p class="main-item"><strong>${boldPart}</strong>${restOfLine ? ' ' + restOfLine : ''}</p>`;
                     } else {
                         // Fallback if regex doesn't capture parts, bold whole line
                         formattedHtml += `<p class="main-item"><strong>${trimmedLine}</strong></p>`;
