@@ -6,6 +6,7 @@
     <title>Sắc Mộc - Thử Son Ảo Nâng Cấp </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js"></script>
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
@@ -802,7 +803,7 @@
 
             const payload = { contents: assistantChatHistory };
             // API KEY - Leave empty for Canvas environment to provide automatically
-            const apiKey = ""; 
+            const apiKey = "AIzaSyA4jDpQ1tTZq2JkSTcBczzoJ0eiU1mpwaw"; // API key của bạn
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
