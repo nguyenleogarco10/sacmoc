@@ -224,14 +224,35 @@
         .assistant-message {
             font-size: 1rem; /* Kích thước chữ lớn hơn */
             color: #333;
-            line-height: 1.5; /* GIẢM GIÃN CÁCH DÒNG */
-            text-align: left; /* THAY ĐỔI CĂN CHỈNH SANG TRÁI */
-            white-space: pre-wrap; /* Bảo toàn xuống dòng */
+            line-height: 1.5; 
+            text-align: left; 
             word-wrap: break-word; /* Đảm bảo từ dài xuống dòng */
-            padding: 0 0.5rem; /* Padding ngang nhẹ để tránh chữ quá sát viền */
-            max-width: 90%; /* Limit width for readability */
-            margin: 0 auto; /* Center the text block */
+            padding: 0; /* Remove padding here, controlled by inner elements */
+            max-width: 90%; 
+            margin: 0 auto; 
+            /* text-indent and white-space properties removed from here to be managed by inner HTML */
         }
+        /* Style for main numbered items and aligned sub-headers */
+        .assistant-message p.main-item {
+            padding-left: 1em; /* Thụt đầu dòng 1 tab */
+            margin-top: 1rem; /* Margin trên cho khoảng cách */
+        }
+        /* Style for content lines that are NOT sub-headers or main items, now 2em */
+        .assistant-message p.content-line {
+            padding-left: 2em; /* Thụt đầu dòng 2 tab */
+            margin-top: 0.25rem; 
+        }
+        /* Style for sub-items with hyphens, now 2em with a small margin for bullet point */
+        .assistant-message p.sub-item-hyphen {
+            padding-left: 2em; /* Align with content-line depth */
+            margin-top: 0.25rem;
+        }
+        /* Ensure the very first paragraph in the assistant message doesn't have top margin */
+        .assistant-message p:first-child {
+            margin-top: 0 !important;
+        }
+
+
         .assistant-loading-text {
             font-style: italic;
             color: #8D6E63;
@@ -855,18 +876,84 @@
         }
 
         async function recommendLipstick(skinTone) {
-            // Initial prompt for skin tone recommendation
             const productNames = products.map(p => p.name).join(', ');
-            const prompt = `Tôi có sắc tố da mặt là "${skinTone}". Hãy gợi ý cho tôi 3 màu son trong danh sách sau đây (${productNames}) mà phù hợp nhất với sắc tố da của tôi. Ngoài ra, hãy gợi ý thêm một phong cách trang điểm hoặc phối đồ phù hợp với mỗi màu son đó, và một dịp sử dụng thích hợp. Định dạng câu trả lời của bạn là một danh sách được đánh số rõ ràng, mỗi mục là một màu son gợi ý kèm theo giải thích và các gợi ý thêm.`;
-            assistantChatHistory = [{ role: "user", parts: [{ text: prompt }] }]; // Initialize chat history for the first recommendation
+            // Updated prompt to explicitly ask for "Giải thích:" and bolding/alignment rules
+            const prompt = `Tôi có sắc tố da mặt là "${skinTone}". Hãy gợi ý cho tôi 3 màu son trong danh sách sau đây (${productNames}) mà phù hợp nhất với sắc tố da của tôi. Ngoài ra, hãy gợi ý thêm một phong cách trang điểm hoặc phối đồ phù hợp với mỗi màu son đó, và một dịp sử dụng thích hợp. Định dạng câu trả lời của bạn là một danh sách được đánh số rõ ràng, mỗi mục là một màu son gợi ý. Đảm bảo các tiêu đề con như "Giải thích:", "Phong cách trang điểm:", "Phối đồ:", "Dịp sử dụng:", "Lưu ý:" được in đậm và gióng thẳng hàng với số mục chính. Các ý con trong "Phong cách trang điểm:" và "Phối đồ:" hãy bắt đầu bằng dấu gạch ngang "-". Đảm bảo có đủ dấu cách giữa các từ.`;
+            assistantChatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             let recommendation = await getGeminiResponse(prompt);
             
-            // Remove markdown formatting (asterisks) and quotes
-            recommendation = recommendation.replace(/\*/g, '').replace(/"/g, '');
-            // Split by newline, filter out empty lines, then join with two newlines for spacing
-            const lines = recommendation.split('\n').filter(line => line.trim().length > 0);
-            assistantMessageElem.textContent = lines.join('\n\n'); // Ensures 1 empty line between items
-            assistantMessageElem.style.textAlign = 'left'; // CHANGED TO LEFT ALIGN
+            // Loại bỏ dấu nháy kép và dấu hoa thị
+            recommendation = recommendation.replace(/"/g, '').replace(/\*/g, ''); 
+
+            let formattedHtml = '';
+            const lines = recommendation.split('\n'); // Chia văn bản thành các dòng
+
+            let currentSectionType = ''; // To track if we are inside 'Phong cách trang điểm:' or 'Phối đồ:'
+            lines.forEach(line => {
+                const trimmedLine = line.trim();
+                if (trimmedLine.length === 0) {
+                    formattedHtml += '<p></p>'; // Thêm khoảng trống cho các dòng trống
+                    return;
+                }
+
+                // Kiểm tra các điểm chính được đánh số (1. 2. 3.)
+                if (trimmedLine.match(/^\d+\.\s/)) {
+                    // Match the numbered item, e.g., "1. Hồng Đất - 05"
+                    const match = trimmedLine.match(/^(\d+\.\s)(.*)/);
+                    if (match && match.length >= 3) {
+                        // Bold the entire matched numbered item, then append the rest of the line
+                        formattedHtml += `<p class="main-item"><strong>${match[1]}${match[2]}</strong></p>`;
+                    } else {
+                        // Fallback if regex doesn't capture parts, bold whole line
+                        formattedHtml += `<p class="main-item"><strong>${trimmedLine}</strong></p>`;
+                    }
+                    currentSectionType = ''; // Reset section type after a new main item
+                } 
+                // Kiểm tra các tiêu đề phụ cần gióng thẳng hàng với mục chính và in đậm
+                else if (trimmedLine.match(/^(Giải thích:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)/)) {
+                    // Split the line into the bold part (e.g., "Giải thích:") and the rest
+                    const headerMatch = trimmedLine.match(/^(Giải thích:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)\s*(.*)/);
+                    if (headerMatch) {
+                        const boldPart = headerMatch[1]; // e.g., "Giải thích:"
+                        const restOfLine = headerMatch[2]; // e.g., "Hồng đất là màu son dễ tính..."
+
+                        // If it's "Giải thích:", bold only that part. Otherwise, bold the whole header line.
+                        if (boldPart === "Giải thích:") {
+                            formattedHtml += `<p class="main-item"><strong>${boldPart}</strong>${restOfLine ? ' ' + restOfLine : ''}</p>`;
+                        } else {
+                            formattedHtml += `<p class="main-item"><strong>${trimmedLine}</strong></p>`;
+                        }
+                    } else {
+                        // Fallback if regex doesn't capture parts, bold whole line
+                        formattedHtml += `<p class="main-item"><strong>${trimmedLine}</strong></p>`;
+                    }
+                    // Set section type for subsequent lines to apply hyphen if applicable
+                    if (trimmedLine.includes('Phong cách trang điểm:')) {
+                        currentSectionType = 'makeup';
+                    } else if (trimmedLine.includes('Phối đồ:')) {
+                        currentSectionType = 'outfit';
+                    } else {
+                        currentSectionType = '';
+                    }
+                } 
+                // Tất cả các dòng nội dung khác
+                else {
+                    let contentToDisplay = trimmedLine;
+                    let className = "content-line"; // Default class for general content
+
+                    // Check if current line should be hyphenated based on section type
+                    // And ensure it doesn't already start with a hyphen to avoid double hyphens
+                    if ((currentSectionType === 'makeup' || currentSectionType === 'outfit') && !trimmedLine.startsWith('- ')) {
+                         contentToDisplay = `- ${trimmedLine}`;
+                         className = "sub-item-hyphen"; // Apply specific class for hyphenated items
+                    }
+                    formattedHtml += `<p class="${className}">${contentToDisplay}</p>`;
+                }
+            });
+
+            assistantMessageElem.innerHTML = formattedHtml;
+            assistantMessageElem.style.textAlign = 'left';
+            assistantMessageElem.style.whiteSpace = 'normal'; // Đặt lại về normal vì chúng ta đang sử dụng các thẻ <p> để cấu trúc
         }
 
         function sendCompliment(productName) {
@@ -901,9 +988,11 @@
             userChatInput.disabled = true;
             sendChatBtn.disabled = true;
 
-            const response = await getGeminiResponse(userQuery, true); // Send user query to Gemini
-            assistantMessageElem.textContent = response;
-            assistantMessageElem.style.textAlign = 'left'; // Default to left for general chat
+            const response = await getGeminiResponse(userQuery, true);
+            // Đối với chat thông thường, chỉ đặt nó trong một đoạn văn bản đơn giản với padding-left 1em
+            assistantMessageElem.innerHTML = `<p class="content-line">${response.trim().replace(/\*/g, '')}</p>`; 
+            assistantMessageElem.style.textAlign = 'left';
+            assistantMessageElem.style.whiteSpace = 'normal';
             userChatInput.disabled = false;
             sendChatBtn.disabled = false;
             userChatInput.focus(); // Keep focus on input
