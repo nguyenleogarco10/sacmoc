@@ -334,8 +334,8 @@
     </div>
 
     <script type="module">
-        // Dynamically import MediaPipe Tasks Vision components
-        const { FaceLandmarker, FilesetResolver } = await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js");
+        // Dynamically import Medipe Tasks Vision components
+        const { FaceLandmarker, FilesetResolver } = await import("https://cdn.jsdelivr.net/npm/@medipe/tasks-vision@latest/vision_bundle.js");
 
         const vtoVideo = document.getElementById('vto-video');
         const vtoCanvas = document.getElementById('vto-canvas');
@@ -364,7 +364,7 @@
         let lastComplimentIndex = -1;
         let assistantChatHistory = []; // To store chat history for conversational AI
 
-        // These landmark indices are standard for MediaPipe Face Mesh (478 landmarks model)
+        // These landmark indices are standard for Medipe Face Mesh (478 landmarks model)
         // and should map to lips.
         const LIP_OUTLINE_UPPER = [61,185,40,39,37,0,267,269,270,409,291,308,415,310,311,312,13,82,81,80,191,78];
         const LIP_OUTLINE_LOWER = [61,146,91,181,84,17,314,405,321,375,291,324,318,402,317,14,87,178,88,95,78];
@@ -581,11 +581,11 @@
             advancedVtoAvailable = false;
             try {
                 const filesetResolver = await FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
+                    "https://cdn.jsdelivr.net/npm/@medipe/tasks-vision@latest/wasm"
                 );
                 faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
                     baseOptions: {
-                        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+                        modelAssetPath: `https://storage.googles.com/medipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
                         delegate: "GPU" // Or "CPU"
                     },
                     outputFaceBlendshapes: false, // Not needed for simple lipstick
@@ -803,7 +803,7 @@
 
             const payload = { contents: assistantChatHistory };
             // API KEY - Leave empty for Canvas environment to provide automatically
-            const apiKey = "AIzaSyA4jDpQ1tTZq2JkSTcBczzoJ0eiU1mpwaw"; // API key của bạn
+            const apiKey = "AIzaSyCZZH7f4IHZ_6WpyW03Az7N7qA_ci1x7qM"; // API key của bạn
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
