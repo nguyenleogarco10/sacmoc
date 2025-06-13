@@ -326,7 +326,7 @@
                 name: 'Đỏ Ruby - 06', color: '#9B1C1C',
                 compliments: [
                     "Sắc đỏ ruby này thật quyền lực trên đôi môi bạn!",
-                    "Bạn trông thật lộng lẫy và quyến rũ với màu đỏ ruby này!",
+                    "Bạn trông thật lộng lẫy và quyến rạng rũ với màu đỏ ruby này!",
                     "Vẻ đẹp của bạn tỏa sáng với màu đỏ ruby đầy mê hoặc!",
                     "Màu đỏ ruby này khiến bạn trông thật tự tin và nổi bật!",
                     "Tuyệt vời, màu đỏ ruby này mang đến vẻ đẹp kiêu sa và sang trọng cho bạn!"
@@ -631,7 +631,9 @@
             let chatHistory = [];
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = ""; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            // CHÈN API KEY CỦA BẠN VÀO ĐÂY:
+            const apiKey = "AIzaSyA4jDpQ1tTZq2JkSTcBczzoJ0eiU1mpwaw"; // Ví dụ: "AIzaSyC..." (lấy từ Google AI Studio)
+            // LƯU Ý: Không được để trống nếu chạy trên GitHub Pages
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
@@ -670,7 +672,8 @@
                     console.error("Gemini API returned an unexpected structure or no content:", result);
                     return "Xin lỗi, tôi không thể tạo phản hồi lúc này. Cấu trúc phản hồi không mong muốn.";
                 }
-            } catch (error) {
+            }
+            catch (error) {
                 console.error("Lỗi khi gọi Gemini API:", error);
                 return "Đã xảy ra lỗi khi kết nối với trợ lý ảo. Vui lòng kiểm tra kết nối mạng và bảng điều khiển.";
             } finally {
