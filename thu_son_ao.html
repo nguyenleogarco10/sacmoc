@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
-            background-color: #FDFBF8;
+            background-color: #FDFBF8; /* Nền nhẹ nhàng, ấm áp */
             color: #4A4A4A;
             display: flex;
             flex-direction: column;
@@ -18,30 +18,33 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            padding: 1rem;
+            padding: 1.5rem; /* Tăng padding tổng thể */
             box-sizing: border-box;
         }
-        .text-brand { color: #8D6E63; }
+        .text-brand { color: #8D6E63; } /* Màu nâu đất chủ đạo */
+
         #vto-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
-            padding: 1rem;
+            gap: 1.5rem; /* Tăng khoảng cách giữa các phần */
+            padding: 2rem; /* Tăng padding bên trong container */
             background-color: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            border-radius: 1rem; /* Bo góc mềm mại hơn */
+            box-shadow: 0 15px 30px -8px rgba(0,0,0,0.15), 0 8px 12px -4px rgba(0,0,0,0.08); /* Đổ bóng sâu hơn */
             width: 100%;
-            max-width: 900px;
+            max-width: 950px; /* Rộng hơn một chút */
         }
         #vto-video-container {
             position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 550px; /* Rộng hơn */
             aspect-ratio: 4 / 3;
             background-color: #EFEBE9;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem; /* Bo góc */
             overflow: hidden;
+            border: 1px solid rgba(141, 110, 99, 0.2); /* Viền mềm mại */
+            box-shadow: 0 5px 15px -3px rgba(0,0,0,0.1); /* Đổ bóng nhẹ */
         }
         #vto-video, #vto-canvas, #vto-face-static {
             position: absolute;
@@ -56,6 +59,8 @@
         }
         #vto-canvas, #vto-lips-overlay {
             pointer-events: none;
+            /* Transition for smoother color application (if applicable to canvas/overlay) */
+            transition: background-color 0.3s ease-in-out;
         }
         #vto-lips-overlay {
              position: absolute;
@@ -63,67 +68,141 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* Default clip-path, will be updated if VTO fails */
             clip-path: polygon(29% 62%, 35% 58%, 43% 56%, 50% 57%, 57% 56%, 65% 58%, 71% 62%, 65% 66%, 57% 68%, 50% 69%, 43% 68%, 35% 66%);
         }
         #vto-controls {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem; /* Tăng khoảng cách */
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
         }
         #vto-color-options {
             display: grid;
-            /* Changed to 6 columns for desktop, and adjusted for smaller screens */
             grid-template-columns: repeat(6, minmax(0, 1fr)); 
-            gap: 0.75rem;
+            gap: 0.85rem; /* Tăng khoảng cách giữa các nút màu */
             width: 100%;
         }
-        /* Responsive adjustment for tablets (2 columns) */
         @media (max-width: 768px) {
             #vto-color-options {
-                grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Fallback to auto-fit for smaller screens if needed */
+                grid-template-columns: repeat(4, minmax(0, 1fr)); /* 4 cột trên tablet */
             }
         }
-        /* Further adjust for mobile (3 columns) */
         @media (max-width: 480px) {
             #vto-color-options {
-                grid-template-columns: repeat(3, minmax(0, 1fr)); 
+                grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 cột trên di động */
             }
         }
         .vto-color-btn {
             width: 100%;
             aspect-ratio: 1 / 1;
-            border-radius: 0.375rem;
+            border-radius: 0.5rem; /* Bo góc nhiều hơn */
             border: 2px solid transparent;
             cursor: pointer;
-            transition: border-color 0.2s ease-in-out;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.1s ease-out; /* Thêm transition cho transform */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Đổ bóng nhẹ mặc định */
         }
-        .vto-color-btn:hover, .vto-color-btn.active {
+        .vto-color-btn:hover {
             border-color: #8D6E63;
-            box-shadow: 0 0 0 2px #D7CCC8;
+            box-shadow: 0 0 0 3px #D7CCC8; /* Hiệu ứng sáng viền mạnh hơn khi hover */
+            transform: translateY(-2px); /* Hiệu ứng nổi nhẹ */
+        }
+        .vto-color-btn.active {
+            border-color: #8D6E63;
+            box-shadow: 0 0 0 4px #8D6E63; /* Hiệu ứng sáng viền mạnh hơn khi active */
+            transform: scale(1.05); /* Phóng to nhẹ khi active */
         }
         #vto-status {
             text-align: center;
-            padding: 0.5rem;
-            background-color: rgba(255,255,255,0.8);
-            border-radius: 0.375rem;
+            padding: 0.75rem 1.25rem; /* Tăng padding */
+            background-color: rgba(255,255,255,0.9);
+            border-radius: 0.5rem;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             z-index: 10;
+            font-size: 1rem;
+            color: #555;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: flex; /* Để căn giữa spinner */
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
         .hidden {
             display: none !important;
+        }
+        /* Styles for the assistant chatbox */
+        #assistant-chatbox {
+            background-image: linear-gradient(to bottom right, #f0f4f7, #e6edf2); /* Gradient tinh tế */
+            border: 1px solid #b0c7d8; /* Viền tinh tế hơn */
+            border-radius: 1.25rem; /* Bo góc nhiều hơn */
+            padding: 1.5rem; /* Tăng padding */
+            margin-top: 2rem; /* Tăng margin top */
+            width: 100%;
+            max-width: 600px; /* Rộng hơn nữa */
+            min-height: 120px; /* Taller */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 12px 25px -8px rgba(0,0,0,0.2), 0 6px 10px -3px rgba(0,0,0,0.12); /* Đổ bóng mạnh hơn */
+            position: relative;
+        }
+        #assistant-chatbox h3 {
+            font-size: 1.35rem; /* Lớn hơn một chút */
+            font-weight: 700; /* Đậm hơn */
+            color: #2a3c4a; /* Màu chữ tối hơn */
+            margin-bottom: 1rem; /* Tăng khoảng cách dưới tiêu đề */
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* Tăng khoảng cách giữa icon và chữ */
+        }
+        #assistant-chatbox h3 img { /* Style cho logo */
+            height: 28px; /* Kích thước logo lớn hơn */
+            width: auto;
+            vertical-align: middle;
+        }
+        .assistant-message {
+            font-size: 1rem; /* Kích thước chữ lớn hơn */
+            color: #333;
+            line-height: 1.7; /* Tăng line height để dễ đọc hơn */
+            text-align: justify; /* Căn đều hai bên */
+            white-space: pre-wrap; /* Bảo toàn xuống dòng */
+            word-wrap: break-word; /* Đảm bảo từ dài xuống dòng */
+            padding: 0 0.5rem; /* Padding ngang nhẹ để tránh chữ quá sát viền */
+        }
+        .assistant-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8D6E63;
+            font-style: italic;
+        }
+        .assistant-loading::after {
+            content: '';
+            display: inline-block;
+            width: 12px; /* Kích thước spinner lớn hơn */
+            height: 12px;
+            border: 2px solid #8D6E63;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+            margin-left: 10px; /* Khoảng cách lớn hơn */
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div id="vto-container">
-        <h1 class="text-3xl font-bold text-brand mb-4">Thử Son Ảo - Sắc Mộc </h1>
+        <h1 class="text-3xl font-bold text-brand mb-4">
+            Thử Son Ảo - Sắc Mộc
+        </h1>
         
         <div id="vto-video-container">
             <img id="vto-face-static" src="https://placehold.co/600x400/EFEBE9/8D6E63?text=Xem+trước+tĩnh" alt="Khuôn mặt mẫu" class="hidden">
@@ -141,6 +220,15 @@
                 <p id="vto-fallback-note" class="hidden mt-1">Chế độ xem trước AI không khả dụng, đang hiển thị bản xem trước tĩnh.</p>
             </div>
         </div>
+
+        <!-- Assistant Chatbox -->
+        <div id="assistant-chatbox" class="mt-4">
+            <h3>
+                <img src="logo.png" alt="Sắc Mộc Logo" class="h-7 w-auto" onerror="this.onerror=null;this.src='https://placehold.co/28x28/8D6E63/FFFFFF?text=Logo';" /> 
+                Trợ lý ảo Sắc Mộc
+            </h3>
+            <p class="assistant-message" id="assistant-message">Chào mừng bạn đến với Sắc Mộc! Vui lòng nhìn thẳng vào webcam để tôi xác định sắc tố da và tư vấn màu son phù hợp nhất nhé.</p>
+        </div>
     </div>
 
     <script type="module">
@@ -155,6 +243,7 @@
         const vtoColorOptions = document.getElementById('vto-color-options');
         const vtoStatus = document.getElementById('vto-status');
         const vtoFallbackNote = document.getElementById('vto-fallback-note');
+        const assistantMessageElem = document.getElementById('assistant-message'); // Element for assistant messages
 
         let faceLandmarker;
         let currentLipColor = 'rgba(185, 92, 80, 0.7)'; // Default color
@@ -162,26 +251,147 @@
         let animationFrameId;
         let advancedVtoAvailable = false;
         let lastVideoTime = -1;
+        let currentSkinTone = null; // Stores estimated skin tone
+        let isSkinToneLocked = false; // New flag to lock skin tone after first detection
+        let lastComplimentIndex = -1; // Store the index of the last compliment to avoid repetition
+        // isInitialLoad không còn cần thiết vì logic kích hoạt lời khen đã được điều chỉnh.
 
         // These landmark indices are standard for MediaPipe Face Mesh (478 landmarks model)
         // and should map to lips.
         const LIP_OUTLINE_UPPER = [61,185,40,39,37,0,267,269,270,409,291,308,415,310,311,312,13,82,81,80,191,78];
         const LIP_OUTLINE_LOWER = [61,146,91,181,84,17,314,405,321,375,291,324,318,402,317,14,87,178,88,95,78];
 
+        // Landmark indices for a region on the forehead (for skin tone estimation)
+        // These are approximations and might need fine-tuning.
+        const FOREHEAD_LANDMARKS_SAMPLE = [
+            10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 467, 441, 
+            431, 319, 390, 462, 283, 300, 386, 397, 365, 379, 378, 400, 
+            377, 152, 148, 176, 149, 150, 136, 172, 58, 207, 213, 215, 212, 
+            214, 177, 199, 175, 171, 140, 170, 143, 145, 159, 160, 161
+        ];
 
+        // Pre-defined products with compliments
         const products = [
-            { name: 'Đỏ Đất - 01', color: '#B95C50'},
-            { name: 'Cam Cháy - 02', color: '#D87C4F'},
-            { name: 'Hồng Đào - 03', color: '#E48F82'},
-            { name: 'Nâu Gỗ - 04', color: '#8C5A4D'},
-            { name: 'Hồng Đất - 05', color: '#C68582'},
-            { name: 'Đỏ Ruby - 06', color: '#9B1C1C' },
-            { name: 'Hồng Cam - 07', color: '#FF7F50' },
-            { name: 'Đỏ Rượu Vang - 08', color: '#800020' },
-            { name: 'Hồng Fuchsia - 09', color: '#C154C1' },
-            { name: 'Nude Đào - 10', color: '#F7CAC9' },
-            { name: 'Mận Chín - 11', color: '#8E4585' },
-            { name: 'Hồng Tím - 12', color: '#C8A2C8' } 
+            { 
+                name: 'Đỏ Đất - 01', color: '#B95C50', 
+                compliments: [
+                    "Màu đỏ đất này trên môi bạn trông thật sang trọng và cuốn hút!",
+                    "Bạn thật sự nổi bật với sắc đỏ đất này, rất hợp với tông da của bạn!",
+                    "Ôi, màu đỏ đất này làm bạn trông thật thanh lịch và hiện đại!",
+                    "Quyến rũ và tinh tế, màu đỏ đất này sinh ra để dành cho bạn!",
+                    "Sự kết hợp giữa đỏ đất và khuôn mặt bạn thật hoàn hảo, rất cá tính!"
+                ]
+            },
+            { 
+                name: 'Cam Cháy - 02', color: '#D87C4F',
+                compliments: [
+                    "Màu cam cháy này làm bừng sáng cả khuôn mặt bạn, rạng rỡ quá!",
+                    "Bạn trông thật năng động và tươi trẻ với sắc cam cháy này!",
+                    "Thật tuyệt vời, màu cam cháy này tôn lên vẻ đẹp ấm áp của bạn!",
+                    "Đôi môi bạn như được thắp sáng với màu cam cháy đầy sức sống này!",
+                    "Màu cam cháy này mang đến một vẻ ngoài đầy thu hút và phóng khoáng cho bạn!"
+                ]
+            },
+            { 
+                name: 'Hồng Đào - 03', color: '#E48F82',
+                compliments: [
+                    "Ngọt ngào và dịu dàng, màu hồng đào này thật sự rất hợp với bạn!",
+                    "Bạn trông thật đáng yêu với sắc hồng đào tươi tắn này!",
+                    "Màu hồng đào này khiến bạn trông thật tự nhiên và duyên dáng!",
+                    "Thật dễ thương, màu hồng đào này làm gương mặt bạn thêm phần rạng rỡ!",
+                    "Sự lựa chọn hồng đào này mang đến vẻ đẹp trong trẻo và thanh thoát cho bạn!"
+                ]
+            },
+            { 
+                name: 'Nâu Gỗ - 04', color: '#8C5A4D',
+                compliments: [
+                    "Màu nâu gỗ này làm bạn trông thật cá tính và thời thượng!",
+                    "Thật ấn tượng, sắc nâu gỗ này mang đến vẻ đẹp trầm ấm và cuốn hút cho bạn!",
+                    "Bạn thật sự phong cách với màu nâu gỗ này!",
+                    "Màu nâu gỗ này tôn lên vẻ đẹp tự nhiên và mạnh mẽ của bạn!",
+                    "Đôi môi bạn trở nên quyến rũ và bí ẩn hơn với sắc nâu gỗ này!"
+                ]
+            },
+            { 
+                name: 'Hồng Đất - 05', color: '#C68582',
+                compliments: [
+                    "Màu hồng đất này làm bạn trông thật nhẹ nhàng và cuốn hút!",
+                    "Bạn thật thanh lịch với sắc hồng đất này!",
+                    "Ôi, màu hồng đất này rất hợp với bạn, vừa tự nhiên vừa sang trọng!",
+                    "Vẻ đẹp tinh tế của bạn được tôn vinh với màu hồng đất này!",
+                    "Sắc hồng đất này mang đến sự dịu dàng và hiện đại cho khuôn mặt bạn!"
+                ]
+            },
+            { 
+                name: 'Đỏ Ruby - 06', color: '#9B1C1C',
+                compliments: [
+                    "Sắc đỏ ruby này thật quyền lực trên đôi môi bạn!",
+                    "Bạn trông thật lộng lẫy và quyến rũ với màu đỏ ruby này!",
+                    "Vẻ đẹp của bạn tỏa sáng với màu đỏ ruby đầy mê hoặc!",
+                    "Màu đỏ ruby này khiến bạn trông thật tự tin và nổi bật!",
+                    "Tuyệt vời, màu đỏ ruby này mang đến vẻ đẹp kiêu sa và sang trọng cho bạn!"
+                ]
+            },
+            { 
+                name: 'Hồng Cam - 07', color: '#FF7F50',
+                compliments: [
+                    "Bạn thật tươi tắn và đáng yêu với màu hồng cam này!",
+                    "Màu hồng cam này làm khuôn mặt bạn bừng sáng đầy sức sống!",
+                    "Sắc hồng cam này mang đến vẻ ngoài trẻ trung và ngọt ngào cho bạn!",
+                    "Thật rạng rỡ, màu hồng cam này rất hợp với bạn!",
+                    "Đôi môi bạn trông thật tự nhiên và quyến rũ với sắc hồng cam này!"
+                ]
+            },
+            { 
+                name: 'Đỏ Rượu Vang - 08', color: '#800020',
+                compliments: [
+                    "Màu đỏ rượu vang này trên môi bạn thật sự lôi cuốn và bí ẩn!",
+                    "Bạn trông thật sang chảnh và đẳng cấp với sắc đỏ rượu vang này!",
+                    "Vẻ đẹp huyền bí của bạn được tôn lên bởi màu đỏ rượu vang này!",
+                    "Thật ma mị và quyến rũ, màu đỏ rượu vang này sinh ra để dành cho bạn!",
+                    "Sắc đỏ rượu vang này mang đến một vẻ ngoài đầy mê hoặc và thời thượng cho bạn!"
+                ]
+            },
+            { 
+                name: 'Hồng Fuchsia - 09', color: '#C154C1',
+                compliments: [
+                    "Sắc hồng fuchsia này làm bạn trông thật nổi bật và cá tính!",
+                    "Bạn thật sự tự tin và đầy sức sống với màu hồng fuchsia rực rỡ này!",
+                    "Ôi, màu hồng fuchsia này khiến bạn trông thật phá cách và hiện đại!",
+                    "Vẻ đẹp độc đáo của bạn được tôn vinh với sắc hồng fuchsia này!",
+                    "Màu hồng fuchsia này mang đến một phong cách táo bạo và đầy cuốn hút cho bạn!"
+                ]
+            },
+            { 
+                name: 'Nude Đào - 10', color: '#F7CAC9',
+                compliments: [
+                    "Màu nude đào này làm bạn trông thật nhẹ nhàng và tinh khiết!",
+                    "Bạn thật duyên dáng với sắc nude đào tự nhiên này!",
+                    "Vẻ đẹp trong trẻo của bạn được tôn lên bởi màu nude đào này!",
+                    "Thật thanh thoát, màu nude đào này rất hợp với bạn!",
+                    "Sắc nude đào này mang đến sự thuần khiết và dịu dàng cho đôi môi bạn!"
+                ]
+            },
+            { 
+                name: 'Mận Chín - 11', color: '#8E4585',
+                compliments: [
+                    "Màu mận chín này trên môi bạn thật sự sang trọng và bí ẩn!",
+                    "Bạn trông thật quý phái với sắc mận chín cuốn hút này!",
+                    "Vẻ đẹp trưởng thành và quyến rũ của bạn được tôn vinh với màu mận chín!",
+                    "Thật ấn tượng, màu mận chín này mang đến một vẻ ngoài đầy mê hoặc!",
+                    "Sắc mận chín này khiến bạn trông thật tự tin và đầy quyền lực!"
+                ]
+            },
+            { 
+                name: 'Hồng Tím - 12', color: '#C8A2C8',
+                compliments: [
+                    "Sắc hồng tím này làm bạn trông thật độc đáo và nổi bật!",
+                    "Bạn thật sự cá tính với màu hồng tím pha chút bí ẩn này!",
+                    "Màu hồng tím này mang đến vẻ đẹp vừa dịu dàng vừa phá cách cho bạn!",
+                    "Thật quyến rũ, màu hồng tím này tôn lên vẻ đẹp riêng của bạn!",
+                    "Đôi môi bạn trông thật cuốn hút và khác biệt với sắc hồng tím này!"
+                ]
+            }
         ];
 
         products.forEach(p => {
@@ -189,20 +399,34 @@
             colorBtn.className = 'vto-color-btn';
             colorBtn.style.backgroundColor = p.color;
             colorBtn.dataset.color = p.color;
+            colorBtn.dataset.name = p.name; // Store product name
             colorBtn.setAttribute('aria-label', `Thử màu ${p.name}`);
             colorBtn.addEventListener('click', () => {
+                const previousColor = currentLipColor; // Store current color before changing
                 currentLipColor = hexToRgba(p.color, 0.6);
                 document.querySelectorAll('.vto-color-btn').forEach(btn => btn.classList.remove('active'));
                 colorBtn.classList.add('active');
                 if (!advancedVtoAvailable) {
                     vtoLipsOverlay.style.backgroundColor = currentLipColor;
                 }
+
+                // Only send compliment if the color actually changed
+                if (currentLipColor !== previousColor) {
+                    sendCompliment(p.name); 
+                }
             });
             vtoColorOptions.appendChild(colorBtn);
         });
+
+        // Set the first product as active on load WITHOUT sending a compliment
         if (vtoColorOptions.firstElementChild) {
-            vtoColorOptions.firstElementChild.click();
+            vtoColorOptions.firstElementChild.classList.add('active');
+            currentLipColor = hexToRgba(products[0].color, 0.6); // Manually set default color
+            if (!advancedVtoAvailable) { // For static preview mode
+                vtoLipsOverlay.style.backgroundColor = currentLipColor;
+            }
         }
+
 
         async function setupWebcam() {
             try {
@@ -339,6 +563,161 @@
             vtoStatus.style.display = 'none'; // Hide status if drawing is successful
         }
 
+        // Function to estimate skin tone
+        function estimateSkinTone(landmarks) {
+            if (!landmarks || landmarks.length === 0) {
+                return null;
+            }
+
+            // Create a temporary canvas to sample pixel color
+            const tempCanvas = document.createElement('canvas');
+            const tempCtx = tempCanvas.getContext('2d');
+            tempCanvas.width = vtoVideo.videoWidth;
+            tempCanvas.height = vtoVideo.videoHeight;
+            
+            // Draw the current video frame onto the temporary canvas
+            tempCtx.drawImage(vtoVideo, 0, 0, tempCanvas.width, tempCanvas.height);
+
+            // Get a sample point (e.g., center of forehead)
+            // This is a simplification. A more robust solution might involve averaging multiple points.
+            // Using a central forehead landmark if available, or a general area
+            let sampleX, sampleY;
+            const centralForeheadLandmarkIndex = 10; // Example landmark for forehead
+            if (landmarks[centralForeheadLandmarkIndex]) {
+                // Adjust for mirrored video
+                sampleX = (1 - landmarks[centralForeheadLandmarkIndex].x) * tempCanvas.width; 
+                sampleY = landmarks[centralForeheadLandmarkIndex].y * tempCanvas.height;
+            } else {
+                // Fallback to a fixed point if landmark not found (less accurate)
+                sampleX = tempCanvas.width / 2;
+                sampleY = tempCanvas.height / 4; 
+            }
+            
+            // Sample the pixel color
+            const imageData = tempCtx.getImageData(sampleX, sampleY, 1, 1).data;
+            const r = imageData[0];
+            const g = imageData[1];
+            const b = imageData[2];
+
+            // Convert RGB to a more descriptive tone. This is a very basic heuristic.
+            // You might need a more sophisticated mapping based on real skin tone charts.
+            // For simplicity, we'll categorize based on general brightness/hue.
+            const brightness = (r + g + b) / 3;
+            let tone = "trung tính"; // Neutral
+
+            if (r > 200 && g > 180 && b > 160) {
+                tone = "sáng"; // Light
+            } else if (r > 150 && g > 120 && b > 100) {
+                tone = "trung bình"; // Medium
+            } else {
+                tone = "tối"; // Dark
+            }
+
+            // Check for undertones (simplified)
+            if (b > r && b > g) {
+                tone += " lạnh"; // Cool (blue/pink undertone)
+            } else if (r > g && g > b) {
+                tone += " ấm"; // Warm (yellow/golden undertone)
+            } else {
+                tone += " trung tính"; // Neutral undertone
+            }
+            
+            return tone;
+        }
+
+        async function getGeminiResponse(prompt) {
+            assistantMessageElem.classList.add('assistant-loading');
+            assistantMessageElem.textContent = ''; // Clear previous message
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                // Log response status and status text for debugging
+                console.log(`Gemini API Response Status: ${response.status} ${response.statusText}`);
+
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    console.error("Gemini API HTTP Error:", errorBody);
+                    return `Lỗi HTTP: ${response.status}. Chi tiết: ${errorBody.substring(0, 100)}...`;
+                }
+
+                let result;
+                try {
+                    result = await response.json();
+                    console.log("Gemini API Full Result:", result); // Log the full result
+                } catch (jsonError) {
+                    console.error("Lỗi phân tích cú pháp JSON từ Gemini API:", jsonError);
+                    const rawText = await response.text();
+                    console.error("Phản hồi thô từ Gemini API:", rawText);
+                    return "Lỗi: Không thể đọc phản hồi từ trợ lý ảo.";
+                }
+                
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    return text;
+                } else {
+                    console.error("Gemini API returned an unexpected structure or no content:", result);
+                    return "Xin lỗi, tôi không thể tạo phản hồi lúc này. Cấu trúc phản hồi không mong muốn.";
+                }
+            } catch (error) {
+                console.error("Lỗi khi gọi Gemini API:", error);
+                return "Đã xảy ra lỗi khi kết nối với trợ lý ảo. Vui lòng kiểm tra kết nối mạng và bảng điều khiển.";
+            } finally {
+                assistantMessageElem.classList.remove('assistant-loading');
+            }
+        }
+
+        async function recommendLipstick(skinTone) {
+            // Updated prompt to encourage numbered list and clearer structure
+            const productNames = products.map(p => p.name).join(', ');
+            const prompt = `Tôi có sắc tố da mặt là "${skinTone}". Hãy gợi ý cho tôi 3 màu son trong danh sách sau đây mà phù hợp nhất với sắc tố da của tôi, và giải thích ngắn gọn tại sao: ${productNames}. Định dạng câu trả lời của bạn là một danh sách các gợi ý.`;
+            let recommendation = await getGeminiResponse(prompt);
+            
+            // Remove markdown formatting (asterisks) and quotes
+            recommendation = recommendation.replace(/\*/g, '').replace(/"/g, '');
+            // Split by newline, filter out empty lines, then join with two newlines for spacing
+            const lines = recommendation.split('\n').filter(line => line.trim().length > 0);
+            assistantMessageElem.textContent = lines.join('\n\n'); // Ensures 1 empty line between items
+            assistantMessageElem.style.textAlign = 'justify'; // Ensure text is justified
+        }
+
+        function sendCompliment(productName) {
+            assistantMessageElem.classList.add('assistant-loading'); // Show loading spinner
+            assistantMessageElem.textContent = ''; // Clear previous message
+
+            setTimeout(() => { // Add a delay for the "thinking" effect
+                const product = products.find(p => p.name === productName);
+                if (!product || !product.compliments || product.compliments.length === 0) {
+                    assistantMessageElem.textContent = "Bạn chọn màu này đẹp quá!";
+                    assistantMessageElem.classList.remove('assistant-loading');
+                    assistantMessageElem.style.textAlign = 'center';
+                    return;
+                }
+
+                // Get a random compliment that hasn't been used recently
+                let newComplimentIndex;
+                do {
+                    newComplimentIndex = Math.floor(Math.random() * product.compliments.length);
+                } while (newComplimentIndex === lastComplimentIndex && product.compliments.length > 1); // Ensure it's different if more than one option
+                
+                lastComplimentIndex = newComplimentIndex;
+                assistantMessageElem.textContent = product.compliments[newComplimentIndex];
+                assistantMessageElem.classList.remove('assistant-loading'); // Hide loading spinner
+                assistantMessageElem.style.textAlign = 'center'; // Compliments look better centered
+            }, 400); // Changed from 700 to 400ms delay
+        }
+
         async function detectionLoop() {
             if (!advancedVtoAvailable || !faceLandmarker) {
                 if (animationFrameId) cancelAnimationFrame(animationFrameId);
@@ -363,6 +742,16 @@
                             if (faceLandmarkerResult && faceLandmarkerResult.faceLandmarks && faceLandmarkerResult.faceLandmarks.length > 0) {
                                 drawLipstick(faceLandmarkerResult.faceLandmarks[0]); 
                                 vtoStatus.style.display = 'none';
+
+                                // Estimate skin tone once if not locked
+                                const newSkinTone = estimateSkinTone(faceLandmarkerResult.faceLandmarks[0]);
+                                if (newSkinTone && !isSkinToneLocked) { // Only update if not locked
+                                    currentSkinTone = newSkinTone;
+                                    isSkinToneLocked = true; // Lock the skin tone after the first successful detection
+                                    console.log("Estimated and locked skin tone:", currentSkinTone);
+                                    recommendLipstick(currentSkinTone); // Recommend lipstick based on new skin tone
+                                }
+
                             } else {
                                 vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); 
                                 vtoStatus.textContent = "Không tìm thấy khuôn mặt.";
@@ -380,6 +769,7 @@
         }
 
         async function startVTO() {
+            console.log("Starting VTO initialization..."); // Log to track startup
             vtoStatus.textContent = "Đang tải...";
             advancedVtoAvailable = await createFaceLandmarker();
 
