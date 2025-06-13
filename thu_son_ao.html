@@ -224,8 +224,8 @@
         .assistant-message {
             font-size: 1rem; /* Kích thước chữ lớn hơn */
             color: #333;
-            line-height: 1.7; /* Tăng line height để dễ đọc hơn */
-            text-align: justify; /* Căn đều hai bên */
+            line-height: 1.5; /* GIẢM GIÃN CÁCH DÒNG */
+            text-align: left; /* THAY ĐỔI CĂN CHỈNH SANG TRÁI */
             white-space: pre-wrap; /* Bảo toàn xuống dòng */
             word-wrap: break-word; /* Đảm bảo từ dài xuống dòng */
             padding: 0 0.5rem; /* Padding ngang nhẹ để tránh chữ quá sát viền */
@@ -334,8 +334,8 @@
     </div>
 
     <script type="module">
-        // Dynamically import Medipe Tasks Vision components
-        const { FaceLandmarker, FilesetResolver } = await import("https://cdn.jsdelivr.net/npm/@medipe/tasks-vision@latest/vision_bundle.js");
+        // Dynamically import MediaPipe Tasks Vision components
+        const { FaceLandmarker, FilesetResolver } = await import("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js");
 
         const vtoVideo = document.getElementById('vto-video');
         const vtoCanvas = document.getElementById('vto-canvas');
@@ -364,7 +364,7 @@
         let lastComplimentIndex = -1;
         let assistantChatHistory = []; // To store chat history for conversational AI
 
-        // These landmark indices are standard for Medipe Face Mesh (478 landmarks model)
+        // These landmark indices are standard for MediaPipe Face Mesh (478 landmarks model)
         // and should map to lips.
         const LIP_OUTLINE_UPPER = [61,185,40,39,37,0,267,269,270,409,291,308,415,310,311,312,13,82,81,80,191,78];
         const LIP_OUTLINE_LOWER = [61,146,91,181,84,17,314,405,321,375,291,324,318,402,317,14,87,178,88,95,78];
@@ -378,7 +378,7 @@
             214, 177, 199, 175, 171, 140, 170, 143, 145, 159, 160, 161
         ];
 
-        // Pre-defined products with compliments
+        // Pre-defined products with compliments - KHÔI PHỤC DỮ LIỆU SẢN PHẨM
         const products = [
             { 
                 name: 'Đỏ Đất - 01', color: '#B95C50', 
@@ -581,11 +581,11 @@
             advancedVtoAvailable = false;
             try {
                 const filesetResolver = await FilesetResolver.forVisionTasks(
-                    "https://cdn.jsdelivr.net/npm/@medipe/tasks-vision@latest/wasm"
+                    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm"
                 );
                 faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
                     baseOptions: {
-                        modelAssetPath: `https://storage.googles.com/medipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+                        modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
                         delegate: "GPU" // Or "CPU"
                     },
                     outputFaceBlendshapes: false, // Not needed for simple lipstick
@@ -772,23 +772,26 @@
             let tone = "trung tính"; // Neutral
 
             if (r > 200 && g > 180 && b > 160) {
-                tone = "sáng"; // Light
+                tone += " sáng"; // Light
             } else if (r > 150 && g > 120 && b > 100) {
-                tone = "trung bình"; // Medium
+                tone += " trung bình"; // Medium
             } else {
-                tone = "tối"; // Dark
+                tone += " tối"; // Dark
             }
 
             // Check for undertones (simplified)
+            // Note: More robust undertone detection would involve analyzing color channels more deeply
+            // and potentially using a larger sample area or a dedicated ML model.
+            // This is a very basic attempt.
             if (b > r && b > g) {
-                tone += " lạnh"; // Cool (blue/pink undertone)
+                tone += " lạnh"; // Cool (more blue/pink)
             } else if (r > g && g > b) {
-                tone += " ấm"; // Warm (yellow/golden undertone)
+                tone += " ấm"; // Warm (more yellow/golden)
             } else {
                 tone += " trung tính"; // Neutral undertone
             }
             
-            return tone;
+            return tone.trim(); // Trim any leading/trailing spaces
         }
 
         async function getGeminiResponse(prompt, isUserInitiated = false) {
@@ -802,8 +805,8 @@
             }
 
             const payload = { contents: assistantChatHistory };
-            // API KEY - Leave empty for Canvas environment to provide automatically
-            const apiKey = "AIzaSyCZZH7f4IHZ_6WpyW03Az7N7qA_ci1x7qM"; // API key của bạn
+            // API KEY - Đã được cập nhật với key mới nhất
+            const apiKey = "AIzaSyCZZH7f4IHZ_6WpyW03Az7N7qA_ci1x7qM"; 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
@@ -863,7 +866,7 @@
             // Split by newline, filter out empty lines, then join with two newlines for spacing
             const lines = recommendation.split('\n').filter(line => line.trim().length > 0);
             assistantMessageElem.textContent = lines.join('\n\n'); // Ensures 1 empty line between items
-            assistantMessageElem.style.textAlign = 'justify'; // Ensure text is justified
+            assistantMessageElem.style.textAlign = 'left'; // CHANGED TO LEFT ALIGN
         }
 
         function sendCompliment(productName) {
@@ -873,7 +876,7 @@
                 const product = products.find(p => p.name === productName);
                 if (!product || !product.compliments || product.compliments.length === 0) {
                     assistantMessageElem.textContent = "Bạn chọn màu này đẹp quá!";
-                    assistantMessageElem.style.textAlign = 'center';
+                    assistantMessageElem.style.textAlign = 'center'; // Compliments look better centered
                     return;
                 }
 
@@ -884,4 +887,130 @@
                 } while (newComplimentIndex === lastComplimentIndex && product.compliments.length > 1); // Ensure it's different if more than one option
                 
                 lastComplimentIndex = newComplimentIndex;
-                assistantMessageElem.textContent = product.complim
+                assistantMessageElem.textContent = product.compliments[newComplimentIndex];
+                assistantMessageElem.style.textAlign = 'center'; // Compliments look better centered
+            }, 400); // Changed from 700 to 400ms delay
+        }
+
+        async function handleUserChat() {
+            const userQuery = userChatInput.value.trim();
+            if (!userQuery) return;
+
+            userChatInput.value = ''; // Clear input field
+            assistantMessageElem.innerHTML = '<span class="assistant-loading-spinner"></span> <span class="assistant-loading-text">Trợ lý ảo đang phản hồi...</span>';
+            userChatInput.disabled = true;
+            sendChatBtn.disabled = true;
+
+            const response = await getGeminiResponse(userQuery, true); // Send user query to Gemini
+            assistantMessageElem.textContent = response;
+            assistantMessageElem.style.textAlign = 'left'; // Default to left for general chat
+            userChatInput.disabled = false;
+            sendChatBtn.disabled = false;
+            userChatInput.focus(); // Keep focus on input
+        }
+
+        // Event listeners for chat input
+        sendChatBtn.addEventListener('click', handleUserChat);
+        userChatInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                handleUserChat();
+            }
+        });
+
+
+        async function detectionLoop() {
+            if (!advancedVtoAvailable || !faceLandmarker) {
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                if (!advancedVtoAvailable) activateStaticPreview();
+                return;
+            }
+
+            if (vtoVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA && !vtoVideo.paused && !vtoVideo.ended) {
+                if (vtoVideo.videoWidth > 0 && vtoVideo.videoHeight > 0) {
+                    if (vtoCanvas.width !== vtoVideo.videoWidth || vtoCanvas.height !== vtoVideo.videoHeight) {
+                        vtoCanvas.width = vtoVideo.videoWidth;
+                        vtoCanvas.height = vtoVideo.videoHeight;
+                        console.log(`Canvas dimensions updated to: ${vtoCanvas.width}x${vtoCanvas.height}`);
+                    }
+
+                    const currentTime = performance.now();
+                    if (vtoVideo.currentTime !== lastVideoTime) { 
+                        lastVideoTime = vtoVideo.currentTime;
+                        try {
+                            const faceLandmarkerResult = faceLandmarker.detectForVideo(vtoVideo, currentTime);
+                            
+                            if (faceLandmarkerResult && faceLandmarkerResult.faceLandmarks && faceLandmarkerResult.faceLandmarks.length > 0) {
+                                drawLipstick(faceLandmarkerResult.faceLandmarks[0]); 
+                                vtoStatus.style.display = 'none';
+                                videoContainer.classList.add('face-detected');
+
+                                // Estimate skin tone once if not locked
+                                const newSkinTone = estimateSkinTone(faceLandmarkerResult.faceLandmarks[0]);
+                                if (newSkinTone && !isSkinToneLocked) { // Only update if not locked
+                                    currentSkinTone = newSkinTone;
+                                    isSkinToneLocked = true; // Lock the skin tone after the first successful detection
+                                    console.log("Estimated and locked skin tone:", currentSkinTone);
+                                    recommendLipstick(currentSkinTone); // Recommend lipstick based on new skin tone
+                                }
+
+                            } else {
+                                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); 
+                                vtoStatus.innerHTML = '<span class="spinner"></span> Không tìm thấy khuôn mặt.';
+                                vtoStatus.style.display = 'flex';
+                                videoContainer.classList.remove('face-detected'); // Remove glow if face not found
+                            }
+                        } catch (error) {
+                            console.error("Lỗi trong quá trình nhận diện khuôn mặt (MediaPipe):", error);
+                            vtoStatus.innerHTML = '<span class="spinner"></span> Lỗi nhận diện. Thử lại.';
+                            vtoStatus.style.display = 'flex';
+                            videoContainer.classList.remove('face-detected');
+                        }
+                    }
+                }
+            }
+            animationFrameId = requestAnimationFrame(detectionLoop);
+        }
+
+        async function startVTO() {
+            console.log("Starting VTO initialization..."); // Log to track startup
+            vtoStatus.innerHTML = '<span class="spinner"></span> Đang tải...';
+            advancedVtoAvailable = await createFaceLandmarker();
+
+            if (!advancedVtoAvailable) {
+                console.log("Khởi tạo AI thất bại. Chuyển sang xem trước tĩnh.");
+                activateStaticPreview();
+                return;
+            }
+            
+            const webcamReady = await setupWebcam();
+            if (!webcamReady) {
+                console.log("Không thể khởi động webcam. Chuyển sang xem trước tĩnh.");
+                advancedVtoAvailable = false; 
+                activateStaticPreview(); 
+                return;
+            }
+            
+            activateAdvancedPreview();
+            console.log("VTO nâng cao đã sẵn sàng. Bắt đầu vòng lặp nhận diện.");
+            
+            vtoVideo.oncanplay = () => {
+                if (advancedVtoAvailable) {
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId); 
+                    lastVideoTime = -1; 
+                    detectionLoop();
+                }
+            };
+            if (vtoVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA && !vtoVideo.paused) {
+                 if (advancedVtoAvailable) {
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                    lastVideoTime = -1;
+                    detectionLoop();
+                }
+            }
+        }
+        
+        setTimeout(startVTO, 100);
+
+    </script>
+</body>
+</html>
