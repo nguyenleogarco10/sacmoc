@@ -238,7 +238,9 @@
             <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-on-scroll visible"> <!-- Hero section is visible by default -->
                 <!-- Increased font size for the main heading on the banner -->
                 <!-- Added gradient text effect for the slogan -->
-                <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#5D7A4D] to-[#8CA786] tracking-tight font-heading">Vẻ Đẹp Có Trách Nhiệm</h1> <!-- Applied font-heading here -->
+                <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#5D7A4D] to-[#8CA786] tracking-tight font-heading leading-tight">
+                    Tự nhiên từ Sắc,<br>Mộc từ tâm
+                </h1> <!-- Applied font-heading here -->
                 <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Sắc Mộc không chỉ là son môi. Đó là một lựa chọn an toàn cho bạn, tử tế với hành tinh và cam kết cho một vẻ đẹp minh bạch.</p>
                 <div class="mt-8">
                     <a href="#philosophy" class="inline-block bg-brand text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105" aria-label="Khám phá câu chuyện của Sắc Mộc">Khám Phám Câu Chuyện</a>
@@ -514,7 +516,7 @@
 
             // Populate Product List - Logic hiển thị sản phẩm đã được cập nhật
             const productList = document.getElementById('product-list');
-            productList.innerHTML = ''; // Xóa nội dung cũ trước khi thêm mới
+            productList.innerHTML = ''; // Clear existing content
             products.forEach(p => {
                 const card = document.createElement('div');
                 // Added role="listitem" for accessibility
