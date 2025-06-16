@@ -23,17 +23,12 @@
     <!-- Preload critical scripts -->
     <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@3.18.0/dist/tf-core.min.js" as="script">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@3.18.0/dist/tf-converter.min.js" as="script">
-    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2/dist/face-landmarks-detection.min.js" as="script">
-
+    <!-- Removed TensorFlow.js preload links -->
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core@3.18.0/dist/tf-core.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter@3.18.0/dist/tf-converter.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.2/dist/face-landmarks-detection.min.js"></script>
+    <!-- Removed TensorFlow.js script links -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,28 +110,7 @@
             padding: 1.5rem; /* Equivalent to p-6 Tailwind class */
          }
 
-        #vto-video-container {
-            position: relative;
-            width: 100%;
-            max-width: 500px; /* Control max size */
-            margin: auto;
-            aspect-ratio: 4 / 3; /* Maintain aspect ratio */
-        }
-        #vto-video, #vto-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 0.5rem; /* Tailwind's rounded-lg */
-            object-fit: cover; /* Ensure video covers the area */
-        }
-         #vto-video {
-            transform: scaleX(-1); /* Mirror mode for webcam */
-        }
-        #vto-canvas {
-            pointer-events: none; /* Allow interaction with elements below if any */
-        }
+        /* Removed VTO modal specific styles */
 
         /* Hero section background image blur and fade-in effect */
         .hero-background-image {
@@ -403,7 +377,7 @@
         <section id="products" class="py-20 bg-brand-superlight" role="region" aria-label="Sản phẩm son môi Sắc Mộc">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center animate-on-scroll slide-up">
-                    <h2 class="text-3xl font-bold text-brand font-heading">Khám Phá Màu Son Của Bạn</h2> <!-- Applied font-heading here -->
+                    <h2 class="text-3xl font-bold text-brand font-heading">Khám Phám Màu Son Của Bạn</h2> <!-- Applied font-heading here -->
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tìm kiếm sắc màu hoàn hảo chưa bao giờ dễ dàng hơn. Hãy thử ngay những gam màu lấy cảm hứng từ thiên nhiên của chúng tôi.</p>
                 </div>
 
@@ -519,29 +493,7 @@
     <!-- Cart Overlay -->
     <div id="cart-overlay" class="cart-overlay"></div>
 
-    <div id="vto-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="vto-modal-title">
-        <!-- Changed modal background to beige -->
-        <div class="bg-[#F5F5DC] rounded-lg shadow-xl p-6 w-full max-w-4xl relative transform transition-all duration-300 scale-95">
-            <button id="close-vto-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 z-10" aria-label="Đóng cửa sổ thử son ảo">&times;</button>
-            <h3 id="vto-modal-title" class="text-2xl font-bold text-brand text-center mb-4 font-heading">Trải Nghiệm Thử Son Ảo</h3> <!-- Applied font-heading here -->
-            <div class="grid md:grid-cols-2 gap-6 items-start">
-                <div id="vto-video-container" class="bg-gray-200 rounded-lg flex items-center justify-center">
-                    <video id="vto-video" playsinline autoplay muted class="rounded-lg"></video>
-                    <canvas id="vto-canvas" class="rounded-lg"></canvas>
-                    <p id="vto-status" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gray-600 bg-white/70 p-2 rounded">Đang tải model và khởi động webcam...</p>
-                </div>
-                <div class="pt-4 md:pt-0">
-                    <h4 class="font-semibold text-gray-700 mb-2">Chọn màu son của bạn:</h4>
-                    <div id="vto-color-options" class="grid grid-cols-3 sm:grid-cols-4 gap-3" role="group" aria-label="Lựa chọn màu son">
-                        <!-- Color options will be dynamically inserted here by JavaScript -->
-                    </div>
-                    <div class="mt-4 p-3 bg-amber-100 border-l-4 border-amber-500 text-amber-700 text-sm">
-                        <p><strong>Lưu ý:</strong> Để có kết quả tốt nhất, hãy đảm bảo khuôn mặt bạn được chiếu sáng đủ và nhìn thẳng vào webcam.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Removed VTO Modal section entirely -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1162,205 +1114,6 @@
             // Using a short timeout to ensure card widths are fully calculated by browser
             // Using a short timeout to ensure card widths are fully calculated by browser
             setTimeout(showTestimonials, 100);
-
-            // VTO (Virtual Try-On) Modal Logic
-            const vtoModal = document.getElementById('vto-modal');
-            const openVtoModalLink = document.querySelector('a[href="thu_son_ao.html"]'); 
-            const closeVtoModalBtn = document.getElementById('close-vto-modal');
-            const vtoVideo = document.getElementById('vto-video');
-            const vtoCanvas = document.getElementById('vto-canvas');
-            const vtoCtx = vtoCanvas.getContext('2d');
-            const vtoColorOptions = document.getElementById('vto-color-options');
-            const vtoStatus = document.getElementById('vto-status');
-
-            let faceLandmarksModel;
-            let currentLipColor = 'rgba(185, 92, 80, 0.7)'; // Default: Đỏ Đất with opacity
-            let videoStream;
-            let animationFrameId;
-
-            // Precise lip landmark indices for TensorFlow.js Face Landmarks Detection model
-            const LIP_LANDMARKS = {
-                // Outer contour of the lips
-                upperLipOuter: [61, 185, 40, 39, 37, 0, 267, 269, 270, 409, 291],
-                lowerLipOuter: [291, 375, 321, 405, 314, 17, 84, 181, 91, 146, 61],
-                // Inner contour of the lips (can be used for more detailed rendering)
-                upperLipInner: [78, 191, 80, 81, 82, 13, 312, 311, 310, 415, 308],
-                lowerLipInner: [308, 324, 318, 402, 317, 14, 87, 178, 88, 95, 78]
-            };
-
-
-            async function setupWebcam() {
-                try {
-                    videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
-                    vtoVideo.srcObject = videoStream;
-                    return new Promise((resolve) => {
-                        vtoVideo.onloadedmetadata = () => resolve(true);
-                    });
-                } catch (err) {
-                    console.error("Error accessing webcam:", err);
-                    vtoStatus.textContent = "Không thể truy cập webcam. Vui lòng cấp quyền.";
-                    return false;
-                }
-            }
-
-            async function loadFaceLandmarksModel() {
-                vtoStatus.textContent = "Đang tải model AI...";
-                try {
-                    await tf.setBackend('webgl'); // Ensure WebGL backend is used for performance
-                    faceLandmarksModel = await faceLandmarksDetection.load(
-                        faceLandmarksDetection.SupportedPackages.mediapipeFacemesh,
-                        { maxFaces: 1, shouldLoadIrisModel: false } // Iris model not needed for lips
-                    );
-                    vtoStatus.textContent = "Model đã sẵn sàng. Đang chờ webcam...";
-                } catch (error) {
-                     console.error("Error loading model:", error);
-                     vtoStatus.textContent = "Lỗi tải model AI.";
-                }
-            }
-            
-            function hexToRgbaWithOpacity(hexWithOpacity) {
-                // Assuming hexWithOpacity is like 'B95C50B3' (RRGGBBAA)
-                const r = parseInt(hexWithOpacity.slice(0, 2), 16);
-                const g = parseInt(hexWithOpacity.slice(2, 4), 16);
-                const b = parseInt(hexWithOpacity.slice(4, 6), 16);
-                const a = parseInt(hexWithOpacity.slice(6, 8), 16) / 255; // Convert AA to 0-1 alpha
-                return `rgba(${r}, ${g}, ${b}, ${a})`;
-            }
-
-            function drawLipstick(predictions) {
-                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); // Clear previous frame
-                if (predictions && predictions.length > 0) {
-                    const keypoints = predictions[0].scaledMesh; // Use scaledMesh for coordinates relative to video size
-                    
-                    vtoCtx.fillStyle = currentLipColor;
-                    
-                    // Combine upper and lower lip outer contours for a single filled path
-                    const lipPath = new Path2D();
-                    
-                    // Upper lip outer
-                    const upperOuterPoints = LIP_LANDMARKS.upperLipOuter.map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]}));
-                    lipPath.moveTo(upperOuterPoints[0].x, upperOuterPoints[0].y);
-                    for (let i = 1; i < upperOuterPoints.length; i++) {
-                        lipPath.lineTo(upperOuterPoints[i].x, upperOuterPoints[i].y);
-                    }
-
-                    // Lower lip outer (connects from the end of upperLipOuter)
-                    // Ensure smooth connection. The last point of upperLipOuter (291) is the first of lowerLipOuter.
-                    const lowerOuterPoints = LIP_LANDMARKS.lowerLipOuter.slice(1).map(idx => ({x: keypoints[idx][0], y: keypoints[idx][1]})); // slice(1) to avoid repeating point 291
-                    for (let i = 0; i < lowerOuterPoints.length; i++) {
-                        lipPath.lineTo(lowerOuterPoints[i].x, lowerOuterPoints[i].y);
-                    }
-                    lipPath.closePath(); // Close the path to form a complete shape
-                    vtoCtx.fill(lipPath);
-
-                    vtoStatus.style.display = 'none'; // Hide status if drawing is successful
-                } else {
-                    // No face detected
-                    vtoStatus.textContent = "Không tìm thấy khuôn mặt.";
-                    vtoStatus.style.display = 'block';
-                }
-            }
-
-            async function detectionLoop() {
-                if (faceLandmarksModel && vtoVideo.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
-                    const predictions = await faceLandmarksModel.estimateFaces({ input: vtoVideo });
-                    drawLipstick(predictions);
-                }
-                animationFrameId = requestAnimationFrame(detectionLoop);
-            }
-
-            async function startVTO() {
-                // This function is called when the modal opens
-                if (!faceLandmarksModel) { // Load model only if not already loaded
-                    await loadFaceLandmarksModel();
-                    if (!faceLandmarksModel) return; // Exit if model loading failed
-                }
-                
-                const webcamReady = await setupWebcam();
-                if (!webcamReady) return;
-
-                vtoVideo.play();
-                // Ensure canvas dimensions are set once video metadata is loaded
-                vtoVideo.onloadedmetadata = () => {
-                    vtoCanvas.width = vtoVideo.videoWidth;
-                    vtoCanvas.height = vtoVideo.videoHeight;
-                    vtoStatus.textContent = "Đang nhận diện...";
-                    if (animationFrameId) cancelAnimationFrame(animationFrameId); // Cancel any existing loop
-                    detectionLoop(); // Start the detection loop
-                };
-                // If metadata is already loaded (e.g., webcam was previously used)
-                if (vtoVideo.readyState >= HTMLMediaElement.HAVE_METADATA) {
-                   if(vtoVideo.onloadedmetadata && typeof vtoVideo.onloadedmetadata === 'function') vtoVideo.onloadedmetadata();
-                }
-            }
-
-            function stopVTO() {
-                // This function is called when the modal closes
-                if (animationFrameId) {
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = null;
-                }
-                if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop()); // Stop webcam tracks
-                    videoStream = null;
-                }
-                vtoVideo.srcObject = null; // Release video object
-                if (vtoCtx) { 
-                    vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); // Clear canvas
-                }
-                vtoStatus.textContent = "Đang tải model và khởi động webcam..."; // Reset status
-                vtoStatus.style.display = 'block';
-            }
-
-            // Event listener for the "Trải Nghiệm Thử Son Ảo (Live)" link
-            // This link will navigate to thu_son_ao.html. The VTO modal is still present
-            // in index.html for potential direct integration if a button on this page were to open it.
-            
-            // Close modal button
-            if (closeVtoModalBtn) { 
-                closeVtoModalBtn.addEventListener('click', () => {
-                    if (vtoModal.querySelector('div')) { 
-                        vtoModal.querySelector('div').classList.add('scale-95'); // Animate out
-                    }
-                    setTimeout(() => vtoModal.classList.add('hidden'), 300);
-                    stopVTO();
-                });
-            }
-            
-            // Close modal if clicking outside content
-            if (vtoModal) { 
-                vtoModal.addEventListener('click', function(e) { 
-                    if(e.target === vtoModal){ // Check if the click is on the backdrop
-                        if (closeVtoModalBtn) closeVtoModalBtn.click(); 
-                    }
-                });
-            }
-
-            // Populate VTO color options (for the modal on this page)
-            // Lặp qua các sản phẩm đã được cấu trúc lại để tạo nút chọn màu
-            products.forEach(p => {
-                const colorBtn = document.createElement('button');
-                colorBtn.className = 'vto-color-btn w-full h-12 sm:h-16 rounded-lg border-2 border-transparent hover:border-brand focus:border-brand focus:ring-2 focus:ring-brand-light outline-none';
-                colorBtn.style.backgroundColor = p.color; // Use the solid color for the button itself
-                colorBtn.dataset.colorHexOpacity = p.hexOpacity; // Store the color with opacity for drawing
-                colorBtn.setAttribute('aria-label', `Thử màu ${p.displayName}`); // Sử dụng displayName cho aria-label
-                colorBtn.addEventListener('click', () => {
-                    currentLipColor = hexToRgbaWithOpacity(p.hexOpacity); // Update the drawing color
-                     document.querySelectorAll('#vto-color-options .vto-color-btn').forEach(btn => btn.classList.remove('ring-2', 'ring-brand'));
-                     colorBtn.classList.add('ring-2', 'ring-brand'); // Highlight selected selected
-                });
-                if (vtoColorOptions) { 
-                    vtoColorOptions.appendChild(colorBtn);
-                }
-            });
-            
-            // Select the first color by default for the modal
-            if (vtoColorOptions) { 
-                const firstColorButton = vtoColorOptions.firstElementChild;
-                if (firstColorButton && typeof firstColorButton.click === 'function') {  
-                    firstColorButton.click();
-                }
-            }
         });
     </script>
 </body>
