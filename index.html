@@ -14,8 +14,8 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Preload fonts for faster loading -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'\">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'\">
     <noscript>
         <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     </noscript>
@@ -46,6 +46,8 @@
             /* Changed background-color to beige */
             background-color: #F5F5DC;
             color: #4A4A4A;
+            /* Add padding-top to body to prevent content from hiding under fixed header */
+            padding-top: 9rem; /* Equivalent to h-36 + some buffer, adjust if needed */
         }
         /* New custom class for headings to use Merriweather Sans */
         .font-heading {
@@ -181,32 +183,120 @@
             object-fit: cover; /* Ensures the video covers the entire area */
             z-index: -1; /* Puts the video behind other content */
         }
+
+        /* Shopping Cart Styles */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Initially hidden off-screen */
+            width: 100%;
+            max-width: 400px; /* Max width for desktop */
+            height: 100%;
+            background-color: #F5F5DC; /* Beige background */
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease-in-out;
+            z-index: 1000; /* High z-index to be on top */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0; /* Slide in */
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none; /* Hidden by default */
+        }
+
+        .cart-overlay.open {
+            display: block; /* Show when cart is open */
+        }
+
+        /* For the cart badge */
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: #EF4444; /* Red color */
+            color: white;
+            border-radius: 9999px; /* Fully rounded */
+            padding: 2px 6px; /* Adjust padding for size */
+            font-size: 0.75rem; /* Text size */
+            font-weight: bold;
+            min-width: 20px; /* Ensure it's a circle even with single digit */
+            text-align: center;
+        }
+
+        /* Animation for product flying to cart */
+        .fly-to-cart-animation {
+            position: fixed;
+            top: var(--start-y);
+            left: var(--start-x);
+            width: var(--size);
+            height: var(--size);
+            background-color: var(--color);
+            border-radius: 50%; /* Make it round */
+            opacity: 1;
+            z-index: 1001; /* Above cart sidebar */
+            transition: all 0.6s ease-in-out; /* Smooth transition for position and size */
+            transform: scale(1);
+        }
+
+        .fly-to-cart-animation.animate {
+            top: var(--end-y);
+            left: var(--end-x);
+            width: 20px; /* Smaller when flying to cart */
+            height: 20px;
+            opacity: 0.5;
+            transform: scale(0.5);
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Header section - Changed 'fixed' to 'relative' to allow scrolling -->
-    <header id="header" class="bg-white/80 backdrop-blur-md relative top-0 left-0 right-0 z-50 shadow-sm" role="banner">
+    <!-- Header section - Changed to 'fixed' -->
+    <header id="header" class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 w-full z-50 shadow-sm" role="banner">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Adjusted header height to accommodate a larger logo -->
-            <!-- Height of header increased to h-36 to allow for a larger logo -->
             <div class="flex justify-between items-center h-36"> 
                 <div class="flex-shrink-0 flex items-center">
-                    <!-- Increased logo size -->
-                    <!-- Logo image height increased to h-32 to make it more prominent -->
                     <a href="#hero" class="flex items-center" aria-label="Trang chủ Sắc Mộc">
-                        <img src="Logo.png" alt="Sắc Mộc Logo" class="h-32 w-auto"> <!-- Adjust h-32 as needed for size -->
+                        <img src="Logo.png" alt="Sắc Mộc Logo" class="h-32 w-auto"> 
                     </a>
                 </div>
-                <div class="hidden md:block">
+                <!-- Desktop Navigation and Cart Icon -->
+                <div class="hidden md:flex items-center"> <!-- This div will contain both nav and desktop cart -->
                     <nav class="flex items-center space-x-8" role="navigation" aria-label="Điều hướng chính">
                         <a href="#philosophy" class="text-gray-600 nav-link font-medium" aria-label="Đi đến phần Triết Lý">Triết Lý</a>
                         <a href="#products" class="text-gray-600 nav-link font-medium" aria-label="Đi đến phần Sản Phẩm">Sản Phẩm</a>
                         <a href="#transparency" class="text-gray-600 nav-link font-medium" aria-label="Đi đến phần Minh Bạch">Minh Bạch</a>
                         <a href="#community" class="text-gray-600 nav-link font-medium" aria-label="Đi đến phần Cộng Đồng">Cộng Đồng</a>
                     </nav>
+                    <div class="relative ml-8"> <!-- Added ml-8 for spacing between nav and cart -->
+                        <button id="cart-icon-desktop" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
+                            <!-- Original Shopping Cart SVG icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-brand">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.023.832l.97 4.284a1.007 1.007 0 01.996.864H18.75a1.007 1.007 0 01.996.864l1.455 7.276a1.007 1.007 0 01-.996 1.134H9.069a1.007 1.007 0 01-.996-1.134L7.373 10.5H5.158l-.001-.006a48.115 48.115 0 013.435-1.168l3.434-.029H15.75m-14.73 0l.968-.428m9.069 5.867a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zm-8.995-4.5c.376 0 .741.064 1.09.186.324.09.658.174.975.253A42.544 42.544 0 0014.25 10.5h2.25m-1.004-.834h-8.879l-.001-.006c.35-.157.658-.403.966-.749a48.108 48.108 0 013.387-2.316m2.546-5.459L12 1.5l2.25 2.25m-3.75 8.625A2.25 2.25 0 1118 13.5a2.25 2.25 0 01-4.5 0z" />
+                            </svg>
+                            <span id="cart-badge-desktop" class="cart-badge hidden">0</span>
+                        </button>
+                    </div>
                 </div>
-                 <div class="md:hidden">
+                <!-- Mobile Menu & Cart Icon -->
+                <div class="md:hidden flex items-center space-x-4">
+                    <button id="cart-icon-mobile" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
+                        <!-- Original Shopping Cart SVG icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-brand">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.023.832l.97 4.284a1.007 1.007 0 01.996.864H18.75a1.007 1.007 0 01.996.864l1.455 7.276a1.007 1.007 0 01-.996 1.134H9.069a1.007 1.007 0 01-.996-1.134L7.373 10.5H5.158l-.001-.006a48.115 48.115 0 013.435-1.168l3.434-.029H15.75m-14.73 0l.968-.428m9.069 5.867a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zm-8.995-4.5c.376 0 .741.064 1.09.186.324.09.658.174.975.253A42.544 42.544 0 0014.25 10.5h2.25m-1.004-.834h-8.879l-.001-.006c.35-.157.658-.403.966-.749a48.108 48.108 0 013.387-2.316m2.546-5.459L12 1.5l2.25 2.25m-3.75 8.625A2.25 2.25 0 1118 13.5a2.25 2.25 0 01-4.5 0z" />
+                        </svg>
+                        <span id="cart-badge-mobile" class="cart-badge hidden">0</span>
+                    </button>
                     <button id="mobile-menu-button" class="text-gray-600 hover:text-brand focus:outline-none" aria-label="Mở menu di động">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
@@ -324,7 +414,7 @@
                 </div>
 
                 <div class="mt-12 text-center animate-on-scroll zoom-in">
-                     <a href="thu_son_ao.html" class="inline-block bg-white text-brand font-bold py-3 px-8 rounded-full shadow-lg border border-brand-light hover:bg-brand-light hover:text-brand transition-all transform hover:scale-105" aria-label="Thử son ảo trực tiếp">
+                     <a href="thu_son_ao.html" class="inline-block bg-white text-brand font-bold py-3 px-8 rounded-full shadow-lg border border-brand-light hover:bg-brand-light hover:text-brand transition-all transform hover:scale-105" aria-label="Trải Nghiệm Thử Son Ảo (Live)">
                         Trải Nghiệm Thử Son Ảo (Live)
                     </a>
                 </div>
@@ -383,6 +473,51 @@
             <p class="mt-6 text-sm text-gray-400">&copy; 2025 Sắc Mộc Việt Nam. All rights reserved.</p>
         </div>
     </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar">
+        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+            <h3 class="text-2xl font-bold text-brand font-heading">Giỏ Hàng</h3>
+            <button id="close-cart-sidebar" class="text-gray-500 hover:text-gray-800 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Đóng giỏ hàng">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div id="cart-items" class="flex-grow p-6 overflow-y-auto">
+            <!-- Cart items will be dynamically inserted here -->
+            <p id="empty-cart-message" class="text-center text-gray-500 hidden">Giỏ hàng của bạn đang trống.</p>
+        </div>
+        <div class="p-6 border-t border-gray-200">
+            <!-- Discount Code Section -->
+            <div class="mb-4">
+                <label for="discount-code" class="block text-sm font-medium text-gray-700 mb-2">Mã giảm giá:</label>
+                <div class="flex space-x-2">
+                    <input type="text" id="discount-code" class="flex-grow p-2 border border-gray-300 rounded-md focus:ring-brand focus:border-brand-light outline-none" placeholder="Nhập mã giảm giá">
+                    <button id="apply-discount-btn" class="bg-gray-400 text-white px-4 py-2 rounded-md cursor-not-allowed" disabled>Áp dụng</button>
+                </div>
+                <p id="discount-message" class="text-sm mt-2"></p>
+            </div>
+
+            <div class="flex justify-between items-center text-lg font-semibold text-gray-800 mb-2">
+                <span>Tạm tính:</span>
+                <span id="cart-subtotal-price">0₫</span>
+            </div>
+            <div id="discount-display" class="flex justify-between items-center text-base text-red-600 mb-4 hidden">
+                <span>Giảm giá (<span id="discount-percentage">0%</span>):</span>
+                <span id="discount-amount">-0₫</span>
+            </div>
+            <div class="flex justify-between items-center text-lg font-semibold text-gray-800 mb-4">
+                <span>Tổng cộng:</span>
+                <span id="cart-total-price">0₫</span>
+            </div>
+            <button class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-opacity-90 transition-transform transform hover:scale-105" aria-label="Tiến hành thanh toán">
+                Thanh Toán
+            </button>
+        </div>
+    </div>
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="cart-overlay"></div>
 
     <div id="vto-modal" class="fixed inset-0 bg-black bg-opacity-50 z-[60] hidden flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="vto-modal-title">
         <!-- Changed modal background to beige -->
@@ -501,26 +636,292 @@
 
             // Products Data - Cấu trúc dữ liệu đã được cập nhật
             const products = [
-                { displayName: 'Đỏ Đất', fullName: 'Đỏ Đất - 01', color: '#B95C50', hexOpacity: 'B95C50B3' },
-                { displayName: 'Cam Cháy', fullName: 'Cam Cháy - 02', color: '#D87C4F', hexOpacity: 'D87C4FB3' },
-                { displayName: 'Hồng Đào', fullName: 'Hồng Đào - 03', color: '#E48F82', hexOpacity: 'E48F82B3' },
-                { displayName: 'Nâu Gỗ', fullName: 'Nâu Gỗ - 04', color: '#8C5A4D', hexOpacity: '8C5A4DB3' },
-                { displayName: 'Hồng Đất', fullName: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3' },
-                { displayName: 'Đỏ Ruby', fullName: 'Đỏ Ruby - 06', color: '#9B1C1C', hexOpacity: '9B1C1CB3' },
-                { displayName: 'Hồng Cam', fullName: 'Hồng Cam - 07', color: '#FF7F50', hexOpacity: 'FF7F50B3' },
-                { displayName: 'Đỏ Rượu Vang', fullName: 'Đỏ Rượu Vang - 08', color: '#800020', hexOpacity: '800020B3' },
-                { displayName: 'Hồng Fuchsia', fullName: 'Hồng Fuchsia - 09', color: '#C154C1', hexOpacity: 'C154C1B3' },
-                { displayName: 'Nude Đào', fullName: 'Nude Đào - 10', color: '#F7CAC9', hexOpacity: 'F7CAC9B3' },
-                { displayName: 'Mận Chín', fullName: 'Mận Chín - 11', color: '#8E4585', hexOpacity: '8E4585B3' },
-                { displayName: 'Hồng Tím', fullName: 'Hồng Tím - 12', color: '#C8A2C8', hexOpacity: 'C8A2C8B3' } 
+                { id: 'son-do-dat', displayName: 'Đỏ Đất', fullName: 'Đỏ Đất - 01', color: '#B95C50', hexOpacity: 'B95C50B3', price: 300000 },
+                { id: 'son-cam-chay', displayName: 'Cam Cháy', fullName: 'Cam Cháy - 02', color: '#D87C4F', hexOpacity: 'D87C4FB3', price: 300000 },
+                { id: 'son-hong-dao', displayName: 'Hồng Đào', fullName: 'Hồng Đào - 03', color: '#E48F82', hexOpacity: 'E48F82B3', price: 300000 },
+                { id: 'son-nau-go', displayName: 'Nâu Gỗ', fullName: 'Nâu Gỗ - 04', color: '#8C5A4D', hexOpacity: '8C5A4DB3', price: 300000 },
+                { id: 'son-hong-dat', displayName: 'Hồng Đất', fullName: 'Hồng Đất - 05', color: '#C68582', hexOpacity: 'C68582B3', price: 300000 },
+                { id: 'son-do-ruby', displayName: 'Đỏ Ruby', fullName: 'Đỏ Ruby - 06', color: '#9B1C1C', hexOpacity: '9B1C1CB3', price: 300000 },
+                { id: 'son-hong-cam', displayName: 'Hồng Cam', fullName: 'Hồng Cam - 07', color: '#FF7F50', hexOpacity: 'FF7F50B3', price: 300000 },
+                { id: 'son-do-ruou-vang', displayName: 'Đỏ Rượu Vang', fullName: 'Đỏ Rượu Vang - 08', color: '#800020', hexOpacity: '800020B3', price: 300000 },
+                { id: 'son-hong-fuchsia', displayName: 'Hồng Fuchsia', fullName: 'Hồng Fuchsia - 09', color: '#C154C1', hexOpacity: 'C154C1B3', price: 300000 },
+                { id: 'son-nude-dao', displayName: 'Nude Đào', fullName: 'Nude Đào - 10', color: '#F7CAC9', hexOpacity: 'F7CAC9B3', price: 300000 },
+                { id: 'son-man-chin', displayName: 'Mận Chín', fullName: 'Mận Chín - 11', color: '#8E4585', hexOpacity: '8E4585B3', price: 300000 },
+                { id: 'son-hong-tim', displayName: 'Hồng Tím', fullName: 'Hồng Tím - 12', color: '#C8A2C8', hexOpacity: 'C8A2C8B3', price: 300000 } 
             ];
 
-            // Populate Product List - Logic hiển thị sản phẩm đã được cập nhật
+            // Shopping Cart Logic
+            let cart = {}; // { productId: quantity }
+            let appliedDiscount = { code: '', percentage: 0, amount: 0 }; // Stores applied discount information
+
+            const discountCodes = {
+                "chaobanmoi": 0.15, // 15% discount
+                "sonsacmoc": 0.05   // 5% discount
+            };
+
+            const cartBadgeDesktop = document.getElementById('cart-badge-desktop');
+            const cartBadgeMobile = document.getElementById('cart-badge-mobile');
+            const cartIconDesktop = document.getElementById('cart-icon-desktop');
+            const cartIconMobile = document.getElementById('cart-icon-mobile');
+            const cartSidebar = document.getElementById('cart-sidebar');
+            const cartOverlay = document.getElementById('cart-overlay');
+            const closeCartSidebarBtn = document.getElementById('close-cart-sidebar');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartSubtotalPriceElement = document.getElementById('cart-subtotal-price'); // New element for subtotal
+            const discountDisplayElement = document.getElementById('discount-display');
+            const discountPercentageElement = document.getElementById('discount-percentage');
+            const discountAmountElement = document.getElementById('discount-amount');
+            const cartTotalPriceElement = document.getElementById('cart-total-price');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const discountCodeInput = document.getElementById('discount-code');
+            const applyDiscountBtn = document.getElementById('apply-discount-btn');
+            const discountMessageElement = document.getElementById('discount-message');
+
+
+            function updateCartCount() {
+                let totalItems = 0;
+                for (const productId in cart) {
+                    totalItems += cart[productId];
+                }
+                if (totalItems > 0) {
+                    cartBadgeDesktop.textContent = totalItems;
+                    cartBadgeMobile.textContent = totalItems;
+                    cartBadgeDesktop.classList.remove('hidden');
+                    cartBadgeMobile.classList.remove('hidden');
+                } else {
+                    cartBadgeDesktop.classList.add('hidden');
+                    cartBadgeMobile.classList.add('hidden');
+                }
+            }
+
+            function formatCurrency(amount) {
+                // Add non-breaking space for thousands separator and currency symbol
+                return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount).replace(/\s/g, '\u00A0');
+            }
+
+            function calculateTotals() {
+                let subtotal = 0;
+                for (const productId in cart) {
+                    const quantity = cart[productId];
+                    const product = products.find(p => p.id === productId);
+                    if (product) {
+                        subtotal += quantity * product.price;
+                    }
+                }
+
+                let total = subtotal;
+                if (appliedDiscount.percentage > 0) {
+                    appliedDiscount.amount = subtotal * appliedDiscount.percentage;
+                    total = subtotal - appliedDiscount.amount;
+                    discountDisplayElement.classList.remove('hidden');
+                    discountPercentageElement.textContent = `${appliedDiscount.percentage * 100}%`;
+                    discountAmountElement.textContent = `-${formatCurrency(appliedDiscount.amount)}`;
+                } else {
+                    discountDisplayElement.classList.add('hidden');
+                    appliedDiscount.amount = 0; // Reset amount if no code is applied
+                }
+
+                cartSubtotalPriceElement.textContent = formatCurrency(subtotal);
+                cartTotalPriceElement.textContent = formatCurrency(total);
+                return { subtotal, total };
+            }
+
+            function renderCart() {
+                cartItemsContainer.innerHTML = ''; // Clear current items
+                let hasItems = false;
+
+                for (const productId in cart) {
+                    const quantity = cart[productId];
+                    if (quantity > 0) {
+                        hasItems = true;
+                        const product = products.find(p => p.id === productId);
+                        if (product) {
+                            const itemTotal = quantity * product.price;
+
+                            const cartItemDiv = document.createElement('div');
+                            cartItemDiv.className = 'flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0';
+                            cartItemDiv.innerHTML = `
+                                <div class="flex items-center space-x-4 flex-grow">
+                                    <div class="w-16 h-16 rounded-lg flex-shrink-0" style="background-color: ${product.color};"></div>
+                                    <div class="flex-grow">
+                                        <p class="font-semibold text-gray-800 text-sm md:text-base">${product.fullName}</p>
+                                        <p class="text-gray-600 text-xs md:text-sm">${formatCurrency(product.price)}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-2 flex-shrink-0 mx-2">
+                                    <button class="cart-quantity-btn cart-decrease-btn bg-gray-200 text-gray-700 w-7 h-7 md:w-8 md:h-8 rounded-full hover:bg-gray-300 transition-colors flex items-center justify-center" data-product-id="${product.id}" aria-label="Giảm số lượng ${product.fullName}">-</button>
+                                    <span class="font-semibold text-gray-800 w-5 text-center text-sm" data-product-id="${product.id}-quantity-cart">${quantity}</span>
+                                    <button class="cart-quantity-btn cart-increase-btn bg-gray-200 text-gray-700 w-7 h-7 md:w-8 md:h-8 rounded-full hover:bg-gray-300 transition-colors flex items-center justify-center" data-product-id="${product.id}" aria-label="Tăng số lượng ${product.fullName}">+</button>
+                                </div>
+                                <span class="font-semibold text-brand text-right w-[90px] flex-shrink-0 text-sm md:text-base">${formatCurrency(itemTotal)}</span>
+                            `;
+                            cartItemsContainer.appendChild(cartItemDiv);
+                        }
+                    }
+                }
+
+                if (hasItems) {
+                    emptyCartMessage.classList.add('hidden');
+                } else {
+                    emptyCartMessage.classList.remove('hidden');
+                }
+
+                calculateTotals();
+                updateCartCount();
+            }
+
+            function addToCart(productId, animate = true) {
+                cart[productId] = (cart[productId] || 0) + 1;
+                renderCart();
+                // Update quantity display on the product card
+                const quantityDisplay = document.querySelector(`#${productId}-quantity`);
+                if (quantityDisplay) {
+                    quantityDisplay.textContent = cart[productId];
+                }
+
+                if (animate) {
+                    triggerFlyToCartAnimation(productId);
+                }
+            }
+
+            function decreaseQuantity(productId) {
+                if (cart[productId] && cart[productId] > 0) {
+                    cart[productId]--;
+                    if (cart[productId] === 0) {
+                        delete cart[productId]; // Remove if quantity is 0
+                    }
+                    renderCart();
+                    // Update quantity display on the product card
+                    const quantityDisplay = document.querySelector(`#${productId}-quantity`);
+                    if (quantityDisplay) {
+                        quantityDisplay.textContent = cart[productId] || 0; // Show 0 if removed
+                    }
+                }
+            }
+
+            // Function to trigger the fly-to-cart animation
+            function triggerFlyToCartAnimation(productId) {
+                const productCard = document.getElementById(productId);
+                // Dynamically select the correct cart icon based on screen size
+                const cartIcon = window.innerWidth >= 768 ? cartIconDesktop : cartIconMobile;
+
+                if (!productCard || !cartIcon) return;
+
+                const productRect = productCard.querySelector('.relative').getBoundingClientRect();
+                const cartRect = cartIcon.getBoundingClientRect();
+
+                const flyEl = document.createElement('div');
+                flyEl.className = 'fly-to-cart-animation';
+                flyEl.style.setProperty('--start-x', `${productRect.left + productRect.width / 2 - 20}px`); // Centered and adjusted for 40px size
+                flyEl.style.setProperty('--start-y', `${productRect.top + productRect.height / 2 - 20}px`); // Centered and adjusted for 40px size
+                flyEl.style.setProperty('--end-x', `${cartRect.left + cartRect.width / 2 - 10}px`); // Centered on target, adjusted for 20px size
+                flyEl.style.setProperty('--end-y', `${cartRect.top + cartRect.height / 2 - 10}px`); // Centered on target, adjusted for 20px size
+                flyEl.style.setProperty('--size', '40px'); // Initial size of the flying element
+                
+                const product = products.find(p => p.id === productId);
+                flyEl.style.setProperty('--color', product ? product.color : '#5D7A4D'); // Use product color
+
+                document.body.appendChild(flyEl);
+
+                // Trigger animation
+                requestAnimationFrame(() => {
+                    flyEl.classList.add('animate');
+                });
+
+                // Remove element after animation
+                flyEl.addEventListener('transitionend', () => {
+                    flyEl.remove();
+                });
+            }
+
+
+            // Event listeners for cart icons
+            cartIconDesktop.addEventListener('click', () => {
+                cartSidebar.classList.add('open');
+                cartOverlay.classList.add('open');
+            });
+
+            cartIconMobile.addEventListener('click', () => {
+                cartSidebar.classList.add('open');
+                cartOverlay.classList.add('open');
+            });
+
+            // Close cart sidebar
+            closeCartSidebarBtn.addEventListener('click', () => {
+                cartSidebar.classList.remove('open');
+                cartOverlay.classList.remove('open');
+            });
+
+            // Close cart when clicking overlay
+            cartOverlay.addEventListener('click', () => {
+                cartSidebar.classList.remove('open');
+                cartOverlay.classList.remove('open');
+            });
+
+            // Event delegation for +/- buttons in the cart sidebar
+            cartItemsContainer.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.classList.contains('cart-increase-btn')) {
+                    const productId = target.dataset.productId;
+                    addToCart(productId, false); // No animation when adding from cart sidebar
+                } else if (target.classList.contains('cart-decrease-btn')) {
+                    const productId = target.dataset.productId;
+                    decreaseQuantity(productId);
+                }
+            });
+
+            // Discount code input validation and button state
+            discountCodeInput.addEventListener('input', () => {
+                const code = discountCodeInput.value.toLowerCase().trim();
+                if (discountCodes[code]) {
+                    applyDiscountBtn.disabled = false;
+                    applyDiscountBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                    applyDiscountBtn.classList.add('bg-brand-light', 'hover:bg-brand');
+                } else {
+                    applyDiscountBtn.disabled = true;
+                    applyDiscountBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+                    applyDiscountBtn.classList.remove('bg-brand-light', 'hover:bg-brand');
+                }
+                // Clear discount message and reset applied discount if input changes after successful application
+                if (appliedDiscount.code && code !== appliedDiscount.code) {
+                    appliedDiscount.code = '';
+                    appliedDiscount.percentage = 0;
+                    appliedDiscount.amount = 0;
+                    discountMessageElement.textContent = "";
+                    calculateTotals();
+                }
+            });
+
+            // Discount code application logic
+            applyDiscountBtn.addEventListener('click', () => {
+                const code = discountCodeInput.value.toLowerCase().trim();
+                if (code === appliedDiscount.code) {
+                    discountMessageElement.textContent = "Mã giảm giá đã được áp dụng.";
+                    discountMessageElement.className = "text-sm mt-2 text-blue-600";
+                    return;
+                }
+
+                if (discountCodes[code]) {
+                    appliedDiscount.code = code;
+                    appliedDiscount.percentage = discountCodes[code];
+                    discountMessageElement.textContent = `Áp dụng mã giảm giá "${code}" thành công!`;
+                    discountMessageElement.className = "text-sm mt-2 text-green-600";
+                } else {
+                    appliedDiscount.code = '';
+                    appliedDiscount.percentage = 0;
+                    appliedDiscount.amount = 0; // Reset amount if invalid code
+                    discountMessageElement.textContent = "Mã giảm giá không hợp lệ.";
+                    discountMessageElement.className = "text-sm mt-2 text-red-600";
+                }
+                calculateTotals(); // Recalculate totals with new discount
+            });
+
+            // Populate Product List with +/- buttons
             const productList = document.getElementById('product-list');
             productList.innerHTML = ''; // Clear existing content
             products.forEach(p => {
                 const card = document.createElement('div');
-                // Added role="listitem" for accessibility
+                card.id = p.id; // Set ID for easy access
                 card.className = 'group text-center animate-on-scroll zoom-in'; // Container for each product card, centered text
                 card.innerHTML = `
                     <div class="relative w-full aspect-square rounded-lg overflow-hidden card-hover" aria-label="Sản phẩm son ${p.displayName}">
@@ -528,9 +929,16 @@
                             <h3 class="text-white text-2xl font-bold font-heading px-2 py-1">${p.displayName}</h3> 
                         </div>
                     </div>
-                    <div class="mt-3"> <!-- Container for full name and small color circle, with top margin -->
+                    <div class="mt-3 flex flex-col items-center"> <!-- Container for full name and small color circle, with top margin -->
                         <h4 class="font-semibold text-gray-800">${p.fullName}</h4>
+                        <p class="text-brand font-bold mt-1">${formatCurrency(p.price)}</p>
                         <div class="w-5 h-5 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};" aria-hidden="true"></div>
+                        <!-- Quantity controls -->
+                        <div class="flex items-center justify-center mt-3 space-x-2">
+                            <button class="decrease-product-quantity bg-gray-200 text-gray-700 w-8 h-8 rounded-full hover:bg-gray-300 transition-colors" data-product-id="${p.id}" aria-label="Giảm số lượng ${p.fullName}">-</button>
+                            <span id="${p.id}-quantity" class="font-semibold text-gray-800 w-6 text-center">0</span>
+                            <button class="increase-product-quantity bg-brand-light text-white w-8 h-8 rounded-full hover:bg-brand transition-colors" data-product-id="${p.id}" aria-label="Tăng số lượng ${p.fullName}">+</button>
+                        </div>
                     </div>
                 `;
                 productList.appendChild(card);
@@ -541,6 +949,22 @@
                     observer.observe(card); 
                 }
             });
+
+            // Event delegation for product quantity buttons
+            productList.addEventListener('click', (e) => {
+                const target = e.target;
+                if (target.classList.contains('increase-product-quantity')) {
+                    const productId = target.dataset.productId;
+                    addToCart(productId); // Animation triggered here
+                } else if (target.classList.contains('decrease-product-quantity')) {
+                    const productId = target.dataset.productId;
+                    decreaseQuantity(productId);
+                }
+            });
+
+            // Initial render of the cart
+            renderCart();
+
 
             // Ingredients Accordion Data
             const ingredientsData = [
