@@ -231,6 +231,16 @@
             opacity: 0.5;
             transform: scale(0.5);
         }
+
+        /* CSS for the subtle pulse animation */
+        @keyframes subtlePulse {
+          0% { transform: scale(1); box-shadow: 0 0 0 rgba(93,122,77,0.2); }
+          50% { transform: scale(1.02); box-shadow: 0 0 12px rgba(93,122,77,0.35); }
+          100% { transform: scale(1); box-shadow: 0 0 0 rgba(93,122,77,0.2); }
+        }
+        .btn-pulse {
+          animation: subtlePulse 2.8s ease-in-out infinite;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -254,9 +264,11 @@
                     </nav>
                     <div class="relative ml-8"> <!-- Added ml-8 for spacing between nav and cart -->
                         <button id="cart-icon-desktop" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
-                            <!-- Original Shopping Cart SVG icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-brand">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.023.832l.97 4.284a1.007 1.007 0 01.996.864H18.75a1.007 1.007 0 01.996.864l1.455 7.276a1.007 1.007 0 01-.996 1.134H9.069a1.007 1.007 0 01-.996-1.134L7.373 10.5H5.158l-.001-.006a48.115 48.115 0 013.435-1.168l3.434-.029H15.75m-14.73 0l.968-.428m9.069 5.867a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zm-8.995-4.5c.376 0 .741.064 1.09.186.324.09.658.174.975.253A42.544 42.544 0 0014.25 10.5h2.25m-1.004-.834h-8.879l-.001-.006c.35-.157.658-.403.966-.749a48.108 48.108 0 013.387-2.316m2.546-5.459L12 1.5l2.25 2.25m-3.75 8.625A2.25 2.25 0 1118 13.5a2.25 2.25 0 01-4.5 0z" />
+                            <!-- Updated Shopping Cart SVG icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+                                <path d="M3 6h18"/>
+                                <path d="M16 10a4 4 0 0 1-8 0"/>
                             </svg>
                             <span id="cart-badge-desktop" class="cart-badge hidden">0</span>
                         </button>
@@ -265,9 +277,11 @@
                 <!-- Mobile Menu & Cart Icon -->
                 <div class="md:hidden flex items-center space-x-4">
                     <button id="cart-icon-mobile" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
-                        <!-- Original Shopping Cart SVG icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8 text-brand">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.023.832l.97 4.284a1.007 1.007 0 01.996.864H18.75a1.007 1.007 0 01.996.864l1.455 7.276a1.007 1.007 0 01-.996 1.134H9.069a1.007 1.007 0 01-.996-1.134L7.373 10.5H5.158l-.001-.006a48.115 48.115 0 013.435-1.168l3.434-.029H15.75m-14.73 0l.968-.428m9.069 5.867a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5zm-8.995-4.5c.376 0 .741.064 1.09.186.324.09.658.174.975.253A42.544 42.544 0 0014.25 10.5h2.25m-1.004-.834h-8.879l-.001-.006c.35-.157.658-.403.966-.749a48.108 48.108 0 013.387-2.316m2.546-5.459L12 1.5l2.25 2.25m-3.75 8.625A2.25 2.25 0 1118 13.5a2.25 2.25 0 01-4.5 0z" />
+                        <!-- Updated Shopping Cart SVG icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand">
+                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+                            <path d="M3 6h18"/>
+                            <path d="M16 10a4 4 0 0 1-8 0"/>
                         </svg>
                         <span id="cart-badge-mobile" class="cart-badge hidden">0</span>
                     </button>
@@ -388,8 +402,10 @@
                 </div>
 
                 <div class="mt-12 text-center animate-on-scroll zoom-in">
-                     <a href="thu_son_ao.html" class="inline-block bg-white text-brand font-bold py-3 px-8 rounded-full shadow-lg border border-brand-light hover:bg-brand-light hover:text-brand transition-all transform hover:scale-105" aria-label="Trải Nghiệm Thử Son Ảo (Live)">
-                        Trải Nghiệm Thử Son Ảo (Live)
+                     <a href="thu_son_ao.html"
+                        class="inline-block bg-brand text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all transform hover:scale-105 hover:shadow-2xl btn-pulse"
+                        aria-label="Trải Nghiệm Thử Son Ảo (Live)">
+                        🎥 Trải Nghiệm Thử Son Ảo (Live)
                     </a>
                 </div>
             </div>
