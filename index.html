@@ -884,7 +884,7 @@
                     <div class="mt-3 flex flex-col items-center"> <!-- Container for full name and small color circle, with top margin -->
                         <h4 class="font-semibold text-gray-800">${p.fullName}</h4>
                         <p class="text-brand font-bold mt-1">${formatCurrency(p.price)}</p>
-                        <div class="w-5 h-5 rounded-full mx-auto mt-2 border border-gray-300" style="background-color: ${p.color};" aria-hidden="true"></div>
+                        <!-- Removed the small color circle here as requested -->
                         <!-- Quantity controls -->
                         <div class="flex items-center justify-center mt-3 space-x-2">
                             <button class="decrease-product-quantity bg-gray-200 text-gray-700 w-8 h-8 rounded-full hover:bg-gray-300 transition-colors" data-product-id="${p.id}" aria-label="Giảm số lượng ${p.fullName}">-</button>
