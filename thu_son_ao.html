@@ -377,7 +377,7 @@
         const sendChatBtn = document.getElementById('send-chat-btn');
 
         let faceLandmarker;
-        let currentLipColor = 'rgba(185, 92, 80, 0.7)'; // Default color
+        let currentLipColor = 'rgba(255, 69, 0, 0.7)'; // Default color: Đỏ Cam
         let targetLipColor = currentLipColor; // New: for smooth transitions
         let transitionStartTime = 0;
         const TRANSITION_DURATION = 300; // ms
@@ -407,63 +407,63 @@
         // Pre-defined products with compliments - KHÔI PHỤC DỮ LIỆU SẢN PHẨM
         const products = [
             { 
-                name: 'Đỏ Đất - 01', color: '#B95C50', 
+                name: 'Đỏ Cam - 01', color: '#FF4500', 
                 compliments: [
-                    "Màu đỏ đất này trên môi bạn trông thật sang trọng và cuốn hút!",
-                    "Bạn thật sự nổi bật với sắc đỏ đất này, rất hợp với tông da của bạn!",
-                    "Ôi, màu đỏ đất này làm bạn trông thật thanh lịch và hiện đại!",
-                    "Quyến rũ và tinh tế, màu đỏ đất này sinh ra để dành cho bạn!",
-                    "Sự kết hợp giữa đỏ đất và khuôn mặt bạn thật hoàn hảo, rất cá tính!"
+                    "Màu đỏ cam này trên môi bạn trông thật rạng rỡ và tràn đầy năng lượng!",
+                    "Bạn thật sự nổi bật với sắc đỏ cam này, rất hợp với tông da của bạn!",
+                    "Ôi, màu đỏ cam này làm bạn trông thật tươi tắn và cuốn hút!",
+                    "Quyến rũ và hiện đại, màu đỏ cam này sinh ra để dành cho bạn!",
+                    "Sự kết hợp giữa đỏ cam và khuôn mặt bạn thật hoàn hảo, rất cá tính!"
                 ]
             },
             { 
-                name: 'Cam Cháy - 02', color: '#D87C4F',
+                name: 'Cam Tươi - 02', color: '#FFA500',
                 compliments: [
-                    "Màu cam cháy này làm bừng sáng cả khuôn mặt bạn, rạng rỡ quá!",
-                    "Bạn trông thật năng động và tươi trẻ với sắc cam cháy này!",
-                    "Thật tuyệt vời, màu cam cháy này tôn lên vẻ đẹp ấm áp của bạn!",
-                    "Đôi môi bạn như được thắp sáng với màu cam cháy đầy sức sống này!",
-                    "Màu cam cháy này mang đến một vẻ ngoài đầy thu hút và phóng khoáng cho bạn!"
+                    "Màu cam tươi này làm bừng sáng cả khuôn mặt bạn, rạng rỡ quá!",
+                    "Bạn trông thật năng động và tươi trẻ với sắc cam tươi này!",
+                    "Thật tuyệt vời, màu cam tươi này tôn lên vẻ đẹp ấm áp của bạn!",
+                    "Đôi môi bạn như được thắp sáng với màu cam tươi đầy sức sống này!",
+                    "Màu cam tươi này mang đến một vẻ ngoài đầy thu hút và phóng khoáng cho bạn!"
                 ]
             },
             { 
-                name: 'Hồng Đào - 03', color: '#E48F82',
+                name: 'Đỏ Hồng - 03', color: '#FF69B4',
                 compliments: [
-                    "Ngọt ngào và dịu dàng, màu hồng đào này thật sự rất hợp với bạn!",
-                    "Bạn trông thật đáng yêu với sắc hồng đào tươi tắn này!",
-                    "Màu hồng đào này khiến bạn trông thật tự nhiên và duyên dáng!",
-                    "Thật dễ thương, màu hồng đào này làm gương mặt bạn thêm phần rạng rỡ!",
-                    "Sự lựa chọn hồng đào này mang đến vẻ đẹp trong trẻo và thanh thoát cho bạn!"
+                    "Ngọt ngào và dịu dàng, màu đỏ hồng này thật sự rất hợp với bạn!",
+                    "Bạn trông thật đáng yêu với sắc đỏ hồng tươi tắn này!",
+                    "Màu đỏ hồng này khiến bạn trông thật tự nhiên và duyên dáng!",
+                    "Thật dễ thương, màu đỏ hồng này làm gương mặt bạn thêm phần rạng rỡ!",
+                    "Sự lựa chọn đỏ hồng này mang đến vẻ đẹp trong trẻo và thanh thoát cho bạn!"
                 ]
             },
             { 
-                name: 'Nâu Gỗ - 04', color: '#8C5A4D',
+                name: 'Đỏ Cherry - 04', color: '#DC143C',
                 compliments: [
-                    "Màu nâu gỗ này làm bạn trông thật cá tính và thời thượng!",
-                    "Thật ấn tượng, sắc nâu gỗ này mang đến vẻ đẹp trầm ấm và cuốn hút cho bạn!",
-                    "Bạn thật sự phong cách với màu nâu gỗ này!",
-                    "Màu nâu gỗ này tôn lên vẻ đẹp tự nhiên và mạnh mẽ của bạn!",
-                    "Đôi môi bạn trở nên quyến rũ và bí ẩn hơn với sắc nâu gỗ này!"
+                    "Sắc đỏ cherry này thật quyền lực trên đôi môi bạn!",
+                    "Bạn trông thật lộng lẫy và quyến rạng rũ với màu đỏ cherry này!",
+                    "Vẻ đẹp của bạn tỏa sáng với màu đỏ cherry đầy mê hoặc!",
+                    "Màu đỏ cherry này khiến bạn trông thật tự tin và nổi bật!",
+                    "Tuyệt vời, màu đỏ cherry này mang đến vẻ đẹp kiêu sa và sang trọng cho bạn!"
                 ]
             },
             { 
-                name: 'Hồng Đất - 05', color: '#C68582',
+                name: 'Hồng Cánh Sen - 05', color: '#FF007F',
                 compliments: [
-                    "Màu hồng đất này làm bạn trông thật nhẹ nhàng và cuốn hút!",
-                    "Bạn thật thanh lịch với sắc hồng đất này!",
-                    "Ôi, màu hồng đất này rất hợp với bạn, vừa tự nhiên vừa sang trọng!",
-                    "Vẻ đẹp tinh tế của bạn được tôn vinh với màu hồng đất này!",
-                    "Sắc hồng đất này mang đến sự dịu dàng và hiện đại cho khuôn mặt bạn!"
+                    "Màu hồng cánh sen này làm bạn trông thật nhẹ nhàng và cuốn hút!",
+                    "Bạn thật thanh lịch với sắc hồng cánh sen này!",
+                    "Ôi, màu hồng cánh sen này rất hợp với bạn, vừa tự nhiên vừa sang trọng!",
+                    "Vẻ đẹp tinh tế của bạn được tôn vinh với màu hồng cánh sen này!",
+                    "Sắc hồng cánh sen này mang đến sự dịu dàng và hiện đại cho khuôn mặt bạn!"
                 ]
             },
             { 
-                name: 'Đỏ Ruby - 06', color: '#9B1C1C',
+                name: 'Cam Đất - 06', color: '#CD853F',
                 compliments: [
-                    "Sắc đỏ ruby này thật quyền lực trên đôi môi bạn!",
-                    "Bạn trông thật lộng lẫy và quyến rạng rũ với màu đỏ ruby này!",
-                    "Vẻ đẹp của bạn tỏa sáng với màu đỏ ruby đầy mê hoặc!",
-                    "Màu đỏ ruby này khiến bạn trông thật tự tin và nổi bật!",
-                    "Tuyệt vời, màu đỏ ruby này mang đến vẻ đẹp kiêu sa và sang trọng cho bạn!"
+                    "Màu cam đất này làm bạn trông thật cá tính và thời thượng!",
+                    "Thật ấn tượng, sắc cam đất này mang đến vẻ đẹp trầm ấm và cuốn hút cho bạn!",
+                    "Bạn thật sự phong cách với màu cam đất này!",
+                    "Màu cam đất này tôn lên vẻ đẹp tự nhiên và mạnh mẽ của bạn!",
+                    "Đôi môi bạn trở nên quyến rũ và bí ẩn hơn với sắc cam đất này!"
                 ]
             },
             { 
