@@ -235,11 +235,59 @@
         /* CSS for the subtle pulse animation */
         @keyframes subtlePulse {
           0% { transform: scale(1); box-shadow: 0 0 0 rgba(93,122,77,0.2); }
-          50% { transform: scale(1.02); box-shadow: 0 0 12px rgba(93,122,77,0.35); }
-          100% { transform: scale(1); box-shadow: 0 0 0 rgba(93,122,77,0.2); }
+          50% { box-shadow: 0 0 12px rgba(93,122,77,0.35); }
+          100% { box-shadow: 0 0 0 rgba(93,122,77,0.2); }
         }
         .btn-pulse {
           animation: subtlePulse 2.8s ease-in-out infinite;
+        }
+
+        /* Styles for discounted price */
+        .original-price {
+            position: relative;
+            display: inline-block;
+            color: #d32f2f; /* Đỏ đậm hoặc #e53935 */
+            font-weight: 600;
+            font-size: 16px;
+            opacity: 0.9;
+            margin-right: 0.5rem; /* Space between original and sale price */
+        }
+        .original-price::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 2px;
+            background: #d32f2f; /* Đỏ đậm cho đường gạch */
+            transform: translateY(-50%);
+        }
+        .sale-price {
+            color: #5D7A4D; /* Brand color for sale price */
+            font-weight: bold;
+        }
+
+        /* Styles for flash sale banner */
+        .flash-sale-banner {
+            margin-top: 15px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            animation: pulse-glow 2s infinite;
+            display: inline-block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 2rem; /* Add some space below the banner */
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 10px rgba(255, 75, 43, 0.6); }
+            50% { box-shadow: 0 0 20px rgba(255, 75, 43, 1); }
+            100% { box-shadow: 0 0 10px rgba(255, 75, 43, 0.6); }
         }
     </style>
 </head>
@@ -266,9 +314,9 @@
                         <button id="cart-icon-desktop" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
                             <!-- Updated Shopping Cart SVG icon -->
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand">
-                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/>
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 0 0 0 2-2V6l-3-4Z"/>
                                 <path d="M3 6h18"/>
-                                <path d="M16 10a4 4 0 0 1-8 0"/>
+                                <path d="M16 10a4 0 0 1-8 0"/>
                             </svg>
                             <span id="cart-badge-desktop" class="cart-badge hidden">0</span>
                         </button>
@@ -393,6 +441,10 @@
                 <div class="text-center animate-on-scroll slide-up">
                     <h2 class="text-3xl font-bold text-brand font-heading">Khám Phám Màu Son Của Bạn</h2> <!-- Applied font-heading here -->
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tìm kiếm sắc màu hoàn hảo chưa bao giờ dễ dàng hơn. Hãy thử ngay những gam màu lấy cảm hứng từ thiên nhiên của chúng tôi.</p>
+                    <!-- Flash Sale Banner -->
+                    <div class="flash-sale-banner">
+                        🔥 FLASH SALE -10% toàn bộ màu son hôm nay!
+                    </div>
                 </div>
 
                 <!-- Product list layout adjusted for larger squares -->
@@ -604,18 +656,18 @@
 
             // Products Data - Cấu trúc dữ liệu đã được cập nhật
             const products = [
-                { id: 'son-do-cam', displayName: 'Đỏ Cam', fullName: 'Đỏ Cam - 01', color: '#FF4500', hexOpacity: 'FF4500B3', price: 300000 },
-                { id: 'son-cam-tuoi', displayName: 'Cam Tươi', fullName: 'Cam Tươi - 02', color: '#FFA500', hexOpacity: 'FFA500B3', price: 300000 },
-                { id: 'son-do-hong', displayName: 'Đỏ Hồng', fullName: 'Đỏ Hồng - 03', color: '#FF69B4', hexOpacity: 'FF69B4B3', price: 300000 },
-                { id: 'son-do-cherry', displayName: 'Đỏ Cherry', fullName: 'Đỏ Cherry - 04', color: '#DC143C', hexOpacity: 'DC143CB3', price: 300000 },
-                { id: 'son-hong-canh-sen', displayName: 'Hồng Cánh Sen', fullName: 'Hồng Cánh Sen - 05', color: '#FF007F', hexOpacity: 'FF007FB3', price: 300000 },
-                { id: 'son-cam-dat', displayName: 'Cam Đất', fullName: 'Cam Đất - 06', color: '#CD853F', hexOpacity: 'CD853FB3', price: 300000 },
-                { id: 'son-hong-cam', displayName: 'Hồng Cam', fullName: 'Hồng Cam - 07', color: '#FF7F50', hexOpacity: 'FF7F50B3', price: 300000 },
-                { id: 'son-do-ruou-vang', displayName: 'Đỏ Rượu Vang', fullName: 'Đỏ Rượu Vang - 08', color: '#800020', hexOpacity: '800020B3', price: 300000 },
-                { id: 'son-hong-fuchsia', displayName: 'Hồng Fuchsia', fullName: 'Hồng Fuchsia - 09', color: '#C154C1', hexOpacity: 'C154C1B3', price: 300000 },
-                { id: 'son-nude-dao', displayName: 'Nude Đào', fullName: 'Nude Đào - 10', color: '#F7CAC9', hexOpacity: 'F7CAC9B3', price: 300000 },
-                { id: 'son-man-chin', displayName: 'Mận Chín', fullName: 'Mận Chín - 11', color: '#8E4585', hexOpacity: '8E4585B3', price: 300000 },
-                { id: 'son-hong-tim', displayName: 'Hồng Tím', fullName: 'Hồng Tím - 12', color: '#C8A2C8', hexOpacity: 'C8A2C8B3', price: 300000 } 
+                { id: 'son-do-cam', displayName: 'Đỏ Cam', fullName: 'Đỏ Cam - 01', color: '#FF4500', hexOpacity: 'FF4500B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-cam-tuoi', displayName: 'Cam Tươi', fullName: 'Cam Tươi - 02', color: '#FFA500', hexOpacity: 'FFA500B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-do-hong', displayName: 'Đỏ Hồng', fullName: 'Đỏ Hồng - 03', color: '#FF69B4', hexOpacity: 'FF69B4B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-do-cherry', displayName: 'Đỏ Cherry', fullName: 'Đỏ Cherry - 04', color: '#DC143C', hexOpacity: 'DC143CB3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-hong-canh-sen', displayName: 'Hồng Cánh Sen', fullName: 'Hồng Cánh Sen - 05', color: '#FF007F', hexOpacity: 'FF007FB3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-cam-dat', displayName: 'Cam Đất', fullName: 'Cam Đất - 06', color: '#CD853F', hexOpacity: 'CD853FB3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-hong-cam', displayName: 'Hồng Cam', fullName: 'Hồng Cam - 07', color: '#FF7F50', hexOpacity: 'FF7F50B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-do-ruou-vang', displayName: 'Đỏ Rượu Vang', fullName: 'Đỏ Rượu Vang - 08', color: '#800020', hexOpacity: '800020B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-hong-fuchsia', displayName: 'Hồng Fuchsia', fullName: 'Hồng Fuchsia - 09', color: '#C154C1', hexOpacity: 'C154C1B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-nude-dao', displayName: 'Nude Đào', fullName: 'Nude Đào - 10', color: '#F7CAC9', hexOpacity: 'F7CAC9B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-man-chin', displayName: 'Mận Chín', fullName: 'Mận Chín - 11', color: '#8E4585', hexOpacity: '8E4585B3', originalPrice: 219000, salePrice: 197000 },
+                { id: 'son-hong-tim', displayName: 'Hồng Tím', fullName: 'Hồng Tím - 12', color: '#C8A2C8', hexOpacity: 'C8A2C8B3', originalPrice: 219000, salePrice: 197000 } 
             ];
 
             // Shopping Cart Logic
@@ -673,7 +725,8 @@
                     const quantity = cart[productId];
                     const product = products.find(p => p.id === productId);
                     if (product) {
-                        subtotal += quantity * product.price;
+                        // Use salePrice for calculation if available, otherwise originalPrice
+                        subtotal += quantity * (product.salePrice || product.originalPrice);
                     }
                 }
 
@@ -704,7 +757,9 @@
                         hasItems = true;
                         const product = products.find(p => p.id === productId);
                         if (product) {
-                            const itemTotal = quantity * product.price;
+                            // Use salePrice for calculation if available, otherwise originalPrice
+                            const itemPrice = product.salePrice || product.originalPrice;
+                            const itemTotal = quantity * itemPrice;
 
                             const cartItemDiv = document.createElement('div');
                             cartItemDiv.className = 'flex items-center justify-between py-3 border-b border-gray-200 last:border-b-0';
@@ -713,7 +768,10 @@
                                     <div class="w-16 h-16 rounded-lg flex-shrink-0" style="background-color: ${product.color};"></div>
                                     <div class="flex-grow">
                                         <p class="font-semibold text-gray-800 text-sm md:text-base">${product.fullName}</p>
-                                        <p class="text-gray-600 text-xs md:text-sm">${formatCurrency(product.price)}</p>
+                                        <p class="text-gray-600 text-xs md:text-sm">
+                                            ${product.salePrice ? `<span class="original-price">${formatCurrency(product.originalPrice)}</span>` : ''}
+                                            <span class="sale-price">${formatCurrency(itemPrice)}</span>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-2 flex-shrink-0 mx-2">
@@ -899,7 +957,10 @@
                     </div>
                     <div class="mt-3 flex flex-col items-center"> <!-- Container for full name and small color circle, with top margin -->
                         <h4 class="font-semibold text-gray-800">${p.fullName}</h4>
-                        <p class="text-brand font-bold mt-1">${formatCurrency(p.price)}</p>
+                        <p class="mt-1">
+                            <span class="original-price">${formatCurrency(p.originalPrice)}</span>
+                            <span class="sale-price">${formatCurrency(p.salePrice)}</span>
+                        </p>
                         <!-- Removed the small color circle here as requested -->
                         <!-- Quantity controls -->
                         <div class="flex items-center justify-center mt-3 space-x-2">
