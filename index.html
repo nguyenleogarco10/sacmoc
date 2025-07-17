@@ -14,8 +14,8 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- Preload fonts for faster loading -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'\">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'\">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'\" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'\" />
     <noscript>
         <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     </noscript>
@@ -312,12 +312,8 @@
                     </nav>
                     <div class="relative ml-8"> <!-- Added ml-8 for spacing between nav and cart -->
                         <button id="cart-icon-desktop" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
-                            <!-- Updated Shopping Cart SVG icon -->
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand">
-                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 0 0 0 2-2V6l-3-4Z"/>
-                                <path d="M3 6h18"/>
-                                <path d="M16 10a4 0 0 1-8 0"/>
-                            </svg>
+                            <!-- Shopping Cart Image Icon -->
+                            <img src="gio_hang.png" alt="Giỏ hàng" class="w-8 h-8 text-brand cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/32x32/5D7A4D/FFFFFF?text=Cart';">
                             <span id="cart-badge-desktop" class="cart-badge hidden">0</span>
                         </button>
                     </div>
@@ -325,12 +321,8 @@
                 <!-- Mobile Menu & Cart Icon -->
                 <div class="md:hidden flex items-center space-x-4">
                     <button id="cart-icon-mobile" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
-                        <!-- Updated Shopping Cart SVG icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-brand">
-                            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 0 0 0 2-2V6l-3-4Z"/>
-                            <path d="M3 6h18"/>
-                            <path d="M16 10a4 0 0 1-8 0"/>
-                        </svg>
+                        <!-- Shopping Cart Image Icon -->
+                        <img src="gio_hang.png" alt="Giỏ hàng" class="w-8 h-8 text-brand cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/32x32/5D7A4D/FFFFFF?text=Cart';">
                         <span id="cart-badge-mobile" class="cart-badge hidden">0</span>
                     </button>
                     <button id="mobile-menu-button" class="text-gray-600 hover:text-brand focus:outline-none" aria-label="Mở menu di động">
