@@ -259,7 +259,7 @@
             100% { box-shadow: 0 0 10px rgba(255, 75, 43, 0.6); }
         }
 
-        /* Payment Popup Styles */
+        /* Payment Popup Styles - CẬP NHẬT */
         .payment-popup {
             position: fixed;
             top: 0;
@@ -267,7 +267,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.6);
-            z-index: 2000; /* Higher than cart sidebar */
+            z-index: 2000;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -282,10 +282,12 @@
         .payment-content {
             background-color: #F5F5DC;
             padding: 2.5rem;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            /* Thay đổi kích thước và bo góc */
             width: 90%;
-            max-width: 500px;
+            max-width: 450px;
+            border-radius: 16px;
+            /* Đổ bóng mềm */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             text-align: center;
             position: relative;
             transform: scale(0.95);
@@ -403,7 +405,7 @@
                     </div>
                      <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover animate-on-scroll slide-up" style="transition-delay: 0.4s;">
                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                             </svg>
                         </div>
@@ -548,18 +550,24 @@
     <!-- Cart Overlay -->
     <div id="cart-overlay" class="cart-overlay"></div>
 
-    <!-- Payment Popup HTML -->
-    <!-- Thêm popup thanh toán ở cuối body để đảm bảo nó hiển thị trên tất cả các thành phần khác -->
+    <!-- Payment Popup HTML - CẬP NHẬT -->
     <div id="payment-popup" class="payment-popup">
-        <div class="payment-content relative">
+        <div class="payment-content relative p-8">
             <!-- Nút đóng popup -->
             <button id="close-payment-popup" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Đóng cửa sổ thanh toán">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <h3 class="text-3xl font-bold text-brand font-heading mb-4">Thông tin thanh toán</h3>
-            <p class="text-gray-600 mb-6">Quét mã QR dưới đây để hoàn tất đơn hàng của bạn.</p>
+            
+            <div class="flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="text-brand-light w-10 h-10 mr-2" viewBox="0 0 24 24">
+                    <path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 10H4V8l8 5 8-5v8z"/>
+                </svg>
+                <h3 class="text-3xl font-bold text-brand font-heading">Thanh toán</h3>
+            </div>
+            
+            <p class="text-gray-600 mb-6">Vui lòng quét mã QR để hoàn tất đơn hàng của bạn.</p>
             
             <div class="flex flex-col items-center space-y-6">
                 <!-- Hiển thị tổng số lượng sản phẩm và tổng tiền -->
@@ -567,15 +575,15 @@
                     <span>Tổng số lượng:</span>
                     <span id="popup-total-quantity">0</span>
                 </div>
-                <div class="w-full flex justify-between items-center text-lg font-semibold text-brand text-2xl border-b pb-2 border-gray-300">
+                <div class="w-full flex justify-between items-center text-lg font-semibold text-brand text-2xl mb-4">
                     <span>Tổng tiền:</span>
                     <span id="popup-total-price">0₫</span>
                 </div>
                 
                 <!-- Hiển thị mã QR -->
-                <div class="p-4 bg-white rounded-lg shadow-inner">
+                <div class="p-2 bg-white rounded-lg shadow-inner border border-gray-200">
                     <!-- Sử dụng hình ảnh QR code đã được bạn cung cấp -->
-                    <img src="QR CODE.jpg" alt="Mã QR thanh toán" class="w-56 h-auto rounded-md mx-auto aspect-square">
+                    <img src="QR CODE.jpg" alt="Mã QR thanh toán" class="w-48 h-auto rounded-md mx-auto aspect-square">
                 </div>
                 
                 <p class="text-sm text-gray-500 mt-4">Vui lòng chuyển khoản đúng số tiền để đơn hàng được xử lý tự động.</p>
