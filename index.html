@@ -575,7 +575,7 @@
                 <!-- Hiển thị mã QR -->
                 <div class="p-4 bg-white rounded-lg shadow-inner">
                     <!-- Sử dụng hình ảnh QR code đã được bạn cung cấp -->
-                    <img src="QR.jpg" alt="Mã QR thanh toán" class="w-56 h-auto rounded-md mx-auto">
+                    <img src="QR CODE.jpg" alt="Mã QR thanh toán" class="w-56 h-auto rounded-md mx-auto">
                 </div>
                 
                 <p class="text-sm text-gray-500 mt-4">Vui lòng chuyển khoản đúng số tiền để đơn hàng được xử lý tự động.</p>
@@ -717,7 +717,7 @@
             const discountCodeInput = document.getElementById('discount-code');
             const applyDiscountBtn = document.getElementById('apply-discount-btn');
             const discountMessageElement = document.getElementById('discount-message');
-            const checkoutBtn = document.getElementById('checkout-btn'); // Nút Thanh Toán
+            const checkoutBtn = document.getElementById('checkout-btn');
 
             // Payment Popup Elements
             const paymentPopup = document.getElementById('payment-popup');
@@ -774,7 +774,6 @@
                 cartSubtotalPriceElement.textContent = formatCurrency(subtotal);
                 cartTotalPriceElement.textContent = formatCurrency(total);
 
-                // Cập nhật giá trị trong popup
                 popupTotalQuantity.textContent = totalItems;
                 popupTotalPrice.textContent = formatCurrency(total);
                 
