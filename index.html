@@ -23,36 +23,27 @@
     <!-- Preload critical scripts -->
     <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/chart.js" as="script">
-    <!-- Removed TensorFlow.js preload links -->
-
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- Removed TensorFlow.js script links -->
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Updated font to be more in harmony with the logo - 'Merriweather Sans' for headings and 'Open Sans' for body text -->
     <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            /* Changed font-family to Open Sans for general text */
             font-family: 'Open Sans', sans-serif;
-            /* Changed background-color to beige */
             background-color: #F5F5DC;
             color: #4A4A4A;
-            /* Add padding-top to body to prevent content from hiding under fixed header */
-            padding-top: 9rem; /* Equivalent to h-36 + some buffer, adjust if needed */
+            padding-top: 9rem;
         }
-        /* New custom class for headings to use Merriweather Sans */
         .font-heading {
             font-family: 'Merriweather Sans', sans-serif;
         }
-        /* Updated brand colors to be closer to the logo's green/brown tones */
-        .text-brand { color: #5D7A4D; } /* A darker, earthy green */
+        .text-brand { color: #5D7A4D; }
         .bg-brand { background-color: #5D7A4D; }
-        .bg-brand-light { background-color: #A2B99C; } /* A lighter green */
-        .bg-brand-superlight { background-color: #E6EDE4; } /* Very light green */
+        .bg-brand-light { background-color: #A2B99C; }
+        .bg-brand-superlight { background-color: #E6EDE4; }
         .border-brand { border-color: #5D7A4D; }
         
         .chart-container {
@@ -74,7 +65,7 @@
             transition: color 0.3s ease;
         }
         .nav-link:hover {
-            color: #5D7A4D; /* Updated hover color */
+            color: #5D7A4D;
         }
         .card-hover {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -84,98 +75,81 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
         
-        /* New CSS for testimonial carousel structure */
         .testimonial-viewport {
-            overflow: hidden; /* This creates the visible window for testimonials */
+            overflow: hidden;
             position: relative;
             width: 100%;
-            /* Removed scroll-snap-type as it conflicts with JS controlled sliding */
         }
 
         #testimonial-slider { 
             display: flex;
-            transition: transform 0.5s ease-in-out; /* Apply transition to the element being transformed */
-            flex-wrap: nowrap; /* Ensure items don't wrap to the next line */
-            -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
-            /* Width will be set dynamically by JS */
+            transition: transform 0.5s ease-in-out;
+            flex-wrap: nowrap;
+            -webkit-overflow-scrolling: touch;
         }
         
         .testimonial-card {
-            /* flex-shrink and flex-grow will be set by JS */
-            /* width will be set dynamically by JS to ensure proper sizing */
-            /* Removed flex-basis and media queries as JS will handle sizing */
         }
-         /* PADDING is still relevant for inside the cards */
          .testimonial-card .bg-white {
-            padding: 1.5rem; /* Equivalent to p-6 Tailwind class */
+            padding: 1.5rem;
          }
 
-        /* Removed VTO modal specific styles */
-
-        /* Hero section background image blur and fade-in effect */
         .hero-background-image {
-            filter: blur(8px); /* Initial blur */
-            transition: filter 1s ease-out, transform 1s ease-out; /* Smooth transition for blur and zoom */
-            transform: scale(1.05); /* Slightly zoomed in */
+            filter: blur(8px);
+            transition: filter 1s ease-out, transform 1s ease-out;
+            transform: scale(1.05);
         }
         .hero-background-image.loaded {
-            filter: blur(0); /* No blur after loading */
-            transform: scale(1); /* Original scale */
+            filter: blur(0);
+            transform: scale(1);
         }
 
-        /* Animation classes for scroll effects */
         .animate-on-scroll {
             opacity: 0;
-            /* Default transform for slide-up and zoom-in */
             transform: translateY(20px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
 
-        /* Specific initial states if they differ from the default transform */
         .animate-on-scroll.zoom-in {
             transform: scale(0.95);
         }
-        /* No specific transform for fade-in, it just uses opacity */
 
-        /* The class that makes elements visible and resets transform */
         .animate-on-scroll.visible {
             opacity: 1;
-            transform: translateY(0); /* Reset for slide-up and default */
+            transform: translateY(0);
         }
         .animate-on-scroll.zoom-in.visible {
-            transform: scale(1); /* Reset for zoom-in */
+            transform: scale(1);
         }
-        /* No explicit fade-in.visible needed if it's just opacity */
 
-        /* Styles for the video background */
         .video-background {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures the video covers the entire area */
-            z-index: -1; /* Puts the video behind other content */
+            object-fit: cover;
+            z-index: -1;
         }
 
         /* Shopping Cart Styles */
         .cart-sidebar {
             position: fixed;
             top: 0;
-            right: -100%; /* Initially hidden off-screen */
+            right: -100%;
             width: 100%;
-            max-width: 400px; /* Max width for desktop */
+            max-width: 400px;
             height: 100%;
-            background-color: #F5F5DC; /* Beige background */
+            background-color: #F5F5DC;
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
             transition: right 0.3s ease-in-out;
-            z-index: 1000; /* High z-index to be on top */
+            z-index: 1000;
             display: flex;
             flex-direction: column;
         }
 
         .cart-sidebar.open {
-            right: 0; /* Slide in */
+            right: 0;
         }
 
         .cart-overlay {
@@ -186,29 +160,27 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
-            display: none; /* Hidden by default */
+            display: none;
         }
 
         .cart-overlay.open {
-            display: block; /* Show when cart is open */
+            display: block;
         }
 
-        /* For the cart badge */
         .cart-badge {
             position: absolute;
             top: -8px;
             right: -8px;
-            background-color: #EF4444; /* Red color */
+            background-color: #EF4444;
             color: white;
-            border-radius: 9999px; /* Fully rounded */
-            padding: 2px 6px; /* Adjust padding for size */
-            font-size: 0.75rem; /* Text size */
+            border-radius: 9999px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
             font-weight: bold;
-            min-width: 20px; /* Ensure it's a circle even with single digit */
+            min-width: 20px;
             text-align: center;
         }
 
-        /* Animation for product flying to cart */
         .fly-to-cart-animation {
             position: fixed;
             top: var(--start-y);
@@ -216,23 +188,22 @@
             width: var(--size);
             height: var(--size);
             background-color: var(--color);
-            border-radius: 50%; /* Make it round */
+            border-radius: 50%;
             opacity: 1;
-            z-index: 1001; /* Above cart sidebar */
-            transition: all 0.6s ease-in-out; /* Smooth transition for position and size */
+            z-index: 1001;
+            transition: all 0.6s ease-in-out;
             transform: scale(1);
         }
 
         .fly-to-cart-animation.animate {
             top: var(--end-y);
             left: var(--end-x);
-            width: 20px; /* Smaller when flying to cart */
+            width: 20px;
             height: 20px;
             opacity: 0.5;
             transform: scale(0.5);
         }
 
-        /* CSS for the subtle pulse animation */
         @keyframes subtlePulse {
           0% { transform: scale(1); box-shadow: 0 0 0 rgba(93,122,77,0.2); }
           50% { box-shadow: 0 0 12px rgba(93,122,77,0.35); }
@@ -242,15 +213,14 @@
           animation: subtlePulse 2.8s ease-in-out infinite;
         }
 
-        /* Styles for discounted price */
         .original-price {
             position: relative;
             display: inline-block;
-            color: #d32f2f; /* Đỏ đậm hoặc #e53935 */
+            color: #d32f2f;
             font-weight: 600;
             font-size: 16px;
             opacity: 0.9;
-            margin-right: 0.5rem; /* Space between original and sale price */
+            margin-right: 0.5rem;
         }
         .original-price::after {
             content: "";
@@ -259,15 +229,14 @@
             top: 50%;
             width: 100%;
             height: 2px;
-            background: #d32f2f; /* Đỏ đậm cho đường gạch */
+            background: #d32f2f;
             transform: translateY(-50%);
         }
         .sale-price {
-            color: #5D7A4D; /* Brand color for sale price */
+            color: #5D7A4D;
             font-weight: bold;
         }
 
-        /* Styles for flash sale banner */
         .flash-sale-banner {
             margin-top: 15px;
             background: linear-gradient(to right, #ff416c, #ff4b2b);
@@ -282,12 +251,48 @@
             display: inline-block;
             margin-left: auto;
             margin-right: auto;
-            margin-bottom: 2rem; /* Add some space below the banner */
+            margin-bottom: 2rem;
         }
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 10px rgba(255, 75, 43, 0.6); }
             50% { box-shadow: 0 0 20px rgba(255, 75, 43, 1); }
             100% { box-shadow: 0 0 10px rgba(255, 75, 43, 0.6); }
+        }
+
+        /* Payment Popup Styles */
+        .payment-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2000; /* Higher than cart sidebar */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.3s, opacity 0.3s;
+        }
+        .payment-popup.open {
+            visibility: visible;
+            opacity: 1;
+        }
+        .payment-content {
+            background-color: #F5F5DC;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease-out;
+        }
+        .payment-popup.open .payment-content {
+            transform: scale(1);
         }
     </style>
 </head>
@@ -313,7 +318,6 @@
                     <div class="relative ml-8"> <!-- Added ml-8 for spacing between nav and cart -->
                         <button id="cart-icon-desktop" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
                             <!-- Shopping Cart Image Icon -->
-                            <!-- Optimal image size for gio_hang.png should be square, e.g., 32x32px, 64x64px, or 128x128px to match Tailwind's w-8 h-8 (32px by 32px) -->
                             <img src="gio_hang.png" alt="Giỏ hàng" class="w-8 h-8 text-brand cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/32x32/5D7A4D/FFFFFF?text=Cart';">
                             <span id="cart-badge-desktop" class="cart-badge hidden">0</span>
                         </button>
@@ -323,7 +327,6 @@
                 <div class="md:hidden flex items-center space-x-4">
                     <button id="cart-icon-mobile" class="relative text-gray-600 hover:text-brand focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Mở giỏ hàng">
                         <!-- Shopping Cart Image Icon -->
-                        <!-- Optimal image size for gio_hang.png should be square, e.g., 32x32px, 64x64px, or 128x128px to match Tailwind's w-8 h-8 (32px by 32px) -->
                         <img src="gio_hang.png" alt="Giỏ hàng" class="w-8 h-8 text-brand cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/32x32/5D7A4D/FFFFFF?text=Cart';">
                         <span id="cart-badge-mobile" class="cart-badge hidden">0</span>
                     </button>
@@ -351,17 +354,12 @@
             <!-- Video background -->
             <video autoplay loop muted playsinline class="video-background">
                 <source src="Video.mp4" type="video/mp4">
-                <!-- Add more source types if needed for broader browser support (e.g., .webm, .ogg) -->
                 Your browser does not support the video tag.
             </video>
-            <!-- Removed the transparent overlay div as per user request -->
-            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-on-scroll visible"> <!-- Hero section is visible by default -->
-                <!-- Increased font size for the main heading on the banner -->
-                <!-- Added gradient text effect for the slogan -->
-                <!-- Adjusted line-height to ensure diacritics are not cut off -->
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-on-scroll visible">
                 <h1 class="text-5xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#5D7A4D] to-[#8CA786] tracking-tight font-heading leading-normal py-4">
                     Tự nhiên từ Sắc,<br>Mộc từ tâm
-                </h1> <!-- Applied font-heading here -->
+                </h1>
                 <p class="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-white" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Sắc Mộc không chỉ là son môi. Đó là một lựa chọn an toàn cho bạn, tử tế với hành tinh và cam kết cho một vẻ đẹp minh bạch.</p>
                 <div class="mt-8">
                     <a href="#philosophy" class="inline-block bg-brand text-white font-bold py-3 px-8 rounded-full shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105" aria-label="Khám phá câu chuyện của Sắc Mộc">Khám Phám Câu Chuyện</a>
@@ -372,55 +370,51 @@
         <section id="philosophy" class="py-20 bg-white" role="region" aria-label="Triết lý Sắc Mộc">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center animate-on-scroll slide-up">
-                    <h2 class="text-3xl font-bold text-brand font-heading">Triết Lý Sắc Mộc</h2> <!-- Applied font-heading here -->
+                    <h2 class="text-3xl font-bold text-brand font-heading">Triết Lý Sắc Mộc</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi ra đời để giải quyết những lo ngại về sức khỏe và môi trường trong ngành mỹ phẩm. Sắc Mộc là câu trả lời cho nhu cầu về một vẻ đẹp không chỉ rạng rỡ bên ngoài mà còn an tâm từ bên trong.</p>
                 </div>
                 <div class="mt-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
                     <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover animate-on-scroll slide-up" style="transition-delay: 0.1s;">
                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">
-                            <!-- SVG Icon for An Toàn & Tinh Khiết (Safe & Pure) - Leaf -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.32 5.09a.75.75 0 011.06 0L20 6.71l-1.68 1.68a.75.75 0 01-1.06 0L17.32 5.09zM12 21.35c-3.78-3.4-7.18-6.8-7.18-11.54 0-3.08 2.42-5.5 5.5-5.5 1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3c3.08 0 5.5 2.42 5.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35zM9.5 7C7.57 7 6 8.57 6 10.5S7.57 14 9.5 14 13 12.43 13 10.5 11.43 7 9.5 7z"/>
                             </svg>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">An Toàn & Tinh Khiết</h3> <!-- Applied font-heading here -->
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">An Toàn & Tinh Khiết</h3>
                         <p class="mt-2 text-gray-600">Công thức với hơn 95% thành phần tự nhiên, không chứa kim loại nặng, parabens hay hóa chất độc hại.</p>
                     </div>
                     <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover animate-on-scroll slide-up" style="transition-delay: 0.2s;">
                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">
-                            <!-- SVG Icon for Bền Vững & Ý Thức (Sustainable & Conscious) - Globe -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.71-7-4.22-7-8.93 0-.31.02-.61.04-.92L11 4.07v15.86z"/>
                             </svg>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Bền Vững & Ý Thức</h3> <!-- Applied font-heading here -->
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Bền Vững & Ý Thức</h3>
                         <p class="mt-2 text-gray-600">Bao bì thân thiện môi trường, tái chế được và nguồn nguyên liệu khai thác có đạo đức.</p>
                     </div>
                     <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover animate-on-scroll slide-up" style="transition-delay: 0.3s;">
                          <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">
-                            <!-- SVG Icon for Minh Bạch & Đạo Đức (Transparent & Ethical) - Heart -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                             </svg>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Minh Bạch & Đạo Đức</h3> <!-- Applied font-heading here -->
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Minh Bạch & Đạo Đức</h3>
                         <p class="mt-2 text-gray-600">Cam kết 100% không thử nghiệm trên động vật và công khai toàn bộ thành phần sản phẩm.</p>
                     </div>
                      <div class="text-center p-6 bg-brand-superlight rounded-xl card-hover animate-on-scroll slide-up" style="transition-delay: 0.4s;">
                         <div class="flex items-center justify-center h-16 w-16 rounded-full bg-brand-light mx-auto text-3xl">
-                            <!-- SVG Icon for Hiệu Suất Vượt Trội (Superior Performance) - Star -->
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
                             </svg>
                         </div>
-                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Hiệu Suất Vượt Trội</h3> <!-- Applied font-heading here -->
+                        <h3 class="mt-5 text-xl font-semibold text-brand font-heading">Hiệu Suất Vượt Trội</h3>
                         <p class="mt-2 text-gray-600">Màu sắc rực rỡ, lâu trôi và chất son mềm mịn. Vẻ đẹp "sạch" không có nghĩa là phải thỏa hiệp.</p>
                     </div>
                 </div>
 
                 <div class="mt-20 animate-on-scroll slide-up">
                     <div class="text-center">
-                        <h3 class="text-2xl font-bold text-brand font-heading">So Sánh Trực Quan</h3> <!-- Applied font-heading here -->
+                        <h3 class="text-2xl font-bold text-brand font-heading">So Sánh Trực Quan</h3>
                         <p class="mt-2 max-w-2xl mx-auto text-md text-gray-600">Một cái nhìn nhanh để thấy sự khác biệt mà Sắc Mộc mang lại cho bạn và cho hành tinh.</p>
                     </div>
                     <div class="mt-8 chart-container">
@@ -433,7 +427,7 @@
         <section id="products" class="py-20 bg-brand-superlight" role="region" aria-label="Sản phẩm son môi Sắc Mộc">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center animate-on-scroll slide-up">
-                    <h2 class="text-3xl font-bold text-brand font-heading">Khám Phám Màu Son Của Bạn</h2> <!-- Applied font-heading here -->
+                    <h2 class="text-3xl font-bold text-brand font-heading">Khám Phám Màu Son Của Bạn</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tìm kiếm sắc màu hoàn hảo chưa bao giờ dễ dàng hơn. Hãy thử ngay những gam màu lấy cảm hứng từ thiên nhiên của chúng tôi.</p>
                     <!-- Flash Sale Banner -->
                     <div class="flash-sale-banner">
@@ -442,7 +436,6 @@
                 </div>
 
                 <!-- Product list layout adjusted for larger squares -->
-                <!-- Changed to 6 columns for large screens to make squares smaller and match thu_son_ao.html -->
                 <div class="mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-8" id="product-list" role="list">
                     <!-- Product items will be dynamically inserted here by JavaScript -->
                 </div>
@@ -460,7 +453,7 @@
         <section id="transparency" class="py-20 bg-[#F5F5DC]" role="region" aria-label="Trung tâm minh bạch về thành phần sản phẩm">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center animate-on-scroll slide-up">
-                    <h2 class="text-3xl font-bold text-brand font-heading">Trung Tâm Minh Bạch</h2> <!-- Applied font-heading here -->
+                    <h2 class="text-3xl font-bold text-brand font-heading">Trung Tâm Minh Bạch</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Chúng tôi tin vào vẻ đẹp không che giấu. Khám phá câu chuyện đằng sau mỗi thành phần làm nên thỏi son của bạn.</p>
                 </div>
                 <div id="ingredient-accordion" class="mt-12 max-w-3xl mx-auto space-y-4" role="tablist" aria-orientation="vertical">
@@ -472,12 +465,12 @@
         <section id="community" class="py-20 bg-brand-superlight" role="region" aria-label="Cộng đồng Sắc Mộc">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center animate-on-scroll slide-up">
-                    <h2 class="text-3xl font-bold text-brand font-heading">Cộng Đồng Sắc Mộc</h2> <!-- Applied font-heading here -->
+                    <h2 class="text-3xl font-bold text-brand font-heading">Cộng Đồng Sắc Mộc</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Tham gia cùng hàng ngàn phụ nữ Việt đã lựa chọn vẻ đẹp có ý thức. Chia sẻ khoảnh khắc của bạn với #SacMocBeauty.</p>
                 </div>
                 <div class="mt-16 relative animate-on-scroll slide-up">
-                    <div class="testimonial-viewport" role="group" aria-label="Lời chứng thực của khách hàng"> <!-- Wrapper for overflow and snap -->
-                        <div id="testimonial-slider" role="presentation"> <!-- This now acts as the flex container for cards -->
+                    <div class="testimonial-viewport" role="group" aria-label="Lời chứng thực của khách hàng">
+                        <div id="testimonial-slider" role="presentation">
                             <!-- Testimonial cards will be dynamically inserted here by JavaScript -->
                         </div>
                     </div>
@@ -498,10 +491,9 @@
 
     <footer class="bg-gray-800 text-white py-12" role="contentinfo">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h3 class="text-2xl font-bold font-heading">Sắc Mộc</h3> <!-- Applied font-heading here -->
-            <p class="mt-2">Tự nhiên từ Sắc, Mộc từ tâm</p> <!-- Updated text as requested -->
+            <h3 class="text-2xl font-bold font-heading">Sắc Mộc</h3>
+            <p class="mt-2">Tự nhiên từ Sắc, Mộc từ tâm</p>
             <div class="mt-6 flex justify-center space-x-6">
-                <!-- Updated Facebook link to the specified URL -->
                 <a href="https://www.facebook.com/profile.php?id=61576617677748" class="hover:text-brand-light" aria-label="Theo dõi chúng tôi trên Facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
                 <a href="#" class="hover:text-brand-light" aria-label="Theo dõi chúng tôi trên Instagram">Instagram</a>
                 <a href="#" class="hover:text-brand-light" aria-label="Theo dõi chúng tôi trên Tiktok">Tiktok</a>
@@ -547,7 +539,8 @@
                 <span>Tổng cộng:</span>
                 <span id="cart-total-price">0₫</span>
             </div>
-            <button class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-opacity-90 transition-transform transform hover:scale-105" aria-label="Tiến hành thanh toán">
+            <!-- Nút "Thanh Toán" đã được thêm ID để bắt sự kiện click -->
+            <button id="checkout-btn" class="w-full bg-brand text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-opacity-90 transition-transform transform hover:scale-105" aria-label="Tiến hành thanh toán">
                 Thanh Toán
             </button>
         </div>
@@ -555,7 +548,45 @@
     <!-- Cart Overlay -->
     <div id="cart-overlay" class="cart-overlay"></div>
 
-    <!-- Removed VTO Modal section entirely -->
+    <!-- Payment Popup HTML -->
+    <!-- Thêm popup thanh toán ở cuối body để đảm bảo nó hiển thị trên tất cả các thành phần khác -->
+    <div id="payment-popup" class="payment-popup">
+        <div class="payment-content relative">
+            <!-- Nút đóng popup -->
+            <button id="close-payment-popup" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 focus:outline-none p-2 rounded-full hover:bg-gray-100 transition-colors" aria-label="Đóng cửa sổ thanh toán">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            <h3 class="text-3xl font-bold text-brand font-heading mb-4">Thông tin thanh toán</h3>
+            <p class="text-gray-600 mb-6">Quét mã QR dưới đây để hoàn tất đơn hàng của bạn.</p>
+            
+            <div class="flex flex-col items-center space-y-6">
+                <!-- Hiển thị tổng số lượng sản phẩm và tổng tiền -->
+                <div class="w-full flex justify-between items-center text-lg font-semibold text-gray-800 border-b pb-2 border-gray-300">
+                    <span>Tổng số lượng:</span>
+                    <span id="popup-total-quantity">0</span>
+                </div>
+                <div class="w-full flex justify-between items-center text-lg font-semibold text-brand text-2xl border-b pb-2 border-gray-300">
+                    <span>Tổng tiền:</span>
+                    <span id="popup-total-price">0₫</span>
+                </div>
+                
+                <!-- Hiển thị mã QR -->
+                <div class="p-4 bg-white rounded-lg shadow-inner">
+                    <!-- Sử dụng hình ảnh QR code đã được bạn cung cấp -->
+                    <img src="QR.jpg" alt="Mã QR thanh toán" class="w-56 h-auto rounded-md mx-auto">
+                </div>
+                
+                <p class="text-sm text-gray-500 mt-4">Vui lòng chuyển khoản đúng số tiền để đơn hàng được xử lý tự động.</p>
+            </div>
+            
+            <button id="close-payment-btn" class="mt-8 w-full bg-brand text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-opacity-90 transition-transform transform hover:scale-105" aria-label="Đóng và tiếp tục mua sắm">
+                Đóng
+            </button>
+        </div>
+    </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -576,33 +607,29 @@
                         e.preventDefault();
                         document.querySelector(targetId).scrollIntoView({ behavior: 'smooth'});
                     }
-                    // If it's not an anchor link (e.g., href="thu_son_ao.html"), let the default behavior happen
                 });
             });
 
             // Intersection Observer for scroll animations
             const observerOptions = {
-                root: null, // viewport
+                root: null,
                 rootMargin: '0px',
-                threshold: 0.1 // Trigger when 10% of the element is visible
+                threshold: 0.1
             };
 
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        observer.unobserve(entry.target); // Stop observing once animated
+                        observer.unobserve(entry.target);
                     }
                 });
             }, observerOptions);
 
-            // Observe existing static elements
             document.querySelectorAll('.animate-on-scroll').forEach(element => {
-                // If element is already in viewport on load, make it visible immediately
                 if (element.getBoundingClientRect().top < window.innerHeight) {
                     element.classList.add('visible');
                 } else {
-                    // Otherwise, observe it for when it comes into view
                     observer.observe(element);
                 }
             });
@@ -616,31 +643,31 @@
                     labels: ['Thành Phần', 'Bao Bì', 'Thử Nghiệm Động Vật', 'Minh Bạch Nguồn Gốc', 'Hiệu Suất'],
                     datasets: [{
                         label: 'Son Truyền Thống',
-                        data: [4, 2, 3, 2, 8], // Example scores
-                        backgroundColor: '#A2B99C', // bg-brand-light
+                        data: [4, 2, 3, 2, 8],
+                        backgroundColor: '#A2B99C',
                         borderColor: '#8CA786',
                         borderWidth: 1
                     }, {
                         label: 'Sắc Mộc',
-                        data: [9, 8, 10, 10, 9], // Example scores for Sac Moc
-                        backgroundColor: '#5D7A4D', // bg-brand
+                        data: [9, 8, 10, 10, 9],
+                        backgroundColor: '#5D7A4D',
                         borderColor: '#4D643E',
                         borderWidth: 1
                     }]
                 },
                 options: {
-                    indexAxis: 'y', // Horizontal bar chart
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
                         x: {
                             beginAtZero: true,
-                            max: 10 // Assuming scores are out of 10
+                            max: 10
                         },
                         y: {
                             ticks: {
                                 font: {
-                                    size: 12 // Adjust font size if needed
+                                    size: 12
                                 }
                             }
                         }
@@ -648,7 +675,7 @@
                 }
             });
 
-            // Products Data - Cấu trúc dữ liệu đã được cập nhật
+            // Products Data
             const products = [
                 { id: 'son-do-cam', displayName: 'Đỏ Cam', fullName: 'Đỏ Cam - 01', color: '#FF4500', hexOpacity: 'FF4500B3', originalPrice: 219000, salePrice: 197000 },
                 { id: 'son-cam-tuoi', displayName: 'Cam Tươi', fullName: 'Cam Tươi - 02', color: '#FFA500', hexOpacity: 'FFA500B3', originalPrice: 219000, salePrice: 197000 },
@@ -665,12 +692,12 @@
             ];
 
             // Shopping Cart Logic
-            let cart = {}; // { productId: quantity }
-            let appliedDiscount = { code: '', percentage: 0, amount: 0 }; // Stores applied discount information
+            let cart = {};
+            let appliedDiscount = { code: '', percentage: 0, amount: 0 };
 
             const discountCodes = {
-                "chaobanmoi": 0.15, // 15% discount
-                "sonsacmoc": 0.05   // 5% discount
+                "chaobanmoi": 0.15,
+                "sonsacmoc": 0.05
             };
 
             const cartBadgeDesktop = document.getElementById('cart-badge-desktop');
@@ -681,7 +708,7 @@
             const cartOverlay = document.getElementById('cart-overlay');
             const closeCartSidebarBtn = document.getElementById('close-cart-sidebar');
             const cartItemsContainer = document.getElementById('cart-items');
-            const cartSubtotalPriceElement = document.getElementById('cart-subtotal-price'); // New element for subtotal
+            const cartSubtotalPriceElement = document.getElementById('cart-subtotal-price');
             const discountDisplayElement = document.getElementById('discount-display');
             const discountPercentageElement = document.getElementById('discount-percentage');
             const discountAmountElement = document.getElementById('discount-amount');
@@ -690,6 +717,14 @@
             const discountCodeInput = document.getElementById('discount-code');
             const applyDiscountBtn = document.getElementById('apply-discount-btn');
             const discountMessageElement = document.getElementById('discount-message');
+            const checkoutBtn = document.getElementById('checkout-btn'); // Nút Thanh Toán
+
+            // Payment Popup Elements
+            const paymentPopup = document.getElementById('payment-popup');
+            const closePaymentPopupBtn = document.getElementById('close-payment-popup');
+            const closePaymentBtn = document.getElementById('close-payment-btn');
+            const popupTotalQuantity = document.getElementById('popup-total-quantity');
+            const popupTotalPrice = document.getElementById('popup-total-price');
 
 
             function updateCartCount() {
@@ -709,17 +744,17 @@
             }
 
             function formatCurrency(amount) {
-                // Add non-breaking space for thousands separator and currency symbol
                 return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount).replace(/\s/g, '\u00A0');
             }
 
             function calculateTotals() {
                 let subtotal = 0;
+                let totalItems = 0;
                 for (const productId in cart) {
                     const quantity = cart[productId];
+                    totalItems += quantity;
                     const product = products.find(p => p.id === productId);
                     if (product) {
-                        // Use salePrice for calculation if available, otherwise originalPrice
                         subtotal += quantity * (product.salePrice || product.originalPrice);
                     }
                 }
@@ -733,16 +768,21 @@
                     discountAmountElement.textContent = `-${formatCurrency(appliedDiscount.amount)}`;
                 } else {
                     discountDisplayElement.classList.add('hidden');
-                    appliedDiscount.amount = 0; // Reset amount if no code is applied
+                    appliedDiscount.amount = 0;
                 }
 
                 cartSubtotalPriceElement.textContent = formatCurrency(subtotal);
                 cartTotalPriceElement.textContent = formatCurrency(total);
-                return { subtotal, total };
+
+                // Cập nhật giá trị trong popup
+                popupTotalQuantity.textContent = totalItems;
+                popupTotalPrice.textContent = formatCurrency(total);
+                
+                return { subtotal, total, totalItems };
             }
 
             function renderCart() {
-                cartItemsContainer.innerHTML = ''; // Clear current items
+                cartItemsContainer.innerHTML = '';
                 let hasItems = false;
 
                 for (const productId in cart) {
@@ -751,7 +791,6 @@
                         hasItems = true;
                         const product = products.find(p => p.id === productId);
                         if (product) {
-                            // Use salePrice for calculation if available, otherwise originalPrice
                             const itemPrice = product.salePrice || product.originalPrice;
                             const itemTotal = quantity * itemPrice;
 
@@ -793,7 +832,6 @@
             function addToCart(productId, animate = true) {
                 cart[productId] = (cart[productId] || 0) + 1;
                 renderCart();
-                // Update quantity display on the product card
                 const quantityDisplay = document.querySelector(`#${productId}-quantity`);
                 if (quantityDisplay) {
                     quantityDisplay.textContent = cart[productId];
@@ -808,21 +846,18 @@
                 if (cart[productId] && cart[productId] > 0) {
                     cart[productId]--;
                     if (cart[productId] === 0) {
-                        delete cart[productId]; // Remove if quantity is 0
+                        delete cart[productId];
                     }
                     renderCart();
-                    // Update quantity display on the product card
                     const quantityDisplay = document.querySelector(`#${productId}-quantity`);
                     if (quantityDisplay) {
-                        quantityDisplay.textContent = cart[productId] || 0; // Show 0 if removed
+                        quantityDisplay.textContent = cart[productId] || 0;
                     }
                 }
             }
 
-            // Function to trigger the fly-to-cart animation
             function triggerFlyToCartAnimation(productId) {
                 const productCard = document.getElementById(productId);
-                // Dynamically select the correct cart icon based on screen size
                 const cartIcon = window.innerWidth >= 768 ? cartIconDesktop : cartIconMobile;
 
                 if (!productCard || !cartIcon) return;
@@ -832,23 +867,21 @@
 
                 const flyEl = document.createElement('div');
                 flyEl.className = 'fly-to-cart-animation';
-                flyEl.style.setProperty('--start-x', `${productRect.left + productRect.width / 2 - 20}px`); // Centered and adjusted for 40px size
-                flyEl.style.setProperty('--start-y', `${productRect.top + productRect.height / 2 - 20}px`); // Centered and adjusted for 40px size
-                flyEl.style.setProperty('--end-x', `${cartRect.left + cartRect.width / 2 - 10}px`); // Centered on target, adjusted for 20px size
-                flyEl.style.setProperty('--end-y', `${cartRect.top + cartRect.height / 2 - 10}px`); // Centered on target, adjusted for 20px size
-                flyEl.style.setProperty('--size', '40px'); // Initial size of the flying element
+                flyEl.style.setProperty('--start-x', `${productRect.left + productRect.width / 2 - 20}px`);
+                flyEl.style.setProperty('--start-y', `${productRect.top + productRect.height / 2 - 20}px`);
+                flyEl.style.setProperty('--end-x', `${cartRect.left + cartRect.width / 2 - 10}px`);
+                flyEl.style.setProperty('--end-y', `${cartRect.top + cartRect.height / 2 - 10}px`);
+                flyEl.style.setProperty('--size', '40px');
                 
                 const product = products.find(p => p.id === productId);
-                flyEl.style.setProperty('--color', product ? product.color : '#5D7A4D'); // Use product color
+                flyEl.style.setProperty('--color', product ? product.color : '#5D7A4D');
 
                 document.body.appendChild(flyEl);
 
-                // Trigger animation
                 requestAnimationFrame(() => {
                     flyEl.classList.add('animate');
                 });
 
-                // Remove element after animation
                 flyEl.addEventListener('transitionend', () => {
                     flyEl.remove();
                 });
@@ -883,7 +916,7 @@
                 const target = e.target;
                 if (target.classList.contains('cart-increase-btn')) {
                     const productId = target.dataset.productId;
-                    addToCart(productId, false); // No animation when adding from cart sidebar
+                    addToCart(productId, false);
                 } else if (target.classList.contains('cart-decrease-btn')) {
                     const productId = target.dataset.productId;
                     decreaseQuantity(productId);
@@ -902,7 +935,6 @@
                     applyDiscountBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
                     applyDiscountBtn.classList.remove('bg-brand-light', 'hover:bg-brand');
                 }
-                // Clear discount message and reset applied discount if input changes after successful application
                 if (appliedDiscount.code && code !== appliedDiscount.code) {
                     appliedDiscount.code = '';
                     appliedDiscount.percentage = 0;
@@ -929,34 +961,32 @@
                 } else {
                     appliedDiscount.code = '';
                     appliedDiscount.percentage = 0;
-                    appliedDiscount.amount = 0; // Reset amount if invalid code
+                    appliedDiscount.amount = 0;
                     discountMessageElement.textContent = "Mã giảm giá không hợp lệ.";
                     discountMessageElement.className = "text-sm mt-2 text-red-600";
                 }
-                calculateTotals(); // Recalculate totals with new discount
+                calculateTotals();
             });
 
             // Populate Product List with +/- buttons
             const productList = document.getElementById('product-list');
-            productList.innerHTML = ''; // Clear existing content
+            productList.innerHTML = '';
             products.forEach(p => {
                 const card = document.createElement('div');
-                card.id = p.id; // Set ID for easy access
-                card.className = 'group text-center animate-on-scroll zoom-in'; // Container for each product card, centered text
+                card.id = p.id;
+                card.className = 'group text-center animate-on-scroll zoom-in';
                 card.innerHTML = `
                     <div class="relative w-full aspect-square rounded-lg overflow-hidden card-hover" aria-label="Sản phẩm son ${p.displayName}">
                         <div class="absolute inset-0 flex items-center justify-center" style="background-color: ${p.color};">
                             <h3 class="text-white text-2xl font-bold font-heading px-2 py-1">${p.displayName}</h3> 
                         </div>
                     </div>
-                    <div class="mt-3 flex flex-col items-center"> <!-- Container for full name and small color circle, with top margin -->
+                    <div class="mt-3 flex flex-col items-center">
                         <h4 class="font-semibold text-gray-800">${p.fullName}</h4>
                         <p class="mt-1">
                             <span class="original-price">${formatCurrency(p.originalPrice)}</span>
                             <span class="sale-price">${formatCurrency(p.salePrice)}</span>
                         </p>
-                        <!-- Removed the small color circle here as requested -->
-                        <!-- Quantity controls -->
                         <div class="flex items-center justify-center mt-3 space-x-2">
                             <button class="decrease-product-quantity bg-gray-200 text-gray-700 w-8 h-8 rounded-full hover:bg-gray-300 transition-colors" data-product-id="${p.id}" aria-label="Giảm số lượng ${p.fullName}">-</button>
                             <span id="${p.id}-quantity" class="font-semibold text-gray-800 w-6 text-center">0</span>
@@ -965,7 +995,6 @@
                     </div>
                 `;
                 productList.appendChild(card);
-                // Observe dynamically added card after it's appended
                 if (card.getBoundingClientRect().top < window.innerHeight) {
                     card.classList.add('visible');
                 } else {
@@ -973,19 +1002,17 @@
                 }
             });
 
-            // Event delegation for product quantity buttons
             productList.addEventListener('click', (e) => {
                 const target = e.target;
                 if (target.classList.contains('increase-product-quantity')) {
                     const productId = target.dataset.productId;
-                    addToCart(productId); // Animation triggered here
+                    addToCart(productId);
                 } else if (target.classList.contains('decrease-product-quantity')) {
                     const productId = target.dataset.productId;
                     decreaseQuantity(productId);
                 }
             });
 
-            // Initial render of the cart
             renderCart();
 
 
@@ -999,11 +1026,11 @@
 
             // Populate Ingredient Accordion
             const accordion = document.getElementById('ingredient-accordion');
-            accordion.innerHTML = ''; // Clear existing content
+            accordion.innerHTML = '';
             ingredientsData.forEach((ing, index) => {
                 const item = document.createElement('div');
-                item.className = 'border border-gray-200 rounded-lg overflow-hidden animate-on-scroll slide-up'; // Added animation class
-                item.style.transitionDelay = `${index * 0.1}s`; // Stagger delay for each item
+                item.className = 'border border-gray-200 rounded-lg overflow-hidden animate-on-scroll slide-up';
+                item.style.transitionDelay = `${index * 0.1}s`;
                 item.innerHTML = `
                     <button class="accordion-button w-full text-left p-4 bg-brand-superlight hover:bg-brand-light transition duration-300 flex justify-between items-center" 
                             id="accordion-header-${index}" 
@@ -1023,7 +1050,6 @@
                     </div>
                 `;
                 accordion.appendChild(item);
-                // Observe dynamically added accordion item after it's appended
                 if (item.getBoundingClientRect().top < window.innerHeight) {
                     item.classList.add('visible');
                 } else {
@@ -1031,7 +1057,6 @@
                 }
             });
             
-            // Accordion Functionality
             accordion.addEventListener('click', function(e) {
                 const button = e.target.closest('.accordion-button');
                 if (button) {
@@ -1039,7 +1064,6 @@
                     const icon = button.querySelector('.accordion-icon');
                     const isHidden = content.classList.contains('hidden');
                     
-                    // Close all other accordions
                     document.querySelectorAll('#ingredient-accordion .accordion-content').forEach(c => {
                         c.classList.add('hidden');
                         c.setAttribute('aria-hidden', 'true');
@@ -1049,14 +1073,12 @@
                         btn.querySelector('.accordion-icon').textContent = '+';
                     });
                     
-                    // Toggle current accordion
                     if (isHidden) {
                         content.classList.remove('hidden');
                         content.setAttribute('aria-hidden', 'false');
                         button.setAttribute('aria-expanded', 'true');
                         icon.textContent = '-';
                     } else {
-                        // If it was already open and clicked, close it
                         content.classList.add('hidden');
                         content.setAttribute('aria-hidden', 'true');
                         button.setAttribute('aria-expanded', 'false');
@@ -1065,7 +1087,7 @@
                 }
             });
 
-            // Testimonials Data - Added more testimonials here for a better loop experience
+            // Testimonials Data
             const testimonials = [
                 { text: "Lần đầu tiên mình tìm được một thỏi son vừa đẹp, vừa lâu trôi mà lại an tâm về thành phần. Yêu Sắc Mộc!", author: "An Nhiên, TP.HCM" },
                 { text: "Mình đang mang thai nên rất kỹ tính. Sắc Mộc là cứu tinh, giúp mình vẫn xinh đẹp mà không lo ảnh hưởng đến bé.", author: "Minh Thư, Hà Nội" },
@@ -1095,13 +1117,11 @@
                 { text: "Chất son mềm mịn, không gây bết dính. Mình có thể dùng Sắc Mộc cả ngày mà không lo khô môi.", author: "Hải Yến, An Giang" }
             ];
 
-            // Populate Testimonial Slider
             const testimonialSlider = document.getElementById('testimonial-slider');
-            testimonialSlider.innerHTML = ''; // Clear existing content
+            testimonialSlider.innerHTML = '';
             testimonials.forEach(t => {
                 const card = document.createElement('div');
-                // Added role="group" and aria-roledescription="slide" for accessibility
-                card.className = 'testimonial-card p-4 md:p-6'; // Added padding for spacing
+                card.className = 'testimonial-card p-4 md:p-6';
                 card.innerHTML = `
                     <div class="bg-white p-6 rounded-xl shadow-sm text-center h-full flex flex-col justify-center card-hover" role="group" aria-roledescription="slide">
                         <p class="text-gray-600 italic text-lg">"${t.text}"</p>
@@ -1111,15 +1131,14 @@
                 testimonialSlider.appendChild(card);
             });
 
-            // Testimonial Slider Functionality
             const prevTestimonialBtn = document.getElementById('prev-testimonial');
             const nextTestimonialBtn = document.getElementById('next-testimonial');
             let currentTestimonialIndex = 0;
 
             function getVisibleCardsCount() {
-                if (window.innerWidth >= 1024) return 3; // lg
-                if (window.innerWidth >= 768) return 2; // md
-                return 1; // sm and smaller
+                if (window.innerWidth >= 1024) return 3;
+                if (window.innerWidth >= 768) return 2;
+                return 1;
             }
 
             function showTestimonials() {
@@ -1129,24 +1148,19 @@
                 }
                 
                 const visibleCards = getVisibleCardsCount();
-                const viewportWidth = testimonialSlider.parentElement.offsetWidth; // Get the width of the .testimonial-viewport
+                const viewportWidth = testimonialSlider.parentElement.offsetWidth;
                 
-                // Calculate the width for each individual card to fit precisely within the viewport
                 const individualCardDisplayWidth = viewportWidth / visibleCards;
 
-                // Apply calculated width to each testimonial card and ensure it doesn't shrink
                 testimonialSlider.querySelectorAll('.testimonial-card').forEach(card => {
                     card.style.width = `${individualCardDisplayWidth}px`;
-                    card.style.flexShrink = '0'; 
+                    card.style.flexShrink = '0';
                 });
 
-                // Set the total width of the slider to accommodate all cards side-by-side
                 testimonialSlider.style.width = `${testimonials.length * individualCardDisplayWidth}px`;
 
-                // Apply the transform to slide the cards
                 testimonialSlider.style.transform = `translateX(-${currentTestimonialIndex * individualCardDisplayWidth}px)`;
                 
-                // Buttons are always enabled for infinite loop
                 prevTestimonialBtn.disabled = false;
                 nextTestimonialBtn.disabled = false;
             }
@@ -1154,7 +1168,6 @@
             nextTestimonialBtn.addEventListener('click', () => {
                 const totalCards = testimonials.length;
                 const visibleCards = getVisibleCardsCount();
-                // If at the end, loop back to the start
                 if (currentTestimonialIndex >= totalCards - visibleCards) {
                     currentTestimonialIndex = 0;
                 } else {
@@ -1165,10 +1178,8 @@
             prevTestimonialBtn.addEventListener('click', () => {
                 const totalCards = testimonials.length;
                 const visibleCards = getVisibleCardsCount();
-                // If at the beginning, loop to the end
                 if (currentTestimonialIndex === 0) {
                     currentTestimonialIndex = totalCards - visibleCards;
-                    // Ensure index is not negative if totalCards is less than visibleCards
                     if (currentTestimonialIndex < 0) currentTestimonialIndex = 0;
                 } else {
                     currentTestimonialIndex--;
@@ -1176,15 +1187,30 @@
                 showTestimonials();
             });
             window.addEventListener('resize', () => {
-                // Reset index on resize to prevent awkward jumps if number of visible cards changes
                 currentTestimonialIndex = 0;
                 showTestimonials();
             });
             
-            // Call showTestimonials after all DOM content is loaded and cards are rendered
-            // Using a short timeout to ensure card widths are fully calculated by browser
-            // Using a short timeout to ensure card widths are fully calculated by browser
             setTimeout(showTestimonials, 100);
+
+            // Xử lý sự kiện khi click nút "Thanh Toán"
+            checkoutBtn.addEventListener('click', () => {
+                // Hiển thị popup thanh toán
+                paymentPopup.classList.add('open');
+                // Đóng giỏ hàng
+                cartSidebar.classList.remove('open');
+                cartOverlay.classList.remove('open');
+                // Dữ liệu trong popup đã được cập nhật tự động bởi hàm calculateTotals()
+            });
+
+            // Xử lý sự kiện khi đóng popup
+            closePaymentPopupBtn.addEventListener('click', () => {
+                paymentPopup.classList.remove('open');
+            });
+            closePaymentBtn.addEventListener('click', () => {
+                paymentPopup.classList.remove('open');
+            });
+            
         });
     </script>
 </body>
