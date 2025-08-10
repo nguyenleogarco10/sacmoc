@@ -135,6 +135,181 @@
             box-shadow: 0 0 0 5px #8D6E63; /* Slightly increased shadow spread */
             transform: scale(1.07); /* Slightly increased scale to give more room */
         }
+
+        /* NEW CSS for Custom Color Picker Button */
+        #custom-color-btn {
+            grid-column: span 6; /* Spans across all 6 columns on desktop */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #EFEBE9;
+            color: #8D6E63;
+            font-weight: 600;
+            border-radius: 0.5rem;
+            border: 2px solid #D7CCC8;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            padding: 0.75rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        #custom-color-btn.active {
+            border: 4px solid #8D6E63;
+            box-shadow: 0 0 0 5px #8D6E63;
+            transform: scale(1.03);
+        }
+        #custom-color-btn:hover {
+             border-color: #8D6E63;
+             background-color: #EFEBE9;
+        }
+
+        /* Responsive adjustments for the custom button */
+        @media (max-width: 768px) {
+            #custom-color-btn {
+                grid-column: span 4; /* Spans 4 columns on tablet */
+            }
+        }
+        @media (max-width: 480px) {
+            #custom-color-btn {
+                grid-column: span 3; /* Spans 3 columns on mobile */
+            }
+        }
+
+        /* NEW CSS for Color Picker Modal */
+        #color-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
+        .color-picker-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: center;
+            width: 90%;
+            max-width: 600px; /* Make it wider to fit the color palette */
+        }
+        .color-picker-content h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #8D6E63;
+        }
+
+        /* Styles for the new color picker UI */
+        .color-picker-ui {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+             .color-picker-ui {
+                flex-direction: row;
+             }
+        }
+        .color-palette-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 0 0 1px #ccc; /* Inner border */
+        }
+        .color-palette-canvas {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+        .color-slider-container {
+            position: relative;
+            width: 25px; /* Fixed width for the slider */
+            height: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 0 0 1px #ccc; /* Inner border */
+        }
+        .color-slider-canvas {
+            width: 100%;
+            height: 100%;
+            cursor: ns-resize;
+        }
+
+        .picker-controls {
+            /* --- THAY ĐỔI CẦN THIẾT --- */
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: stretch;
+            flex-grow: 1; /* Allow it to take up remaining space */
+            /* --- KẾT THÚC THAY ĐỔI --- */
+        }
+        .hex-code-display {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #4A4A4A;
+            background-color: #EFEBE9;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+        
+        /* NEW: Visual color display below hex code */
+        .color-preview-box {
+            width: 100%;
+            /* --- THAY ĐỔI CẦN THIẾT --- */
+            height: 150px;
+            /* --- KẾT THÚC THAY ĐỔI --- */
+            border-radius: 0.5rem;
+            border: 1px solid #ccc;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .picker-done-btn, .picker-cancel-btn {
+            padding: 0.75rem 1.5rem;
+            color: white;
+            font-weight: 700;
+            border-radius: 0.75rem;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .picker-done-btn {
+            background-color: #8D6E63;
+        }
+        .picker-done-btn:hover {
+            background-color: #7A5D4D;
+            transform: translateY(-2px);
+        }
+        .picker-done-btn:active {
+            transform: translateY(0);
+        }
+        .picker-cancel-btn {
+            background-color: #D7CCC8;
+            color: #4A4A4A;
+            margin-top: 0.5rem; /* Space below done button */
+        }
+        .picker-cancel-btn:hover {
+            background-color: #C2B4B2;
+            transform: translateY(-2px);
+        }
+        .picker-cancel-btn:active {
+            transform: translateY(0);
+        }
+
+
         #vto-status {
             text-align: center;
             padding: 0.75rem 1.25rem; /* Tăng padding */
@@ -336,10 +511,41 @@
 
         <div id="vto-controls">
             <h4 class="font-semibold text-gray-700">Chọn màu son của bạn:</h4>
-            <div id="vto-color-options"></div>
+            <div id="vto-color-options">
+            </div>
+            
+            <!-- Custom Color Picker Button is now moved to the bottom -->
+            <button id="custom-color-btn" class="w-full mt-4">
+                Trải nghiệm màu son của riêng bạn
+            </button>
+
             <div class="mt-2 p-3 bg-amber-100 border-l-4 border-amber-500 text-amber-700 text-sm w-full rounded">
                 <p><strong>Lưu ý:</strong> Để có kết quả tốt nhất, hãy đảm bảo khuôn mặt bạn được chiếu sáng đủ và nhìn thẳng vào webcam.</p>
                 <p id="vto-fallback-note" class="hidden mt-1">Chế độ xem trước AI không khả dụng, đang hiển thị bản xem trước tĩnh.</p>
+            </div>
+        </div>
+        
+        <!-- NEW Color Picker Modal -->
+        <div id="color-picker-modal" class="hidden">
+            <div class="color-picker-content">
+                <h4>Chọn màu son tùy chỉnh</h4>
+                
+                <div class="color-picker-ui">
+                    <div class="color-palette-container">
+                        <canvas id="color-palette-canvas" class="color-palette-canvas"></canvas>
+                    </div>
+                    <div class="color-slider-container">
+                        <canvas id="color-slider-canvas" class="color-slider-canvas"></canvas>
+                    </div>
+                    <div class="picker-controls">
+                         <span class="hex-code-display" id="hex-code-display">#FF4500</span>
+                         <!-- NEW: Color preview box -->
+                         <div id="color-preview-box" class="color-preview-box"></div>
+                         <div class="flex-grow"></div> <!-- spacer -->
+                         <button id="picker-done-btn" class="picker-done-btn">Hoàn thành</button>
+                         <button id="picker-cancel-btn" class="picker-cancel-btn">Hủy</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -375,10 +581,22 @@
         const videoContainer = document.getElementById('vto-video-container'); // For glow effect
         const userChatInput = document.getElementById('user-chat-input');
         const sendChatBtn = document.getElementById('send-chat-btn');
-
+        
+        // NEW HTML element references for custom color picker
+        const customColorBtn = document.getElementById('custom-color-btn');
+        const colorPickerModal = document.getElementById('color-picker-modal');
+        const pickerDoneBtn = document.getElementById('picker-done-btn');
+        const pickerCancelBtn = document.getElementById('picker-cancel-btn');
+        const colorPaletteCanvas = document.getElementById('color-palette-canvas');
+        const colorSliderCanvas = document.getElementById('color-slider-canvas');
+        const hexCodeDisplay = document.getElementById('hex-code-display');
+        const colorPreviewBox = document.getElementById('color-preview-box');
+        const paletteCtx = colorPaletteCanvas.getContext('2d');
+        const sliderCtx = colorSliderCanvas.getContext('2d');
+        
         let faceLandmarker;
         let currentLipColor = 'rgba(255, 69, 0, 0.7)'; // Default color: Đỏ Cam
-        let targetLipColor = currentLipColor; // New: for smooth transitions
+        let targetLipColor = currentLipColor; // For smooth transitions
         let transitionStartTime = 0;
         const TRANSITION_DURATION = 300; // ms
         let videoStream;
@@ -389,6 +607,15 @@
         let isSkinToneLocked = false;
         let lastComplimentIndex = -1;
         let assistantChatHistory = []; // To store chat history for conversational AI
+        
+        // NEW: Color Picker state variables
+        let hue = 0;
+        let saturation = 100;
+        let lightness = 50;
+        let isDraggingPalette = false;
+        let isDraggingSlider = false;
+        // Keep track of the current color for canceling
+        let initialColorBeforePicker = ''; 
 
         // These landmark indices are standard for MediaPipe Face Mesh (478 landmarks model)
         // and should map to lips.
@@ -452,7 +679,7 @@
                     "Màu hồng cánh sen này làm bạn trông thật nhẹ nhàng và cuốn hút!",
                     "Bạn thật thanh lịch với sắc hồng cánh sen này!",
                     "Ôi, màu hồng cánh sen này rất hợp với bạn, vừa tự nhiên vừa sang trọng!",
-                    "Vẻ đẹp tinh tế của bạn được tôn vinh với màu hồng cánh sen này!",
+                    "Vẻ đẹp tinh tế của bạn được tôn vinh với sắc hồng cánh sen này!",
                     "Sắc hồng cánh sen này mang đến sự dịu dàng và hiện đại cho khuôn mặt bạn!"
                 ]
             },
@@ -543,6 +770,7 @@
 
                 // Remove 'active' class from all buttons and then add to the clicked one
                 document.querySelectorAll('.vto-color-btn').forEach(btn => btn.classList.remove('active'));
+                document.getElementById('custom-color-btn').classList.remove('active'); // Remove active class from custom button
                 colorBtn.classList.add('active');
                 
                 if (!advancedVtoAvailable) {
@@ -572,7 +800,253 @@
             }
         }
 
+        // NEW: Color Picker logic
+        
+        // Function to convert HSL to a valid CSS color string
+        function hslToCss(h, s, l) {
+            return `hsl(${h}, ${s}%, ${l}%)`;
+        }
+        
+        // Function to convert RGB to Hex
+        function rgbToHex(r, g, b) {
+            return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        }
 
+        // CORRECTED HSL to RGB conversion
+        function hslToRgb(h, s, l) {
+            s /= 100;
+            l /= 100;
+            const c = (1 - Math.abs(2 * l - 1)) * s;
+            const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
+            const m = l - c / 2;
+            let r = 0;
+            let g = 0;
+            let b = 0;
+            if (0 <= h && h < 60) {
+                r = c; g = x; b = 0;
+            } else if (60 <= h && h < 120) {
+                r = x; g = c; b = 0;
+            } else if (120 <= h && h < 180) {
+                r = 0; g = c; b = x;
+            } else if (180 <= h && h < 240) {
+                r = 0; g = x; b = c;
+            } else if (240 <= h && h < 300) {
+                r = x; g = 0; b = c;
+            } else if (300 <= h && h < 360) {
+                r = c; g = 0; b = x;
+            }
+            r = Math.round((r + m) * 255);
+            g = Math.round((g + m) * 255);
+            b = Math.round((b + m) * 255);
+            return [r, g, b];
+        }
+
+        function drawColorPalette() {
+            paletteCtx.clearRect(0, 0, colorPaletteCanvas.width, colorPaletteCanvas.height);
+            const baseColor = hslToCss(hue, 100, 50);
+
+            // Draw saturation gradient (left to right)
+            const saturationGradient = paletteCtx.createLinearGradient(0, 0, colorPaletteCanvas.width, 0);
+            saturationGradient.addColorStop(0, '#FFFFFF'); // White
+            saturationGradient.addColorStop(1, baseColor);
+            paletteCtx.fillStyle = saturationGradient;
+            paletteCtx.fillRect(0, 0, colorPaletteCanvas.width, colorPaletteCanvas.height);
+
+            // Draw lightness gradient (top to bottom)
+            const lightnessGradient = paletteCtx.createLinearGradient(0, 0, 0, colorPaletteCanvas.height);
+            lightnessGradient.addColorStop(0, 'rgba(0,0,0,0)'); // Transparent
+            lightnessGradient.addColorStop(1, '#000000'); // Black
+            paletteCtx.fillStyle = lightnessGradient;
+            paletteCtx.fillRect(0, 0, colorPaletteCanvas.width, colorPaletteCanvas.height);
+
+            // Draw the marker
+            const markerX = (saturation / 100) * colorPaletteCanvas.width;
+            const markerY = (1 - (lightness / 100)) * colorPaletteCanvas.height;
+            paletteCtx.beginPath();
+            paletteCtx.arc(markerX, markerY, 8, 0, 2 * Math.PI);
+            paletteCtx.strokeStyle = 'black';
+            paletteCtx.lineWidth = 2;
+            paletteCtx.stroke();
+            paletteCtx.fillStyle = 'white';
+            paletteCtx.fill();
+        }
+
+        function drawColorSlider() {
+            sliderCtx.clearRect(0, 0, colorSliderCanvas.width, colorSliderCanvas.height);
+            const gradient = sliderCtx.createLinearGradient(0, 0, 0, colorSliderCanvas.height);
+            gradient.addColorStop(0, 'hsl(0, 100%, 50%)');
+            gradient.addColorStop(0.17, 'hsl(60, 100%, 50%)');
+            gradient.addColorStop(0.33, 'hsl(120, 100%, 50%)');
+            gradient.addColorStop(0.5, 'hsl(180, 100%, 50%)');
+            gradient.addColorStop(0.67, 'hsl(240, 100%, 50%)');
+            gradient.addColorStop(0.83, 'hsl(300, 100%, 50%)');
+            gradient.addColorStop(1, 'hsl(360, 100%, 50%)');
+            sliderCtx.fillStyle = gradient;
+            sliderCtx.fillRect(0, 0, colorSliderCanvas.width, colorSliderCanvas.height);
+            
+            const markerY = (hue / 360) * colorSliderCanvas.height;
+            sliderCtx.beginPath();
+            sliderCtx.arc(colorSliderCanvas.width / 2, markerY, 8, 0, 2 * Math.PI);
+            sliderCtx.strokeStyle = 'black';
+            sliderCtx.lineWidth = 2;
+            sliderCtx.stroke();
+            sliderCtx.fillStyle = 'white';
+            sliderCtx.fill();
+        }
+        
+        function handlePaletteSelection(e) {
+            const rect = colorPaletteCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Corrected saturation mapping: from 0 (white) to 100% (base color)
+            const newSaturation = Math.min(Math.max(x / colorPaletteCanvas.width, 0), 1) * 100;
+            // Corrected lightness mapping: from 100% (top) to 0% (bottom)
+            const newLightness = (1 - Math.min(Math.max(y / colorPaletteCanvas.height, 0), 1)) * 100;
+            
+            saturation = newSaturation;
+            lightness = newLightness;
+
+            updatePickerUI();
+        }
+
+        function handleSliderSelection(e) {
+            const rect = colorSliderCanvas.getBoundingClientRect();
+            const y = e.clientY - rect.top;
+            
+            const newHue = Math.min(Math.max(y / colorSliderCanvas.height, 0), 1) * 360;
+            
+            hue = newHue;
+
+            drawColorPalette(); // Redraw palette with the new hue
+            updatePickerUI();
+        }
+
+        function updatePickerUI() {
+            const rgb = hslToRgb(hue, saturation, lightness);
+            const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
+            hexCodeDisplay.textContent = hex.toUpperCase();
+            colorPreviewBox.style.backgroundColor = hex;
+
+            drawColorPalette();
+            drawColorSlider();
+
+            if (advancedVtoAvailable) {
+                targetLipColor = hexToRgba(hex, 0.7);
+            } else {
+                vtoLipsOverlay.style.backgroundColor = hexToRgba(hex, 0.7);
+            }
+        }
+        
+        function initializeColorPicker() {
+            const paletteRect = colorPaletteCanvas.getBoundingClientRect();
+            colorPaletteCanvas.width = paletteRect.width;
+            colorPaletteCanvas.height = paletteRect.height;
+            const sliderRect = colorSliderCanvas.getBoundingClientRect();
+            colorSliderCanvas.width = sliderRect.width;
+            colorSliderCanvas.height = paletteRect.height;
+
+            drawColorPalette();
+            drawColorSlider();
+            updatePickerUI();
+        }
+
+        window.addEventListener('resize', initializeColorPicker);
+
+        customColorBtn.addEventListener('click', () => {
+            colorPickerModal.classList.remove('hidden');
+            initialColorBeforePicker = currentLipColor;
+            document.querySelectorAll('.vto-color-btn').forEach(btn => btn.classList.remove('active'));
+            customColorBtn.classList.add('active');
+            
+            initializeColorPicker();
+        });
+
+        pickerDoneBtn.addEventListener('click', () => {
+            const newColor = hexCodeDisplay.textContent;
+            targetLipColor = hexToRgba(newColor, 0.7);
+            transitionStartTime = performance.now();
+            colorPickerModal.classList.add('hidden');
+            if (!advancedVtoAvailable) {
+                vtoLipsOverlay.style.backgroundColor = targetLipColor; 
+            }
+            sendCompliment('màu tùy chỉnh'); 
+        });
+
+        pickerCancelBtn.addEventListener('click', () => {
+            colorPickerModal.classList.add('hidden');
+            targetLipColor = initialColorBeforePicker;
+            transitionStartTime = performance.now();
+            if (!advancedVtoAvailable) {
+                vtoLipsOverlay.style.backgroundColor = targetLipColor;
+            }
+            document.querySelectorAll('.vto-color-btn').forEach(btn => {
+                const hexColor = targetLipColor.match(/^rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d\.]+)\)$/);
+                if (hexColor) {
+                    const r = parseInt(hexColor[1]);
+                    const g = parseInt(hexColor[2]);
+                    const b = parseInt(hexColor[3]);
+                    const hexFromRgb = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+                    if (btn.dataset.color.toUpperCase() === hexFromRgb) {
+                        btn.classList.add('active');
+                        document.getElementById('custom-color-btn').classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        function startDraggingPalette(e) {
+            isDraggingPalette = true;
+            e.preventDefault();
+            const touch = e.touches ? e.touches[0] : e;
+            handlePaletteSelection(touch);
+        }
+
+        function dragPalette(e) {
+            if (isDraggingPalette) {
+                e.preventDefault();
+                const touch = e.touches ? e.touches[0] : e;
+                handlePaletteSelection(touch);
+            }
+        }
+
+        function stopDraggingPalette() {
+            isDraggingPalette = false;
+        }
+
+        colorPaletteCanvas.addEventListener('mousedown', startDraggingPalette);
+        colorPaletteCanvas.addEventListener('mousemove', dragPalette);
+        window.addEventListener('mouseup', stopDraggingPalette);
+        colorPaletteCanvas.addEventListener('touchstart', startDraggingPalette);
+        colorPaletteCanvas.addEventListener('touchmove', dragPalette);
+        colorPaletteCanvas.addEventListener('touchend', stopDraggingPalette);
+
+        function startDraggingSlider(e) {
+            isDraggingSlider = true;
+            e.preventDefault();
+            const touch = e.touches ? e.touches[0] : e;
+            handleSliderSelection(touch);
+        }
+
+        function dragSlider(e) {
+            if (isDraggingSlider) {
+                e.preventDefault();
+                const touch = e.touches ? e.touches[0] : e;
+                handleSliderSelection(touch);
+            }
+        }
+
+        function stopDraggingSlider() {
+            isDraggingSlider = false;
+        }
+
+        colorSliderCanvas.addEventListener('mousedown', startDraggingSlider);
+        colorSliderCanvas.addEventListener('mousemove', dragSlider);
+        window.addEventListener('mouseup', stopDraggingSlider);
+        colorSliderCanvas.addEventListener('touchstart', startDraggingSlider);
+        colorSliderCanvas.addEventListener('touchmove', dragSlider);
+        colorSliderCanvas.addEventListener('touchend', stopDraggingSlider);
+        
         async function setupWebcam() {
             try {
                 videoStream = await navigator.mediaDevices.getUserMedia({ 
@@ -582,14 +1056,14 @@
                 vtoVideo.srcObject = videoStream;
                 return new Promise((resolve) => {
                     vtoVideo.onloadedmetadata = () => {
-                        vtoVideo.play().then(() => { // Autoplay after metadata is loaded
+                        vtoVideo.play().then(() => {
                            resolve(true);
                         }).catch(e => {
                            console.error("Error auto-playing video:", e);
-                           resolve(false); // Could not play
+                           resolve(false);
                         });
                     }
-                    vtoVideo.onerror = () => { // Handle video error
+                    vtoVideo.onerror = () => {
                         console.error("Video error.");
                         resolve(false);
                     }
@@ -612,11 +1086,11 @@
                 faceLandmarker = await FaceLandmarker.createFromOptions(filesetResolver, {
                     baseOptions: {
                         modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
-                        delegate: "GPU" // Or "CPU"
+                        delegate: "GPU"
                     },
-                    outputFaceBlendshapes: false, // Not needed for simple lipstick
-                    outputFacialTransformationMatrixes: false, // Not needed
-                    runningMode: "VIDEO", // Important for video processing
+                    outputFaceBlendshapes: false,
+                    outputFacialTransformationMatrixes: false,
+                    runningMode: "VIDEO",
                     numFaces: 1
                 });
                 console.log("FaceLandmarker created successfully.");
@@ -637,13 +1111,11 @@
             return `rgba(${r}, ${g}, ${b}, ${alpha})`;
         }
 
-        // Helper to convert rgba string to array [r, g, b, a]
         function rgbaToArray(rgba) {
             const parts = rgba.match(/\d+(\.\d+)?/g).map(Number);
             return [parts[0], parts[1], parts[2], parts[3]];
         }
 
-        // Helper to convert array [r, g, b, a] to rgba string
         function arrayToRgba([r, g, b, a]) {
             return `rgba(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)}, ${a})`;
         }
@@ -658,22 +1130,21 @@
             return arrayToRgba([r, g, b, a]);
         }
 
-
         function activateStaticPreview() {
             console.log("Activating static preview mode.");
             vtoVideo.classList.add('hidden');
             vtoCanvas.classList.add('hidden');
-            videoContainer.classList.remove('face-detected'); // Remove glow
+            videoContainer.classList.remove('face-detected');
             vtoFaceStatic.classList.remove('hidden');
             vtoLipsOverlay.classList.remove('hidden');
-            vtoLipsOverlay.style.backgroundColor = currentLipColor; // Use currentLipColor which is default or last selected
+            vtoLipsOverlay.style.backgroundColor = currentLipColor;
             vtoStatus.innerHTML = '<span class="spinner"></span> Xem trước tĩnh (AI không khả dụng).';
-            vtoStatus.style.display = 'flex'; // Ensure display is flex for spinner
+            vtoStatus.style.display = 'flex';
             vtoFallbackNote.classList.remove('hidden');
-            userChatInput.disabled = true; // Disable chat input
+            userChatInput.disabled = true;
             sendChatBtn.disabled = true;
 
-            if (videoStream) { 
+            if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
                 videoStream = null;
                 vtoVideo.srcObject = null;
@@ -687,29 +1158,28 @@
         function activateAdvancedPreview() {
             console.log("Attempting to activate advanced preview mode.");
             vtoFaceStatic.classList.add('hidden');
-            vtoLipsOverlay.classList.add('hidden'); // Hide static overlay
+            vtoLipsOverlay.classList.add('hidden');
             vtoVideo.classList.remove('hidden');
             vtoCanvas.classList.remove('hidden');
             vtoFallbackNote.classList.add('hidden');
-            vtoStatus.innerHTML = '<span class="spinner"></span> Đang nhận diện...'; // Initial status
-            userChatInput.disabled = false; // Enable chat input
+            vtoStatus.innerHTML = '<span class="spinner"></span> Đang nhận diện...';
+            userChatInput.disabled = false;
             sendChatBtn.disabled = false;
         }
 
         function drawLipstick(landmarks) {
-            // Smooth color transition logic
             const now = performance.now();
             let interpolatedColor = currentLipColor;
 
             if (currentLipColor !== targetLipColor) {
                 const elapsed = now - transitionStartTime;
-                const t = Math.min(elapsed / TRANSITION_DURATION, 1); // Normalize to 0-1
+                const t = Math.min(elapsed / TRANSITION_DURATION, 1);
                 interpolatedColor = interpolateColor(currentLipColor, targetLipColor, t);
                 if (t >= 1) {
-                    currentLipColor = targetLipColor; // Transition complete
+                    currentLipColor = targetLipColor;
                 }
             } else {
-                interpolatedColor = currentLipColor; // No transition needed
+                interpolatedColor = currentLipColor;
             }
 
             vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
@@ -719,10 +1189,8 @@
 
             vtoCtx.fillStyle = interpolatedColor;
 
-            // Draw Upper Lip - Adjusted for mirrored video
             vtoCtx.beginPath();
             const upperLipPoints = LIP_OUTLINE_UPPER.map(idx => ({
-                // Flip X coordinate: (1 - normalizedX) * canvasWidth
                 x: (1 - landmarks[idx].x) * vtoCanvas.width, 
                 y: landmarks[idx].y * vtoCanvas.height
             }));
@@ -733,10 +1201,8 @@
             vtoCtx.closePath();
             vtoCtx.fill();
 
-            // Draw Lower Lip - Adjusted for mirrored video
             vtoCtx.beginPath();
             const lowerLipPoints = LIP_OUTLINE_LOWER.map(idx => ({
-                // Flip X coordinate: (1 - normalizedX) * canvasWidth
                 x: (1 - landmarks[idx].x) * vtoCanvas.width, 
                 y: landmarks[idx].y * vtoCanvas.height
             }));
@@ -747,77 +1213,57 @@
             vtoCtx.closePath();
             vtoCtx.fill();
             
-            // Removed the call to drawGlossEffect
-            
-            vtoStatus.style.display = 'none'; // Hide status if drawing is successful
-            videoContainer.classList.add('face-detected'); // Add glow effect
+            vtoStatus.style.display = 'none';
+            videoContainer.classList.add('face-detected');
         }
 
-        // Removed the drawGlossEffect function completely as per user request
-
-        // Function to estimate skin tone
         function estimateSkinTone(landmarks) {
             if (!landmarks || landmarks.length === 0) {
                 return null;
             }
 
-            // Create a temporary canvas to sample pixel color
             const tempCanvas = document.createElement('canvas');
             const tempCtx = tempCanvas.getContext('2d');
             tempCanvas.width = vtoVideo.videoWidth;
             tempCanvas.height = vtoVideo.videoHeight;
             
-            // Draw the current video frame onto the temporary canvas
             tempCtx.drawImage(vtoVideo, 0, 0, tempCanvas.width, tempCanvas.height);
 
-            // Get a sample point (e.g., center of forehead)
-            // This is a simplification. A more robust solution might involve averaging multiple points.
-            // Using a central forehead landmark if available, or a general area
             let sampleX, sampleY;
-            const centralForeheadLandmarkIndex = 10; // Example landmark for forehead
+            const centralForeheadLandmarkIndex = 10;
             if (landmarks[centralForeheadLandmarkIndex]) {
-                // Adjust for mirrored video
                 sampleX = (1 - landmarks[centralForeheadLandmarkIndex].x) * tempCanvas.width; 
                 sampleY = landmarks[centralForeheadLandmarkIndex].y * tempCanvas.height;
             } else {
-                // Fallback to a fixed point if landmark not found (less accurate)
                 sampleX = tempCanvas.width / 2;
                 sampleY = tempCanvas.height / 4; 
             }
             
-            // Sample the pixel color
             const imageData = tempCtx.getImageData(sampleX, sampleY, 1, 1).data;
             const r = imageData[0];
             const g = imageData[1];
             const b = imageData[2];
 
-            // Convert RGB to a more descriptive tone. This is a very basic heuristic.
-            // You might need a more sophisticated mapping based on real skin tone charts.
-            // For simplicity, we'll categorize based on general brightness/hue.
             const brightness = (r + g + b) / 3;
-            let tone = "trung tính"; // Neutral
+            let tone = "trung tính";
 
             if (r > 200 && g > 180 && b > 160) {
-                tone += " sáng"; // Light
+                tone += " sáng";
             } else if (r > 150 && g > 120 && b > 100) {
-                tone += " trung bình"; // Medium
+                tone += " trung bình";
             } else {
-                tone += " tối"; // Dark
+                tone += " tối";
             }
 
-            // Check for undertones (simplified)
-            // Note: More robust undertone detection would involve analyzing color channels more deeply
-            // and potentially using a larger sample area or a dedicated ML model.
-            // This is a very basic attempt.
             if (b > r && b > g) {
-                tone += " lạnh"; // Cool (more blue/pink)
+                tone += " lạnh";
             } else if (r > g && g > b) {
-                tone += " ấm"; // Warm (more yellow/golden)
+                tone += " ấm";
             } else {
-                tone += " trung tính"; // Neutral undertone
+                tone += " trung tính";
             }
             
-            return tone.trim(); // Trim any leading/trailing spaces
+            return tone.trim();
         }
 
         async function getGeminiResponse(prompt, isUserInitiated = false) {
@@ -825,15 +1271,13 @@
             userChatInput.disabled = true;
             sendChatBtn.disabled = true;
 
-            // Add user's prompt to chat history if it's a user-initiated query
             if (isUserInitiated) {
                 assistantChatHistory.push({ role: "user", parts: [{ text: prompt }] });
             }
 
             const payload = { contents: assistantChatHistory };
-            // API KEY - Đã được cập nhật với key mới nhất
             const apiKey = "AIzaSyCZZH7f4IHZ_6WpyW03Az7N7qA_ci1x7qM"; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl, {
@@ -862,7 +1306,7 @@
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
                     const text = result.candidates[0].content.parts[0].text;
-                    assistantChatHistory.push({ role: "model", parts: [{ text: text }] }); // Add model response to history
+                    assistantChatHistory.push({ role: "model", parts: [{ text: text }] });
                     return text;
                 } else {
                     console.error("Gemini API returned an unexpected structure or no content:", result);
@@ -875,59 +1319,49 @@
             } finally {
                 userChatInput.disabled = false;
                 sendChatBtn.disabled = false;
-                assistantMessageElem.querySelector('.assistant-loading-spinner')?.remove(); // Remove spinner
-                assistantMessageElem.querySelector('.assistant-loading-text')?.remove(); // Remove loading text
+                assistantMessageElem.querySelector('.assistant-loading-spinner')?.remove();
+                assistantMessageElem.querySelector('.assistant-loading-text')?.remove();
             }
         }
 
         async function recommendLipstick(skinTone) {
             const productNames = products.map(p => p.name).join(', ');
-            // Updated prompt to explicitly ask for "Giải thích:" and bolding/alignment rules
             const prompt = `Tôi có sắc tố da mặt là "${skinTone}". Hãy gợi ý cho tôi 3 màu son trong danh sách sau đây (${productNames}) mà phù hợp nhất với sắc tố da của tôi. Ngoài ra, hãy gợi ý thêm một phong cách trang điểm hoặc phối đồ phù hợp với mỗi màu son đó, và một dịp sử dụng thích hợp. Định dạng câu trả lời của bạn là một danh sách được đánh số rõ ràng, mỗi mục là một màu son gợi ý. Đảm bảo toàn bộ dòng của mục được đánh số (ví dụ: "1. Tên Son - Mã số:") được in đậm. Chỉ riêng từ "Giải thích:" (hoặc "Lý do:", "Phong cách trang điểm:", "Phối đồ:", "Dịp sử dụng:", "Lưu ý:") được in đậm mà không phải toàn bộ phần nội dung theo sau. Các tiêu đề con này cũng phải gióng thẳng hàng với số mục chính. Các ý con trong "Phong cách trang điểm:" và "Phối đồ:" hãy bắt đầu bằng dấu gạch ngang "-". Đảm bảo có đủ dấu cách giữa các từ.`;
             assistantChatHistory = [{ role: "user", parts: [{ text: prompt }] }];
             let recommendation = await getGeminiResponse(prompt);
             
-            // Loại bỏ dấu nháy kép và dấu hoa thị
             recommendation = recommendation.replace(/"/g, '').replace(/\*/g, ''); 
 
             let formattedHtml = '';
-            const lines = recommendation.split('\n'); // Chia văn bản thành các dòng
+            const lines = recommendation.split('\n');
 
-            let currentSectionType = ''; // To track if we are inside 'Phong cách trang điểm:' or 'Phối đồ:'
+            let currentSectionType = '';
             lines.forEach(line => {
                 const trimmedLine = line.trim();
                 if (trimmedLine.length === 0) {
-                    formattedHtml += '<p></p>'; // Thêm khoảng trống cho các dòng trống
+                    formattedHtml += '<p></p>';
                     return;
                 }
 
-                // Kiểm tra các điểm chính được đánh số (1. 2. 3.)
                 if (trimmedLine.match(/^\d+\.\s/)) {
-                    // Match the numbered item, e.g., "1. Hồng Đất - 05"
                     const match = trimmedLine.match(/^(\d+\.\s)(.*)/);
                     if (match && match.length >= 3) {
-                        // Bold the entire matched numbered item, then append the rest of the line
                         formattedHtml += `<p class="main-item"><strong>${match[1]}${match[2]}</strong></p>`;
                     } else {
-                        // Fallback if regex doesn't capture parts, bold whole line
                         formattedHtml += `<p class="main-item"><strong>${trimmedLine}</strong></p>`;
                     }
-                    currentSectionType = ''; // Reset section type after a new main item
+                    currentSectionType = '';
                 } 
-                // Kiểm tra các tiêu đề phụ cần gióng thẳng hàng với mục chính và in đậm
                 else if (trimmedLine.match(/^(Giải thích:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)/)) {
-                    // Split the line into the bold part (e.g., "Giải thích:") and the rest
                     const headerMatch = trimmedLine.match(/^(Giải thích:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)\s*(.*)/);
                     if (headerMatch) {
-                        const boldPart = headerMatch[1]; // e.g., "Giải thích:"
-                        const restOfLine = headerMatch[2]; // e.g., "Hồng đất là màu son dễ tính..."
+                        const boldPart = headerMatch[1];
+                        const restOfLine = headerMatch[2];
 
                         formattedHtml += `<p class="main-item"><strong>${boldPart}</strong>${restOfLine ? ' ' + restOfLine : ''}</p>`;
                     } else {
-                        // Fallback if regex doesn't capture parts, bold whole line
                         formattedHtml += `<p class="main-item"><strong>${trimmedLine}</strong></p>`;
                     }
-                    // Set section type for subsequent lines to apply hyphen if applicable
                     if (trimmedLine.includes('Phong cách trang điểm:')) {
                         currentSectionType = 'makeup';
                     } else if (trimmedLine.includes('Phối đồ:')) {
@@ -936,16 +1370,13 @@
                         currentSectionType = '';
                     }
                 } 
-                // Tất cả các dòng nội dung khác
                 else {
                     let contentToDisplay = trimmedLine;
-                    let className = "content-line"; // Default class for general content
+                    let className = "content-line";
 
-                    // Check if current line should be hyphenated based on section type
-                    // And ensure it doesn't already start with a hyphen to avoid double hyphens
                     if ((currentSectionType === 'makeup' || currentSectionType === 'outfit') && !trimmedLine.startsWith('- ')) {
                          contentToDisplay = `- ${trimmedLine}`;
-                         className = "sub-item-hyphen"; // Apply specific class for hyphenated items
+                         className = "sub-item-hyphen";
                     }
                     formattedHtml += `<p class="${className}">${contentToDisplay}</p>`;
                 }
@@ -953,52 +1384,55 @@
 
             assistantMessageElem.innerHTML = formattedHtml;
             assistantMessageElem.style.textAlign = 'left';
-            assistantMessageElem.style.whiteSpace = 'normal'; // Đặt lại về normal vì chúng ta đang sử dụng các thẻ <p> để cấu trúc
+            assistantMessageElem.style.whiteSpace = 'normal';
         }
 
         function sendCompliment(productName) {
             assistantMessageElem.innerHTML = '<span class="assistant-loading-spinner"></span> <span class="assistant-loading-text">Trợ lý ảo đang suy nghĩ...</span>';
             
-            setTimeout(() => { // Add a delay for the "thinking" effect
+            setTimeout(() => {
+                if(productName === 'màu tùy chỉnh') {
+                     assistantMessageElem.textContent = "Một sự lựa chọn đầy cá tính! Màu son này thật sự rất riêng và hợp với phong cách của bạn!";
+                     assistantMessageElem.style.textAlign = 'center';
+                     return;
+                }
+
                 const product = products.find(p => p.name === productName);
                 if (!product || !product.compliments || product.compliments.length === 0) {
                     assistantMessageElem.textContent = "Bạn chọn màu này đẹp quá!";
-                    assistantMessageElem.style.textAlign = 'center'; // Compliments look better centered
+                    assistantMessageElem.style.textAlign = 'center';
                     return;
                 }
 
-                // Get a random compliment that hasn't been used recently
                 let newComplimentIndex;
                 do {
                     newComplimentIndex = Math.floor(Math.random() * product.compliments.length);
-                } while (newComplimentIndex === lastComplimentIndex && product.compliments.length > 1); // Ensure it's different if more than one option
+                } while (newComplimentIndex === lastComplimentIndex && product.compliments.length > 1);
                 
                 lastComplimentIndex = newComplimentIndex;
                 assistantMessageElem.textContent = product.compliments[newComplimentIndex];
-                assistantMessageElem.style.textAlign = 'center'; // Compliments look better centered
-            }, 400); // Changed from 700 to 400ms delay
+                assistantMessageElem.style.textAlign = 'center';
+            }, 400);
         }
 
         async function handleUserChat() {
             const userQuery = userChatInput.value.trim();
             if (!userQuery) return;
 
-            userChatInput.value = ''; // Clear input field
+            userChatInput.value = '';
             assistantMessageElem.innerHTML = '<span class="assistant-loading-spinner"></span> <span class="assistant-loading-text">Trợ lý ảo đang phản hồi...</span>';
             userChatInput.disabled = true;
             sendChatBtn.disabled = true;
 
             const response = await getGeminiResponse(userQuery, true);
-            // Đối với chat thông thường, chỉ đặt nó trong một đoạn văn bản đơn giản với padding-left 1em
-            assistantMessageElem.innerHTML = `<p class="content-line">${response.trim().replace(/\*/g, '')}</p>`; 
+            assistantMessageElem.innerHTML = `<p class="content-line">${response.trim().replace(/\*/g, '')}</p>`;
             assistantMessageElem.style.textAlign = 'left';
             assistantMessageElem.style.whiteSpace = 'normal';
             userChatInput.disabled = false;
             sendChatBtn.disabled = false;
-            userChatInput.focus(); // Keep focus on input
+            userChatInput.focus();
         }
 
-        // Event listeners for chat input
         sendChatBtn.addEventListener('click', handleUserChat);
         userChatInput.addEventListener('keypress', (event) => {
             if (event.key === 'Enter') {
@@ -1029,24 +1463,23 @@
                             const faceLandmarkerResult = faceLandmarker.detectForVideo(vtoVideo, currentTime);
                             
                             if (faceLandmarkerResult && faceLandmarkerResult.faceLandmarks && faceLandmarkerResult.faceLandmarks.length > 0) {
-                                drawLipstick(faceLandmarkerResult.faceLandmarks[0]); 
+                                drawLipstick(faceLandmarkerResult.faceLandmarks[0]);
                                 vtoStatus.style.display = 'none';
                                 videoContainer.classList.add('face-detected');
 
-                                // Estimate skin tone once if not locked
                                 const newSkinTone = estimateSkinTone(faceLandmarkerResult.faceLandmarks[0]);
-                                if (newSkinTone && !isSkinToneLocked) { // Only update if not locked
+                                if (newSkinTone && !isSkinToneLocked) {
                                     currentSkinTone = newSkinTone;
-                                    isSkinToneLocked = true; // Lock the skin tone after the first successful detection
+                                    isSkinToneLocked = true;
                                     console.log("Estimated and locked skin tone:", currentSkinTone);
-                                    recommendLipstick(currentSkinTone); // Recommend lipstick based on new skin tone
+                                    recommendLipstick(currentSkinTone);
                                 }
 
                             } else {
-                                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height); 
+                                vtoCtx.clearRect(0, 0, vtoCanvas.width, vtoCanvas.height);
                                 vtoStatus.innerHTML = '<span class="spinner"></span> Không tìm thấy khuôn mặt.';
                                 vtoStatus.style.display = 'flex';
-                                videoContainer.classList.remove('face-detected'); // Remove glow if face not found
+                                videoContainer.classList.remove('face-detected');
                             }
                         } catch (error) {
                             console.error("Lỗi trong quá trình nhận diện khuôn mặt (MediaPipe):", error);
@@ -1061,7 +1494,7 @@
         }
 
         async function startVTO() {
-            console.log("Starting VTO initialization..."); // Log to track startup
+            console.log("Starting VTO initialization...");
             vtoStatus.innerHTML = '<span class="spinner"></span> Đang tải...';
             advancedVtoAvailable = await createFaceLandmarker();
 
@@ -1074,8 +1507,8 @@
             const webcamReady = await setupWebcam();
             if (!webcamReady) {
                 console.log("Không thể khởi động webcam. Chuyển sang xem trước tĩnh.");
-                advancedVtoAvailable = false; 
-                activateStaticPreview(); 
+                advancedVtoAvailable = false;
+                activateStaticPreview();
                 return;
             }
             
@@ -1084,8 +1517,8 @@
             
             vtoVideo.oncanplay = () => {
                 if (advancedVtoAvailable) {
-                    if (animationFrameId) cancelAnimationFrame(animationFrameId); 
-                    lastVideoTime = -1; 
+                    if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                    lastVideoTime = -1;
                     detectionLoop();
                 }
             };
