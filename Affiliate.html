@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chương Trình Affiliate - Sắc Mộc</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- Vanilla Tilt JS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
+    
+    <!-- Google Fonts: Merriweather Sans & Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Styles (Synced and Upgraded) -->
+    <style>
+        :root {
+            --bg-color: #F5F5DC;
+            --text-color: #4A4A4A;
+            --text-light: #F7FAFC;
+            --text-muted: #A0AEC0;
+            --brand-color: #5D7A4D;
+            --brand-light: #A2B99C;
+            --brand-superlight: #E6EDE4;
+            --card-bg: #ffffff;
+            --header-bg: rgba(245, 245, 220, 0.8);
+            --footer-bg: #1f2937;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a202c;
+            --text-color: #e2e8f0; 
+            --brand-color: #A2B99C;
+            --brand-light: #82997C;
+            --brand-superlight: #2d3748;
+            --card-bg: #2d3748;
+            --header-bg: rgba(26, 32, 44, 0.8);
+            --footer-bg: #111827;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.65;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .font-heading {
+            font-family: 'Merriweather Sans', sans-serif;
+            letter-spacing: 0.025em;
+        }
+        .text-brand { color: var(--brand-color); }
+        .bg-brand { background-color: var(--brand-color); }
+        .bg-brand-light { background-color: var(--brand-light); }
+        .bg-brand-superlight { background-color: var(--brand-superlight); }
+        .border-brand { border-color: var(--brand-color); }
+
+        #hero-section {
+            position: relative;
+            overflow: hidden;
+        }
+        #hero-particles {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0;
+        }
+        #hero-bg {
+            background: linear-gradient(135deg, #e6ede4, #f5f5dc);
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: -1;
+            animation: gradient-shift 15s ease infinite;
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        [data-theme="dark"] #hero-bg {
+            background: linear-gradient(135deg, #1a202c, #2d3748);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            transition: all 0.3s ease;
+            border-radius: 1.5rem;
+            padding: 2rem 1.5rem;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        [data-theme="dark"] .card {
+            border: 1px solid var(--brand-light);
+        }
+
+        .footer {
+            background-color: var(--footer-bg);
+        }
+
+        [data-theme="dark"] .section-title,
+        [data-theme="dark"] .card .font-heading {
+            color: var(--brand-color);
+        }
+        [data-theme="dark"] .section-subtitle,
+        [data-theme="dark"] .card p,
+        [data-theme="dark"] label {
+            color: var(--text-color);
+        }
+        [data-theme="dark"] #hero-section .text-gray-800,
+        [data-theme="dark"] #hero-section .text-gray-700 {
+            color: var(--text-light);
+        }
+        
+        .bg-commission-gradient {
+            background: linear-gradient(180deg, var(--brand-superlight), var(--bg-color));
+        }
+        
+        .poster-placeholder {
+            background-color: #e5e7eb; /* gray-200 */
+        }
+        [data-theme="dark"] .poster-placeholder {
+            background-color: var(--brand-superlight);
+        }
+        [data-theme="dark"] .poster-placeholder .text-gray-500 {
+             color: var(--text-muted);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-50 shadow-sm" style="background-color: var(--header-bg);">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" aria-label="Trang chủ Sắc Mộc">
+                <!-- Tăng chiều cao của logo lên 20 và cho khung to lên -->
+                <img src="Logo.png" alt="Sắc Mộc Logo" class="h-20 w-auto" onerror="this.onerror=null;this.style.display='none'; this.parentElement.innerHTML = '<h1 class=\'text-3xl font-bold text-brand font-heading\'>Sắc Mộc</h1>';">
+            </a>
+            <div class="flex items-center space-x-4">
+                <button id="dark-mode-toggle" aria-label="Toggle Dark Mode" class="p-2 rounded-full text-brand">
+                    <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                    <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Poster Section -->
+    <section class="py-8 md:py-12 bg-brand-superlight">
+        <div class="container mx-auto px-6">
+            <!-- 16:9 Aspect Ratio Container -->
+            <div class="relative w-full shadow-lg rounded-2xl" style="padding-top: 56.25%;"> <!-- 16:9 Aspect Ratio -->
+                <!-- CHANGE: Replaced placeholder with actual image -->
+                <img src="Poster.png" alt="Poster quảng cáo Sắc Mộc" class="absolute top-0 left-0 w-full h-full object-cover rounded-2xl">
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero-section" class="py-20 md:py-32">
+            <canvas id="hero-particles"></canvas>
+            <div id="hero-bg" style="background-size: 200% 200%;"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <h2 class="hero-text text-4xl md:text-6xl font-extrabold text-gray-800 leading-tight font-heading">Lan Tỏa Vẻ Đẹp Tự Nhiên</h2>
+                <h3 class="hero-text text-4xl md:text-6xl font-extrabold text-brand leading-tight mt-2 font-heading">Kiếm Thu Nhập Bền Vững</h3>
+                <p class="hero-text mt-6 text-lg md:text-xl max-w-3xl mx-auto text-gray-700">
+                    Trở thành đối tác của Sắc Mộc, chia sẻ những thỏi son bạn yêu thích và nhận hoa hồng hấp dẫn. Chúng tôi tin vào sức mạnh của những lời giới thiệu chân thật.
+                </p>
+                <audio id="cta-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-fast-small-sweep-transition-166.mp3" preload="auto"></audio>
+            </div>
+        </section>
+
+        <!-- Why Join Section -->
+        <section class="py-16 md:py-24 bg-brand-superlight">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 font-heading">Tại Sao Bạn Nên Tham Gia?</h2>
+                <p class="section-subtitle max-w-2xl mx-auto text-lg">Chương trình Affiliate của Sắc Mộc được tạo ra cho chính những người yêu mến sản phẩm của chúng tôi.</p>
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="card" data-tilt>
+                        <h3 class="text-xl font-bold mb-2 font-heading">Chia Sẻ Thật, Giá Trị Thật</h3>
+                        <p>Lan tỏa sản phẩm bằng trải nghiệm và câu chuyện chân thực của bạn.</p>
+                    </div>
+                    <div class="card" data-tilt>
+                        <h3 class="text-xl font-bold mb-2 font-heading">Thu Nhập Hấp Dẫn</h3>
+                        <p>Nhận hoa hồng lên đến 20% trên mỗi đơn hàng thành công.</p>
+                    </div>
+                    <div class="card" data-tilt>
+                        <h3 class="text-xl font-bold mb-2 font-heading">Cộng Đồng Bền Vững</h3>
+                        <p>Dành cho mọi đối tượng, từ khách hàng thân thiết đến KOC, sinh viên.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Commission Calculator -->
+        <section class="py-16 md:py-24">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 font-heading">Ước Tính Thu Nhập Của Bạn</h2>
+                <p class="section-subtitle max-w-2xl mx-auto text-lg">Kéo thanh trượt để xem bạn có thể kiếm được bao nhiêu mỗi tháng!</p>
+                <div class="mt-12 max-w-2xl mx-auto p-8 rounded-2xl bg-brand-superlight shadow-lg">
+                    <div class="space-y-4 text-left">
+                        <label for="sales-slider" class="font-bold text-lg">Số đơn hàng bạn giới thiệu / tháng: <span id="sales-count" class="text-brand font-heading text-2xl">50</span></label>
+                        <input id="sales-slider" type="range" min="1" max="500" value="50" class="w-full h-2 bg-brand-light rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div>
+                            <p class="font-heading text-gray-500">Hoa hồng F1 (10%)</p>
+                            <p id="f1-commission" class="text-2xl font-bold text-brand commission-value">0đ</p>
+                        </div>
+                        <div>
+                            <p class="font-heading text-gray-500">Hoa hồng F2 (6%)</p>
+                            <p id="f2-commission" class="text-2xl font-bold text-brand-light commission-value">0đ</p>
+                        </div>
+                        <div>
+                            <p class="font-heading text-gray-500">Hoa hồng F3 (4%)</p>
+                            <p id="f3-commission" class="text-2xl font-bold text-yellow-600 commission-value">0đ</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 text-center border-t border-brand/20 pt-4">
+                        <p class="text-lg">Tổng thu nhập tiềm năng:</p>
+                        <p id="total-commission" class="text-4xl font-extrabold text-brand font-heading">0đ</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commission Structure Section with Counters -->
+        <section class="py-16 md:py-24 bg-commission-gradient">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="section-title text-3xl md:text-4xl font-bold mb-4 font-heading">Cơ Chế Hoa Hồng 3 Tầng</h2>
+                <p class="section-subtitle max-w-2xl mx-auto text-lg">Sắc Mộc chi trả tổng hoa hồng lên đến 20% giá trị đơn hàng, một cơ chế hấp dẫn và bền vững.</p>
+                <div id="commission-cards" class="mt-12 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card" data-tilt><p class="text-sm text-gray-500 font-heading">Tầng 1 (F1)</p><p class="text-5xl font-bold text-brand my-2 font-heading"><span class="counter" data-target="10">0</span>%</p><p class="font-semibold">Người trực tiếp giới thiệu</p></div>
+                    <div class="card" data-tilt><p class="text-sm text-gray-500 font-heading">Tầng 2 (F2)</p><p class="text-5xl font-bold text-brand-light my-2 font-heading"><span class="counter" data-target="6">0</span>%</p><p class="font-semibold">Người giới thiệu F1</p></div>
+                    <div class="card" data-tilt><p class="text-sm text-gray-500 font-heading">Tầng 3 (F3)</p><p class="text-5xl font-bold text-yellow-600 my-2 font-heading"><span class="counter" data-target="4">0</span>%</p><p class="font-semibold">Người giới thiệu F2</p></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container mx-auto px-6 py-12 text-center">
+            <h3 class="font-bold text-2xl mb-2 font-heading text-white">Sắc Mộc</h3>
+            <p class="text-gray-300 mb-8">Tự nhiên từ Sắc, Mộc từ tâm</p>
+            <p class="text-sm text-gray-500">&copy; 2025 Sắc Mộc. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- GSAP & ScrollTrigger Setup ---
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // --- Dark Mode Toggle ---
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            sunIcon.classList.remove('hidden');
+            moonIcon.classList.add('hidden');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            if (document.documentElement.hasAttribute('data-theme')) {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            }
+        });
+
+        // --- Hero Animations ---
+        gsap.from(".hero-text", {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            stagger: 0.2,
+            ease: "power3.out"
+        });
+
+        // --- General Scroll Animations ---
+        gsap.utils.toArray('.section-title, .section-subtitle, .card, .grid > div').forEach(elem => {
+            gsap.from(elem, {
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                ease: "power3.out"
+            });
+        });
+
+        // --- Particle Effect ---
+        const canvas = document.getElementById('hero-particles');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        let particlesArray;
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x; this.y = y; this.directionX = directionX; this.directionY = directionY; this.size = size; this.color = color;
+            }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false); ctx.fillStyle = this.color; ctx.fill(); }
+            update() {
+                if (this.x > canvas.width || this.x < 0) { this.directionX = -this.directionX; }
+                if (this.y > canvas.height || this.y < 0) { this.directionY = -this.directionY; }
+                this.x += this.directionX; this.y += this.directionY; this.draw();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * .4) - .2;
+                let directionY = (Math.random() * .4) - .2;
+                let color = 'rgba(93, 122, 77, 0.5)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+        }
+        initParticles();
+        animateParticles();
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); });
+        
+        // --- Vanilla Tilt Initialization ---
+        VanillaTilt.init(document.querySelectorAll(".card"), { max: 15, speed: 400, glare: true, "max-glare": 0.5 });
+
+        // --- Commission Calculator ---
+        const salesSlider = document.getElementById('sales-slider');
+        const salesCount = document.getElementById('sales-count');
+        const f1Commission = document.getElementById('f1-commission');
+        const f2Commission = document.getElementById('f2-commission');
+        const f3Commission = document.getElementById('f3-commission');
+        const totalCommission = document.getElementById('total-commission');
+        const avgOrderValue = 250000; // Giả định giá trị đơn hàng trung bình
+
+        function calculateCommission() {
+            const sales = parseInt(salesSlider.value);
+            salesCount.textContent = sales;
+            const baseCommission = sales * avgOrderValue;
+            const f1 = baseCommission * 0.10;
+            const f2 = baseCommission * 0.06;
+            const f3 = baseCommission * 0.04;
+            const total = f1 + f2 + f3;
+            
+            const format = (val) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+
+            f1Commission.textContent = format(f1);
+            f2Commission.textContent = format(f2);
+            f3Commission.textContent = format(f3);
+            totalCommission.textContent = format(total);
+        }
+        salesSlider.addEventListener('input', calculateCommission);
+        calculateCommission();
+
+        // --- Number Counters ---
+        gsap.utils.toArray('.counter').forEach(counter => {
+            const target = +counter.dataset.target;
+            let proxy = { val: 0 };
+
+            gsap.to(proxy, {
+                val: target,
+                duration: 2,
+                scrollTrigger: {
+                    trigger: counter,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                },
+                onUpdate: () => {
+                    counter.textContent = Math.round(proxy.val);
+                }
+            });
+        });
+
+    });
+    </script>
+</body>
+</html>
