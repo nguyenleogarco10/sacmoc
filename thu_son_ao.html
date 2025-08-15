@@ -595,7 +595,7 @@
         const sliderCtx = colorSliderCanvas.getContext('2d');
         
         let faceLandmarker;
-        let currentLipColor = 'rgba(255, 69, 0, 0.7)'; // Default color: Đỏ Cam
+        let currentLipColor = 'rgba(204, 85, 61, 0.7)'; // Default color changed to the first new color
         let targetLipColor = currentLipColor; // For smooth transitions
         let transitionStartTime = 0;
         const TRANSITION_DURATION = 300; // ms
@@ -607,6 +607,7 @@
         let isSkinToneLocked = false;
         let lastComplimentIndex = -1;
         let assistantChatHistory = []; // To store chat history for conversational AI
+        let complimentsEnabled = false; // <<< TÍNH NĂNG KHEN BỊ VÔ HIỆU HÓA BAN ĐẦU
         
         // NEW: Color Picker state variables
         let hue = 0;
@@ -631,10 +632,10 @@
             214, 177, 199, 175, 171, 140, 170, 143, 145, 159, 160, 161
         ];
 
-        // Pre-defined products with compliments - KHÔI PHỤC DỮ LIỆU SẢN PHẨM
+        // Pre-defined products with compliments - CẬP NHẬT 5 MÀU ĐẦU TIÊN
         const products = [
             { 
-                name: 'Đỏ Cam - 01', color: '#FF4500', 
+                name: 'Đỏ Cam - 01', color: '#CC553D', // THAY ĐỔI
                 compliments: [
                     "Màu đỏ cam này trên môi bạn trông thật rạng rỡ và tràn đầy năng lượng!",
                     "Bạn thật sự nổi bật với sắc đỏ cam này, rất hợp với tông da của bạn!",
@@ -644,7 +645,7 @@
                 ]
             },
             { 
-                name: 'Cam Tươi - 02', color: '#FFA500',
+                name: 'Cam Tươi - 02', color: '#D9A59A', // THAY ĐỔI
                 compliments: [
                     "Màu cam tươi này làm bừng sáng cả khuôn mặt bạn, rạng rỡ quá!",
                     "Bạn trông thật năng động và tươi trẻ với sắc cam tươi này!",
@@ -654,7 +655,7 @@
                 ]
             },
             { 
-                name: 'Đỏ Hồng - 03', color: '#FF69B4',
+                name: 'Đỏ Hồng - 03', color: '#C08081', // THAY ĐỔI
                 compliments: [
                     "Ngọt ngào và dịu dàng, màu đỏ hồng này thật sự rất hợp với bạn!",
                     "Bạn trông thật đáng yêu với sắc đỏ hồng tươi tắn này!",
@@ -664,7 +665,7 @@
                 ]
             },
             { 
-                name: 'Đỏ Cherry - 04', color: '#DC143C',
+                name: 'Đỏ Cherry - 04', color: '#B74134', // THAY ĐỔI
                 compliments: [
                     "Sắc đỏ cherry này thật quyền lực trên đôi môi bạn!",
                     "Bạn trông thật lộng lẫy và quyến rạng rũ với màu đỏ cherry này!",
@@ -674,7 +675,7 @@
                 ]
             },
             { 
-                name: 'Hồng Cánh Sen - 05', color: '#FF007F',
+                name: 'Hồng Cánh Sen - 05', color: '#B76E79', // THAY ĐỔI
                 compliments: [
                     "Màu hồng cánh sen này làm bạn trông thật nhẹ nhàng và cuốn hút!",
                     "Bạn thật thanh lịch với sắc hồng cánh sen này!",
@@ -777,8 +778,8 @@
                     vtoLipsOverlay.style.backgroundColor = targetLipColor; // For static preview
                 }
 
-                // Only send compliment if the color actually changed
-                if (targetLipColor !== previousColor) {
+                // Only send compliment if the color actually changed and compliments are enabled
+                if (targetLipColor !== previousColor && complimentsEnabled) { // <<< KIỂM TRA NẾU TÍNH NĂNG KHEN ĐÃ BẬT
                     sendCompliment(p.name); 
                 }
 
@@ -970,7 +971,9 @@
             if (!advancedVtoAvailable) {
                 vtoLipsOverlay.style.backgroundColor = targetLipColor; 
             }
-            sendCompliment('màu tùy chỉnh'); 
+            if (complimentsEnabled) { // <<< KIỂM TRA NẾU TÍNH NĂNG KHEN ĐÃ BẬT
+                sendCompliment('màu tùy chỉnh'); 
+            }
         });
 
         pickerCancelBtn.addEventListener('click', () => {
@@ -1385,6 +1388,8 @@
             assistantMessageElem.innerHTML = formattedHtml;
             assistantMessageElem.style.textAlign = 'left';
             assistantMessageElem.style.whiteSpace = 'normal';
+            complimentsEnabled = true; // <<< KÍCH HOẠT TÍNH NĂNG KHEN TẠI ĐÂY
+            console.log("Compliments are now enabled.");
         }
 
         function sendCompliment(productName) {
