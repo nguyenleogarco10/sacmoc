@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thể Lệ Minigame Son Sắc Mộc - Khởi Đầu Ngày Mới</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Thể lệ chi tiết chương trình Minigame Son Sắc Mộc - Khởi Đầu Ngày Mới. Tham gia ngay để có cơ hội nhận những phần quà hấp dẫn!">
+    <meta property="og:title" content="Thể Lệ Minigame Son Sắc Mộc">
+    <meta property="og:description" content="Thể lệ chi tiết chương trình Minigame Son Sắc Mộc - Khởi Đầu Ngày Mới.">
+    <meta property="og:image" content="https://placehold.co/1200x630/5D7A4D/FFFFFF?text=The+Le+Minigame">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Preload and load fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP & ScrollTrigger for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <style>
+        /* Custom styles based on index.html */
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #F5F5DC; /* Beige background */
+            color: #4A4A4A;
+            padding-top: 9rem; /* Adjust for fixed header */
+        }
+        .font-heading {
+            font-family: 'Merriweather Sans', sans-serif;
+        }
+        .text-brand { color: #5D7A4D; }
+        .bg-brand { background-color: #5D7A4D; }
+        .bg-brand-superlight { background-color: #E6EDE4; }
+        .border-brand { border-color: #5D7A4D; }
+        
+        /* Style for content sections */
+        .content-section h2 {
+            font-family: 'Merriweather Sans', sans-serif;
+            color: #5D7A4D;
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 700;
+            margin-top: 2.5rem; /* mt-10 */
+            padding-bottom: 0.5rem; /* pb-2 */
+            border-bottom: 2px solid #A2B99C; /* border-b-2 border-brand-light */
+        }
+        .content-section p, .content-section li {
+            margin-top: 1rem; /* mt-4 */
+            font-size: 1.125rem; /* text-lg */
+            line-height: 1.75;
+            color: #4A4A4A;
+        }
+        .content-section ul {
+            list-style-position: inside;
+            list-style-type: disc;
+            padding-left: 1rem;
+        }
+
+        /* Parallax container for poster */
+        .parallax-container {
+            overflow: hidden;
+            border-radius: 1rem; /* rounded-2xl */
+        }
+        
+        /* Gradient overlay for poster */
+        .gradient-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.3), transparent);
+            border-radius: 1rem; /* rounded-2xl */
+        }
+
+        /* Initial state for scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        /* Countdown Timer style */
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            min-width: 80px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .countdown-item span:first-child {
+            font-family: 'Merriweather Sans', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #5D7A4D;
+        }
+        .countdown-item span:last-child {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            color: #4A4A4A;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Reusable Header -->
+    <header id="header" class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 w-full z-50 shadow-sm" role="banner">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-start items-center h-36"> 
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="index.html" class="flex items-center" aria-label="Trang chủ Sắc Mộc">
+                        <img src="Logo.png" alt="Sắc Mộc Logo" class="h-32 w-auto" onerror="this.onerror=null;this.src='https://placehold.co/200x128/FFFFFF/5D7A4D?text=Sắc+Mộc';"> 
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Poster Section with Parallax and Gradient -->
+    <section id="hero-poster" class="py-8 md:py-12 bg-brand-superlight">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="relative w-full shadow-lg rounded-2xl parallax-container" style="padding-top: 56.25%;">
+                <img id="poster-image" src="minigame.png" alt="Poster quảng cáo Minigame Sắc Mộc" class="absolute top-0 left-0 w-full h-full object-cover" onerror="this.onerror=null;this.parentElement.innerHTML = '<div class=\'absolute inset-0 bg-gray-200 flex items-center justify-center rounded-2xl\'><p class=\'text-gray-500\'>Poster Image</p></div>';">
+                <div class="absolute inset-0 gradient-overlay"></div>
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section id="rules" class="py-20 bg-white">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12 animate-on-scroll">
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-brand font-heading tracking-tight">
+                        Thể Lệ Chương Trình
+                    </h1>
+                    <p class="mt-4 text-xl text-gray-600">"MINIGAME SON SẮC MỘC - KHỞI ĐẦU NGÀY MỚI"</p>
+                </div>
+
+                <div class="bg-brand-superlight p-8 md:p-12 rounded-2xl shadow-lg content-section animate-on-scroll">
+                    
+                    <!-- Countdown Timer -->
+                    <div class="mb-10">
+                        <h2 class="text-center !border-b-0 !pb-0">Chương trình kết thúc sau</h2>
+                        <div id="countdown-timer" class="mt-4 flex justify-center items-center space-x-2 md:space-x-4">
+                            <!-- Timer items will be injected by JS -->
+                        </div>
+                    </div>
+
+                    <!-- 1. Tên chương trình -->
+                    <h2>1. Tên chương trình</h2>
+                    <p>“MINIGAME SON SẮC MỘC - KHỞI ĐẦU NGÀY MỚI”.</p>
+
+                    <!-- 2. Địa bàn -->
+                    <h2>2. Địa bàn (phạm vi)</h2>
+                    <p>Toàn quốc.</p>
+
+                    <!-- 3. Hình thức chương trình -->
+                    <h2>3. Hình thức chương trình</h2>
+                    <ul>
+                        <li><strong class="text-brand">Chương trình tích điểm đổi quà:</strong> Người chơi tham gia bằng cách quét mã QR trên poster để truy cập vào website chương trình và điền thông tin đăng ký. Người chơi sẽ tham gia các thử thách làm đẹp để "khởi đầu ngày mới" và tích lũy điểm thưởng.</li>
+                        <li><strong class="text-brand">Chương trình đua top Bảng Xếp Hạng:</strong> Top 02 người chơi có số điểm tích lũy cao nhất trong suốt thời gian diễn ra minigame sẽ nhận được giải Đặc Biệt.</li>
+                    </ul>
+
+                    <!-- 4. Thời gian chương trình -->
+                    <h2>4. Thời gian chương trình</h2>
+                    <p>Từ <strong class="text-brand">17:00:00 ngày 11/08/2025</strong> đến <strong class="text-brand">23:59:59 ngày 26/08/2025</strong>.</p>
+                    <p class="text-sm text-red-600"><strong>Lưu ý:</strong> Số lượng quà tặng có giới hạn nên chương trình có thể kết thúc sớm hơn dự kiến.</p>
+
+                    <!-- 5. Đối tượng tham gia -->
+                    <h2>5. Đối tượng tham gia chương trình</h2>
+                    <ul>
+                        <li>Tất cả công dân Việt Nam từ 18 tuổi trở lên, đang cư trú tại Việt Nam.</li>
+                        <li>Người tham gia dưới 18 tuổi cần có sự đồng ý của cha/mẹ hoặc người giám hộ.</li>
+                    </ul>
+
+                    <!-- 6. Cơ cấu giải thưởng -->
+                    <h2>6. Cơ cấu giải thưởng</h2>
+                    <ul class="space-y-4">
+                        <li class="p-4 bg-white rounded-lg shadow transition-all duration-300 hover:shadow-xl hover:scale-105"><strong class="text-brand">40 Giải May Mắn:</strong> Mỗi giải là 01 thẻ cào điện thoại trị giá 10.000đ.</li>
+                        <li class="p-4 bg-white rounded-lg shadow transition-all duration-300 hover:shadow-xl hover:scale-105"><strong class="text-brand">100 Giải Sành Điệu:</strong> Mỗi giải là 01 voucher mua hàng các sản phẩm của Sắc Mộc.</li>
+                        <li class="p-4 bg-white rounded-lg shadow transition-all duration-300 hover:shadow-xl hover:scale-105"><strong class="text-brand">02 Giải Đặc Biệt:</strong> Mỗi giải là 01 set son ra mắt mới nhất từ Sắc Mộc.</li>
+                    </ul>
+
+                    <!-- 7. Nội dung chi tiết -->
+                    <h2>7. Nội dung chi tiết của chương trình</h2>
+                    <h3 class="font-heading text-xl font-bold mt-6 text-gray-700">Cách thức tham gia:</h3>
+                    <p>Người chơi quét mã QR trên poster hoặc truy cập trực tiếp vào website và điền thông tin đăng ký để tham gia.</p>
+
+                    <h3 class="font-heading text-xl font-bold mt-6 text-gray-700">Cách thức tích điểm:</h3>
+                    <ul>
+                        <li>Hoàn thành các thử thách làm đẹp như: Chia sẻ màu son yêu thích, trả lời câu hỏi kiến thức makeup, mời bạn bè cùng tham gia... Mỗi thử thách hoàn thành, người chơi sẽ được cộng <strong class="text-brand">1 điểm</strong>.</li>
+                        <li>Mời thêm bạn bè tham gia thành công: Nhận <strong class="text-brand">2 điểm</strong> cho mỗi lượt mời thành công.</li>
+                    </ul>
+
+                    <h3 class="font-heading text-xl font-bold mt-6 text-gray-700">Cơ hội nhận quà:</h3>
+                    <ul>
+                        <li><strong>Cơ hội 1: Vòng Quay May Mắn</strong>
+                            <p class="pl-4">Mỗi khi tích lũy đủ điểm, người chơi có thể đổi điểm để nhận 01 lượt quay tại "Vòng Quay May Mắn". Phần thưởng của vòng quay là Thẻ cào điện thoại 10.000đ hoặc Voucher mua hàng Sắc Mộc.</p>
+                        </li>
+                        <li><strong>Cơ hội 2: Đua Top Bảng Xếp Hạng</strong>
+                            <p class="pl-4">Kết thúc chương trình, Sắc Mộc sẽ công bố Bảng Xếp Hạng dựa trên tổng số điểm người chơi đã tích lũy. Top 02 người chơi có tổng điểm cao nhất sẽ nhận Giải Đặc Biệt.</p>
+                        </li>
+                    </ul>
+
+                    <!-- 8. Cách thức giao/nhận quà -->
+                    <h2>8. Cách thức giao/nhận quà</h2>
+                    <ul>
+                        <li><strong>Đối với Thẻ cào điện thoại:</strong> Giải thưởng sẽ được nạp trực tiếp vào số điện thoại người chơi đã đăng ký trong vòng 24h. BTC không chịu trách nhiệm nếu người chơi cung cấp sai số điện thoại.</li>
+                        <li><strong>Đối với Voucher mua hàng:</strong> Mã voucher điện tử sẽ được gửi vào mục "Quà của bạn" trên website chương trình ngay sau khi trúng thưởng. Voucher không có giá trị quy đổi thành tiền mặt và không hoàn tiền thừa.</li>
+                        <li><strong>Đối với Giải Đặc Biệt:</strong> BTC sẽ liên hệ với người trúng thưởng qua số điện thoại đã đăng ký trong vòng 03 ngày làm việc sau khi chương trình kết thúc. Nếu không thể liên lạc được, giải thưởng sẽ bị hủy và trao cho người có thứ hạng kế tiếp. Phần quà sẽ được vận chuyển miễn phí.</li>
+                    </ul>
+
+                    <!-- 9. Các quy định khác -->
+                    <h2>9. Các quy định khác</h2>
+                    <ul>
+                        <li>Tài khoản tham gia phải là tài khoản cá nhân thật. Các trường hợp sử dụng tài khoản ảo, thông tin giả mạo sẽ bị loại.</li>
+                        <li>Sắc Mộc có quyền sử dụng thông tin và hình ảnh của người tham gia cho các mục đích quảng bá.</li>
+                        <li>Trong mọi trường hợp, quyết định của Sắc Mộc là quyết định cuối cùng.</li>
+                        <li>Bằng việc tham gia chương trình, người chơi được xem là đồng ý với tất cả các điều khoản và điều kiện trong thể lệ này.</li>
+                    </ul>
+
+                    <!-- 10. Thông tin liên hệ -->
+                    <h2>10. Thông tin liên hệ và giải đáp thắc mắc</h2>
+                    <p>Mọi thắc mắc liên quan đến chương trình, người chơi vui lòng liên hệ qua:</p>
+                    <ul>
+                        <li><strong>Fanpage:</strong> [Link Fanpage Sắc Mộc]</li>
+                        <li><strong>Hotline:</strong> [Số điện thoại Sắc Mộc]</li>
+                        <li><strong>Email:</strong> [Email Sắc Mộc]</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Registration Form Section -->
+        <section id="register-form" class="py-20 bg-white">
+            <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-on-scroll">
+                <h2 class="text-3xl md:text-4xl font-bold text-brand font-heading mb-4">Đăng Ký Tham Gia Ngay!</h2>
+                <p class="text-lg text-gray-600 mb-8">Đừng bỏ lỡ cơ hội nhận những phần quà hấp dẫn từ Sắc Mộc.</p>
+                <form action="#" class="space-y-6 bg-brand-superlight p-8 rounded-2xl shadow-lg">
+                    <div>
+                        <input type="text" placeholder="Họ và Tên" class="w-full p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand focus:border-transparent outline-none transition">
+                    </div>
+                    <div>
+                        <input type="tel" placeholder="Số Điện Thoại" class="w-full p-4 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brand focus:border-transparent outline-none transition">
+                    </div>
+                    <button type="submit" class="w-full md:w-auto bg-brand text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-opacity-90 transition-transform transform hover:scale-105 text-lg">
+                        Gửi Đăng Ký
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating CTA Button -->
+    <a href="#register-form" class="fixed bottom-6 right-6 bg-brand text-white w-16 h-16 rounded-full flex items-center justify-center shadow-lg z-40 transform transition-transform hover:scale-110" aria-label="Đăng ký tham gia ngay">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+    </a>
+
+    <!-- Reusable Footer -->
+    <footer class="bg-gray-800 text-white py-12" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h3 class="text-2xl font-bold font-heading">Sắc Mộc</h3>
+            <p class="mt-2">Tự nhiên từ Sắc, Mộc từ tâm</p>
+            <div class="mt-6 flex justify-center space-x-6">
+                <a href="https://www.facebook.com/profile.php?id=61576617677748" class="hover:text-brand-light" aria-label="Theo dõi chúng tôi trên Facebook" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="#" class="hover:text-brand-light" aria-label="Theo dõi chúng tôi trên Instagram">Instagram</a>
+                <a href="#" class="hover:text-brand-light" aria-label="Theo dõi chúng tôi trên Tiktok">Tiktok</a>
+            </div>
+            <p class="mt-6 text-sm text-gray-400">&copy; 2025 Sắc Mộc Việt Nam. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- GSAP & ScrollTrigger Setup ---
+        gsap.registerPlugin(ScrollTrigger);
+
+        // --- Hero Poster Animation ---
+        // Fade-in on load
+        gsap.from("#hero-poster", { opacity: 0, duration: 1.5, ease: "power3.out" });
+        
+        // Parallax effect on scroll
+        gsap.to("#poster-image", {
+            y: "20%", // Moves the image down as you scroll up
+            ease: "none",
+            scrollTrigger: {
+                trigger: "#hero-poster",
+                start: "top top",
+                end: "bottom top",
+                scrub: true // Smoothly animates with scroll
+            }
+        });
+
+        // --- General Scroll Animations ---
+        gsap.utils.toArray('.animate-on-scroll').forEach(elem => {
+            gsap.to(elem, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: elem,
+                    start: "top 85%",
+                    toggleActions: "play none none none"
+                }
+            });
+        });
+
+        // --- Countdown Timer Logic ---
+        const countdownEndDate = new Date("2025-08-26T23:59:59").getTime();
+        const countdownElement = document.getElementById('countdown-timer');
+
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countdownEndDate - now;
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                countdownElement.innerHTML = "<p class='text-xl font-bold text-red-600'>Chương trình đã kết thúc!</p>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `
+                <div class="countdown-item"><span>${days}</span><span>Ngày</span></div>
+                <div class="countdown-item"><span>${hours}</span><span>Giờ</span></div>
+                <div class="countdown-item"><span>${minutes}</span><span>Phút</span></div>
+                <div class="countdown-item"><span>${seconds}</span><span>Giây</span></div>
+            `;
+        }, 1000);
+
+    });
+    </script>
+
+</body>
+</html>
