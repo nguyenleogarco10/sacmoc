@@ -65,8 +65,6 @@
         }
         #vto-canvas {
             pointer-events: none;
-            /* Transition for smoother color application (if applicable to canvas/overlay) */
-            /* Note: Canvas drawing doesn't directly support CSS transitions on fillStyle, handled by JS */
         }
         #vto-lips-overlay {
              position: absolute;
@@ -248,14 +246,12 @@
         }
 
         .picker-controls {
-            /* --- THAY ĐỔI CẦN THIẾT --- */
             display: flex;
             flex-direction: column;
             gap: 1rem;
             justify-content: space-between;
             align-items: stretch;
             flex-grow: 1; /* Allow it to take up remaining space */
-            /* --- KẾT THÚC THAY ĐỔI --- */
         }
         .hex-code-display {
             font-family: 'Courier New', Courier, monospace;
@@ -270,9 +266,7 @@
         /* NEW: Visual color display below hex code */
         .color-preview-box {
             width: 100%;
-            /* --- THAY ĐỔI CẦN THIẾT --- */
             height: 150px;
-            /* --- KẾT THÚC THAY ĐỔI --- */
             border-radius: 0.5rem;
             border: 1px solid #ccc;
             box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
@@ -407,7 +401,6 @@
             padding: 0; /* Remove padding here, controlled by inner elements */
             max-width: 90%; 
             margin: 0 auto; 
-            /* text-indent and white-space properties removed from here to be managed by inner HTML */
         }
         /* Style for main numbered items and aligned sub-headers */
         .assistant-message p.main-item {
@@ -492,6 +485,12 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+        /* Style for the initial instruction message to guide the user */
+        .initial-instruction {
+            font-style: italic;
+            color: #8D6E63;
+            text-align: center;
+        }
 
     </style>
 </head>
@@ -556,7 +555,9 @@
                 Trợ lý ảo Sắc Mộc
             </h3>
             <div class="assistant-message-container">
-                <p class="assistant-message" id="assistant-message">Chào mừng bạn đến với Sắc Mộc! Vui lòng nhìn thẳng vào webcam để tôi xác định sắc tố da và tư vấn màu son phù hợp nhất nhé.</p>
+                <p class="assistant-message initial-instruction" id="assistant-message">
+                    Chào mừng bạn đến với Sắc Mộc! Vui lòng nhìn thẳng vào webcam để tôi xác định sắc tố da và tư vấn màu son phù hợp nhất nhé.
+                </p>
             </div>
             <div id="chat-input-container">
                 <input type="text" id="user-chat-input" placeholder="Hỏi trợ lý Sắc Mộc..." disabled>
@@ -590,7 +591,7 @@
         const colorPaletteCanvas = document.getElementById('color-palette-canvas');
         const colorSliderCanvas = document.getElementById('color-slider-canvas');
         const hexCodeDisplay = document.getElementById('hex-code-display');
-        const colorPreviewBox = document.getElementById('color-preview-box');
+        const colorPreviewBoxElem = document.getElementById('color-preview-box'); // Đã sửa tên biến
         const paletteCtx = colorPaletteCanvas.getContext('2d');
         const sliderCtx = colorSliderCanvas.getContext('2d');
         
@@ -607,7 +608,8 @@
         let isSkinToneLocked = false;
         let lastComplimentIndex = -1;
         let assistantChatHistory = []; // To store chat history for conversational AI
-        let complimentsEnabled = false; // <<< TÍNH NĂNG KHEN BỊ VÔ HIỆU HÓA BAN ĐẦU
+        let complimentsEnabled = false; // TÍNH NĂNG KHEN BỊ VÔ HIỆU HÓA BAN ĐẦU
+        let hasRecommended = false; // Cờ mới để kiểm tra xem đã gợi ý son chưa
         
         // NEW: Color Picker state variables
         let hue = 0;
@@ -632,10 +634,10 @@
             214, 177, 199, 175, 171, 140, 170, 143, 145, 159, 160, 161
         ];
 
-        // Pre-defined products with compliments - CẬP NHẬT 5 MÀU ĐẦU TIÊN
+        // Pre-defined products with compliments
         const products = [
             { 
-                name: 'Đỏ Cam - 01', color: '#CC553D', // THAY ĐỔI
+                name: 'Đỏ Cam - 01', color: '#CC553D',
                 compliments: [
                     "Màu đỏ cam này trên môi bạn trông thật rạng rỡ và tràn đầy năng lượng!",
                     "Bạn thật sự nổi bật với sắc đỏ cam này, rất hợp với tông da của bạn!",
@@ -645,7 +647,7 @@
                 ]
             },
             { 
-                name: 'Cam Tươi - 02', color: '#D9A59A', // THAY ĐỔI
+                name: 'Cam Tươi - 02', color: '#D9A59A',
                 compliments: [
                     "Màu cam tươi này làm bừng sáng cả khuôn mặt bạn, rạng rỡ quá!",
                     "Bạn trông thật năng động và tươi trẻ với sắc cam tươi này!",
@@ -655,7 +657,7 @@
                 ]
             },
             { 
-                name: 'Đỏ Hồng - 03', color: '#C08081', // THAY ĐỔI
+                name: 'Đỏ Hồng - 03', color: '#C08081',
                 compliments: [
                     "Ngọt ngào và dịu dàng, màu đỏ hồng này thật sự rất hợp với bạn!",
                     "Bạn trông thật đáng yêu với sắc đỏ hồng tươi tắn này!",
@@ -665,7 +667,7 @@
                 ]
             },
             { 
-                name: 'Đỏ Cherry - 04', color: '#B74134', // THAY ĐỔI
+                name: 'Đỏ Cherry - 04', color: '#B74134',
                 compliments: [
                     "Sắc đỏ cherry này thật quyền lực trên đôi môi bạn!",
                     "Bạn trông thật lộng lẫy và quyến rạng rũ với màu đỏ cherry này!",
@@ -675,7 +677,7 @@
                 ]
             },
             { 
-                name: 'Hồng Cánh Sen - 05', color: '#B76E79', // THAY ĐỔI
+                name: 'Hồng Cánh Sen - 05', color: '#B76E79',
                 compliments: [
                     "Màu hồng cánh sen này làm bạn trông thật nhẹ nhàng và cuốn hút!",
                     "Bạn thật thanh lịch với sắc hồng cánh sen này!",
@@ -756,6 +758,104 @@
             }
         ];
 
+        // Mảng các cặp câu hỏi và câu trả lời mẫu cho chatbot
+        const chatbotResponses = [
+            // Về thương hiệu và triết lý
+            { 
+                questions: ["son sắc mộc là gì", "sắc mộc khác gì son khác", "sắc mộc có gì đặc biệt", "son mộc là gì", "giới thiệu"],
+                answer: "Dạ, Sắc Mộc là một thương hiệu son môi thuần thiên nhiên. Chúng tôi không chỉ tập trung vào màu sắc mà còn cam kết mang đến một sản phẩm an toàn cho sức khỏe, thân thiện với môi trường, và thể hiện một lối sống có trách nhiệm. Son Sắc Mộc được làm từ nguyên liệu tự nhiên lành tính như dầu thực vật nguyên chất, sáp ong tự nhiên và bột màu khoáng an toàn."
+            },
+            {
+                questions: ["tên sắc mộc có ý nghĩa gì", "sắc mộc nghĩa là gì"],
+                answer: `"Sắc" đại diện cho vẻ đẹp và sự rạng rỡ. "Mộc" gợi lên sự gần gũi với thiên nhiên, sự thuần khiết và lành tính của nguyên liệu tự nhiên. Cái tên Sắc Mộc thể hiện triết lý "sống xanh – sống đẹp – sống có trách nhiệm" mà chúng tôi theo đuổi.`
+            },
+            // Về sản phẩm và thành phần
+            {
+                questions: ["son có chứa chì không", "có paraben không", "có chất độc hại không", "son có an toàn không"],
+                answer: "Dạ không, son Sắc Mộc cam kết không chứa các thành phần độc hại như chì, paraben, hương liệu hay các kim loại nặng. Chúng tôi sử dụng các nguyên liệu từ thiên nhiên, an toàn tuyệt đối cho người dùng, kể cả phụ nữ mang thai và những người có làn da nhạy cảm."
+            },
+            {
+                questions: ["thành phần son là gì", "son làm từ gì"],
+                answer: "Sắc Mộc sử dụng các thành phần tự nhiên lành tính như dầu thực vật nguyên chất, sáp ong và bột màu khoáng an toàn. Chúng tôi muốn bạn yên tâm rằng mỗi thỏi son đều được làm ra từ những nguyên liệu 'tử tế' nhất."
+            },
+            {
+                questions: ["son có dưỡng môi không", "son có làm khô môi không", "có làm thâm môi không"],
+                answer: "Sắc Mộc được làm từ các thành phần thiên nhiên như dầu thực vật, bơ hạt mỡ và sáp ong, giúp son có khả năng dưỡng ẩm vượt trội, không gây khô hay thâm môi khi sử dụng. Bạn sẽ cảm nhận sự mềm mượt và thoải mái cả ngày."
+            },
+            // Về công nghệ và trải nghiệm mua sắm
+            {
+                questions: ["cách chọn màu son phù hợp", "chọn màu online như nào", "có AR thử son không", "tư vấn màu son", "tư vấn", "thử", "chọn màu", "phù hợp"],
+                answer: "Dạ, chúng tôi đã tích hợp công nghệ thực tế tăng cường (AR) ngay trên website để giúp anh/chị thử màu son trực tiếp qua điện thoại một cách tiện lợi và trực quan. Ngoài ra, chúng tôi cũng có công nghệ AI để gợi ý màu son phù hợp với tông da của bạn. Điều này giúp anh/chị chọn được màu ưng ý nhất mà không cần đến cửa hàng."
+            },
+            // Về môi trường và cộng đồng
+            {
+                questions: ["bao bì có thân thiện môi trường không", "vỏ son làm bằng gì", "vỏ son có tái chế được không"],
+                answer: "Chắc chắn rồi ạ. Chúng tôi sử dụng vỏ son bằng gỗ tự nhiên được hoàn thiện thủ công và bao bì giấy tái chế, tất cả đều hướng đến triết lý sống xanh và có trách nhiệm với môi trường."
+            },
+            {
+                questions: ["có thử nghiệm trên động vật không", "son có cruelty-free không"],
+                answer: "Không ạ. Chúng tôi cam kết không thử nghiệm sản phẩm trên động vật. Sắc Mộc luôn tuân thủ các nguyên tắc đạo đức trong sản xuất."
+            },
+            // Về giá cả và vận chuyển
+            {
+                questions: ["son giá bao nhiêu", "giá một cây son", "giá 1 thỏi son", "mua son bao nhiêu tiền", "giá"],
+                answer: "Dạ thưa anh chị, một thỏi son Sắc Mộc hiện đang có mức giá là 329.000 VNĐ."
+            },
+            {
+                questions: ["có combo nào không", "có ưu đãi gì không", "mua nhiều có giảm giá không", "giảm giá", "combo"],
+                answer: `Chúng tôi có một số combo ưu đãi đặc biệt dành cho khách hàng:
+- Combo Tự Nhiên (2 thỏi son bất kỳ): Giảm ngay 10% tổng giá trị đơn hàng, chỉ còn 592.200 VNĐ.
+- Combo Sống Xanh (3 thỏi son bất kỳ): Tặng kèm một túi vải cotton hữu cơ và miễn phí vận chuyển, tổng giá trị chỉ 885.000 VNĐ.`
+            },
+            {
+                questions: ["mua son ở đâu", "tôi có thể mua ở đâu", "cửa hàng ở đâu"],
+                answer: "Bạn có thể mua hàng trực tiếp trên website của Sắc Mộc, các kênh mạng xã hội như Facebook, TikTok, hoặc ghé thăm cửa hàng offline của chúng tôi tại số 15-17 Ngọc Khánh, quận Ba Đình, Hà Nội."
+            },
+                // Về chương trình affiliate
+            {
+                questions: ["có chương trình affiliate không", "cộng tác viên", "tiếp thị liên kết"],
+                answer: `Dạ có ạ! Chúng tôi rất vui được chào đón các đối tác cùng lan tỏa giá trị sống xanh. Chương trình affiliate của Sắc Mộc mang lại nhiều quyền lợi hấp dẫn:
+- Hoa hồng hấp dẫn: Hoa hồng 15% cho mỗi đơn hàng thành công qua link giới thiệu.
+- Tăng trưởng bền vững: Cùng chúng tôi xây dựng một cộng đồng làm đẹp có ý thức.
+- Hỗ trợ chuyên nghiệp: Chúng tôi sẽ cung cấp đầy đủ hình ảnh, nội dung và hỗ trợ kỹ thuật để bạn dễ dàng quảng bá sản phẩm.`
+            },
+            {
+                questions: ["đăng ký affiliate như nào", "cách tham gia affiliate", "làm sao để đăng ký cộng tác viên"],
+                answer: "Anh/chị có thể đăng ký tham gia chương trình affiliate bằng cách truy cập vào trang 'Đối tác' trên website của chúng tôi và điền thông tin vào form đăng ký. Đội ngũ của Sắc Mộc sẽ liên hệ lại trong vòng 24 giờ làm việc để hỗ trợ anh/chị."
+            },
+            // Các câu hỏi mở rộng khác
+            {
+                questions: ["công thức son có gì đặc biệt", "son có những thành phần nào nổi bật"],
+                answer: "Công thức son Sắc Mộc kết hợp các thành phần giàu dưỡng chất như bơ hạt mỡ, dầu thực vật nguyên chất, sáp ong tự nhiên và bột màu khoáng an toàn. Đặc biệt, chúng tôi nói không với chì, paraben và hương liệu tổng hợp, đảm bảo an toàn tuyệt đối."
+            },
+            {
+                questions: ["son có dùng cho bà bầu được không", "phụ nữ mang thai có dùng được không"],
+                answer: "Dạ vâng, son Sắc Mộc được làm từ nguyên liệu hoàn toàn thiên nhiên, không chứa các chất độc hại nên rất an toàn cho phụ nữ mang thai và những người có làn da nhạy cảm."
+            },
+            {
+                questions: ["son có giữ màu lâu không", "độ bám màu son", "son có bền màu không"],
+                answer: "Sắc Mộc mang lại màu sắc chuẩn và bền đẹp, không gây cảm giác nặng môi. Tuy nhiên, vì là son thiên nhiên, độ bám màu sẽ ở mức vừa phải để đảm bảo sự lành tính, bạn có thể dặm lại son sau khi ăn uống."
+            },
+            {
+                questions: ["chất son của sắc mộc", "son lì có bị khô môi không"],
+                answer: "Chất son Sắc Mộc rất mềm mượt và nhẹ môi. Dòng son lì thiên nhiên của chúng tôi được kết hợp với các loại dầu dưỡng tự nhiên, nên không hề gây khô môi như các loại son lì công nghiệp khác."
+            },
+            {
+                questions: ["Sắc Mộc có chương trình gì cho khách hàng thân thiết không"],
+                answer: "Chúng tôi đang xây dựng các chương trình chăm sóc khách hàng thân thiết với nhiều ưu đãi hấp dẫn như tích điểm, quà sinh nhật và voucher giảm giá độc quyền. Hãy đăng ký tài khoản trên website để không bỏ lỡ nhé!"
+            },
+            {
+                questions: ["Sắc Mộc có những màu son nào"],
+                answer: `Hiện tại, chúng tôi có 5 màu son chủ lực được nghiên cứu kỹ lưỡng để phù hợp với tông da châu Á:
+- Cánh hồng khô: Thanh lịch, dịu dàng
+- Hồng khói: Hiện đại, cá tính
+- Cam cháy: Thời thượng, nổi bật
+- Đỏ cam: Rực rỡ, quyến rũ
+- Nude hồng ấm: Tự nhiên, tinh tế`
+            }
+        ];
+
+
         // Populate color options
         products.forEach(p => {
             const colorBtn = document.createElement('button');
@@ -779,7 +879,7 @@
                 }
 
                 // Only send compliment if the color actually changed and compliments are enabled
-                if (targetLipColor !== previousColor && complimentsEnabled) { // <<< KIỂM TRA NẾU TÍNH NĂNG KHEN ĐÃ BẬT
+                if (targetLipColor !== previousColor && complimentsEnabled) { // KIỂM TRA NẾU TÍNH NĂNG KHEN ĐÃ BẬT
                     sendCompliment(p.name); 
                 }
 
@@ -927,7 +1027,7 @@
             const rgb = hslToRgb(hue, saturation, lightness);
             const hex = rgbToHex(rgb[0], rgb[1], rgb[2]);
             hexCodeDisplay.textContent = hex.toUpperCase();
-            colorPreviewBox.style.backgroundColor = hex;
+            colorPreviewBoxElem.style.backgroundColor = hex;
 
             drawColorPalette();
             drawColorSlider();
@@ -971,7 +1071,7 @@
             if (!advancedVtoAvailable) {
                 vtoLipsOverlay.style.backgroundColor = targetLipColor; 
             }
-            if (complimentsEnabled) { // <<< KIỂM TRA NẾU TÍNH NĂNG KHEN ĐÃ BẬT
+            if (complimentsEnabled) { // KIỂM TRA NẾU TÍNH NĂNG KHEN ĐÃ BẬT
                 sendCompliment('màu tùy chỉnh'); 
             }
         });
@@ -1166,8 +1266,9 @@
             vtoCanvas.classList.remove('hidden');
             vtoFallbackNote.classList.add('hidden');
             vtoStatus.innerHTML = '<span class="spinner"></span> Đang nhận diện...';
-            userChatInput.disabled = false;
-            sendChatBtn.disabled = false;
+            // Không bật input chat ngay lập tức, chỉ sau khi đã gợi ý son
+            // userChatInput.disabled = false;
+            // sendChatBtn.disabled = false;
         }
 
         function drawLipstick(landmarks) {
@@ -1251,11 +1352,11 @@
             let tone = "trung tính";
 
             if (r > 200 && g > 180 && b > 160) {
-                tone += " sáng";
+                tone = "sáng";
             } else if (r > 150 && g > 120 && b > 100) {
-                tone += " trung bình";
+                tone = "trung bình";
             } else {
-                tone += " tối";
+                tone = "tối";
             }
 
             if (b > r && b > g) {
@@ -1268,75 +1369,68 @@
             
             return tone.trim();
         }
+        
+        async function getChatbotResponse(userPrompt) {
+            const normalizedPrompt = userPrompt.toLowerCase().trim();
+            for (const item of chatbotResponses) {
+                if (item.questions.some(q => normalizedPrompt.includes(q.toLowerCase()))) {
+                    return item.answer;
+                }
+            }
+            return "Cảm ơn Quý khách đã tin tưởng lựa chọn Sắc Mộc. Để được tư vấn chi tiết và tận tình hơn, Quý khách vui lòng liên hệ qua fanpage Facebook Sắc Mộc, đội ngũ nhân viên của chúng tôi sẽ hỗ trợ trực tiếp.";
+        }
 
-        async function getGeminiResponse(prompt, isUserInitiated = false) {
-            assistantMessageElem.innerHTML = '<span class="assistant-loading-spinner"></span> <span class="assistant-loading-text">Trợ lý ảo đang suy nghĩ...</span>';
+        async function handleUserChat() {
+            const userQuery = userChatInput.value.trim();
+            if (!userQuery) return;
+
+            userChatInput.value = '';
+            
+            // Hiển thị loading spinner cho chatbot và ẩn nội dung cũ
+            assistantMessageElem.innerHTML = '<span class="assistant-loading-spinner"></span> <span class="assistant-loading-text">Trợ lý ảo đang phản hồi...</span>';
             userChatInput.disabled = true;
             sendChatBtn.disabled = true;
-
-            if (isUserInitiated) {
-                assistantChatHistory.push({ role: "user", parts: [{ text: prompt }] });
-            }
-
-            const payload = { contents: assistantChatHistory };
-            const apiKey = "AIzaSyCZZH7f4IHZ_6WpyW03Az7N7qA_ci1x7qM"; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    const errorBody = await response.text();
-                    console.error("Gemini API HTTP Error:", errorBody);
-                    throw new Error(`Lỗi HTTP: ${response.status}. Chi tiết: ${errorBody.substring(0, 100)}...`);
-                }
-
-                let result;
-                try {
-                    result = await response.json();
-                } catch (jsonError) {
-                    console.error("Lỗi phân tích cú pháp JSON từ Gemini API:", jsonError);
-                    const rawText = await response.text();
-                    console.error("Phản hồi thô từ Gemini API:", rawText);
-                    throw new Error("Lỗi: Không thể đọc phản hồi từ trợ lý ảo.");
-                }
+            
+            // Thêm độ trễ để mô phỏng bot đang "suy nghĩ"
+            setTimeout(async () => {
+                const response = await getChatbotResponse(userQuery);
                 
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    assistantChatHistory.push({ role: "model", parts: [{ text: text }] });
-                    return text;
-                } else {
-                    console.error("Gemini API returned an unexpected structure or no content:", result);
-                    throw new Error("Xin lỗi, tôi không thể tạo phản hồi lúc này. Cấu trúc phản hồi không mong muốn.");
-                }
-            }
-            catch (error) {
-                console.error("Lỗi khi gọi Gemini API:", error);
-                return "Đã xảy ra lỗi khi kết nối với trợ lý ảo. Vui lòng kiểm tra kết nối mạng và bảng điều khiển.";
-            } finally {
+                // Xóa loading spinner và hiển thị câu trả lời
+                assistantMessageElem.innerHTML = `<p class="content-line">${response.trim().replace(/\*/g, '')}</p>`;
+                assistantMessageElem.style.textAlign = 'left';
+                assistantMessageElem.style.whiteSpace = 'normal';
                 userChatInput.disabled = false;
                 sendChatBtn.disabled = false;
-                assistantMessageElem.querySelector('.assistant-loading-spinner')?.remove();
-                assistantMessageElem.querySelector('.assistant-loading-text')?.remove();
-            }
+                userChatInput.focus();
+            }, 750); // Độ trễ 750ms
         }
 
         async function recommendLipstick(skinTone) {
-            const productNames = products.map(p => p.name).join(', ');
-            const prompt = `Tôi có sắc tố da mặt là "${skinTone}". Hãy gợi ý cho tôi 3 màu son trong danh sách sau đây (${productNames}) mà phù hợp nhất với sắc tố da của tôi. Ngoài ra, hãy gợi ý thêm một phong cách trang điểm hoặc phối đồ phù hợp với mỗi màu son đó, và một dịp sử dụng thích hợp. Định dạng câu trả lời của bạn là một danh sách được đánh số rõ ràng, mỗi mục là một màu son gợi ý. Đảm bảo toàn bộ dòng của mục được đánh số (ví dụ: "1. Tên Son - Mã số:") được in đậm. Chỉ riêng từ "Giải thích:" (hoặc "Lý do:", "Phong cách trang điểm:", "Phối đồ:", "Dịp sử dụng:", "Lưu ý:") được in đậm mà không phải toàn bộ phần nội dung theo sau. Các tiêu đề con này cũng phải gióng thẳng hàng với số mục chính. Các ý con trong "Phong cách trang điểm:" và "Phối đồ:" hãy bắt đầu bằng dấu gạch ngang "-". Đảm bảo có đủ dấu cách giữa các từ.`;
-            assistantChatHistory = [{ role: "user", parts: [{ text: prompt }] }];
-            let recommendation = await getGeminiResponse(prompt);
-            
-            recommendation = recommendation.replace(/"/g, '').replace(/\*/g, ''); 
+            if (hasRecommended) return;
+            hasRecommended = true;
 
+            assistantMessageElem.classList.remove('initial-instruction');
+            userChatInput.disabled = false;
+            sendChatBtn.disabled = false;
+            
+            // Xây dựng prompt để tạo gợi ý
+            const prompt = `Dựa trên tông da ${skinTone} của bạn, tôi xin gợi ý một vài lựa chọn sau đây:
+1. Đỏ Cam - 01:
+   Lý do: Tông đỏ cam giúp làm sáng da, mang lại vẻ ngoài tươi tắn và tràn đầy sức sống. Đây là một lựa chọn tuyệt vời cho tông da của bạn.
+   Phong cách trang điểm: Một chút kẻ mắt eyeliner mảnh và mascara, kết hợp với má hồng cam đào nhẹ nhàng.
+   Phối đồ: Hợp với những trang phục có tông màu ấm như trắng, be, cam, hoặc các trang phục năng động, trẻ trung.
+2. Cam Đất - 06:
+   Lý do: Màu cam đất mang lại vẻ đẹp cá tính, thời thượng và cuốn hút. Rất phù hợp với những người yêu thích phong cách trang điểm tự nhiên, trầm ấm.
+   Phong cách trang điểm: Mắt khói nhẹ hoặc chỉ cần chuốt mascara, kết hợp với chân mày tự nhiên.
+   Phối đồ: Tuyệt vời khi kết hợp với các trang phục có tông màu nude, nâu, hoặc đen, tạo vẻ ngoài bí ẩn, thanh lịch.
+3. Đỏ Hồng - 03:
+   Lý do: Sự kết hợp giữa sắc đỏ và hồng tạo nên vẻ ngoài ngọt ngào, dịu dàng nhưng không kém phần rạng rỡ. Thích hợp cho những cô nàng theo đuổi phong cách nữ tính, trong trẻo.
+   Phong cách trang điểm: Lớp nền mỏng nhẹ, một chút phấn mắt màu hồng nhạt và mi cong tự nhiên.
+   Phối đồ: Hài hòa với các trang phục màu pastel, váy hoa, hoặc những thiết kế nhẹ nhàng, bay bổng.`;
+            
+            // Hàm này sẽ giả lập việc xử lý prompt và trả về kết quả
             let formattedHtml = '';
-            const lines = recommendation.split('\n');
+            const lines = prompt.split('\n');
 
             let currentSectionType = '';
             lines.forEach(line => {
@@ -1355,8 +1449,8 @@
                     }
                     currentSectionType = '';
                 } 
-                else if (trimmedLine.match(/^(Giải thích:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)/)) {
-                    const headerMatch = trimmedLine.match(/^(Giải thích:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)\s*(.*)/);
+                else if (trimmedLine.match(/^(Giải thích:|Lý do:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)/)) {
+                    const headerMatch = trimmedLine.match(/^(Giải thích:|Lý do:|Phong cách trang điểm:|Phối đồ:|Dịp sử dụng:|Lưu ý:)\s*(.*)/);
                     if (headerMatch) {
                         const boldPart = headerMatch[1];
                         const restOfLine = headerMatch[2];
@@ -1373,14 +1467,12 @@
                         currentSectionType = '';
                     }
                 } 
+                else if (trimmedLine.startsWith('- ')) {
+                     formattedHtml += `<p class="sub-item-hyphen">${trimmedLine.replace(/^-/, '')}</p>`;
+                }
                 else {
                     let contentToDisplay = trimmedLine;
                     let className = "content-line";
-
-                    if ((currentSectionType === 'makeup' || currentSectionType === 'outfit') && !trimmedLine.startsWith('- ')) {
-                         contentToDisplay = `- ${trimmedLine}`;
-                         className = "sub-item-hyphen";
-                    }
                     formattedHtml += `<p class="${className}">${contentToDisplay}</p>`;
                 }
             });
@@ -1388,11 +1480,11 @@
             assistantMessageElem.innerHTML = formattedHtml;
             assistantMessageElem.style.textAlign = 'left';
             assistantMessageElem.style.whiteSpace = 'normal';
-            complimentsEnabled = true; // <<< KÍCH HOẠT TÍNH NĂNG KHEN TẠI ĐÂY
-            console.log("Compliments are now enabled.");
+            complimentsEnabled = true; // KÍCH HOẠT TÍNH NĂNG KHEN TẠI ĐÂY
         }
-
+        
         function sendCompliment(productName) {
+            // Hiển thị loading spinner cho chatbot
             assistantMessageElem.innerHTML = '<span class="assistant-loading-spinner"></span> <span class="assistant-loading-text">Trợ lý ảo đang suy nghĩ...</span>';
             
             setTimeout(() => {
@@ -1418,24 +1510,6 @@
                 assistantMessageElem.textContent = product.compliments[newComplimentIndex];
                 assistantMessageElem.style.textAlign = 'center';
             }, 400);
-        }
-
-        async function handleUserChat() {
-            const userQuery = userChatInput.value.trim();
-            if (!userQuery) return;
-
-            userChatInput.value = '';
-            assistantMessageElem.innerHTML = '<span class="assistant-loading-spinner"></span> <span class="assistant-loading-text">Trợ lý ảo đang phản hồi...</span>';
-            userChatInput.disabled = true;
-            sendChatBtn.disabled = true;
-
-            const response = await getGeminiResponse(userQuery, true);
-            assistantMessageElem.innerHTML = `<p class="content-line">${response.trim().replace(/\*/g, '')}</p>`;
-            assistantMessageElem.style.textAlign = 'left';
-            assistantMessageElem.style.whiteSpace = 'normal';
-            userChatInput.disabled = false;
-            sendChatBtn.disabled = false;
-            userChatInput.focus();
         }
 
         sendChatBtn.addEventListener('click', handleUserChat);
@@ -1472,12 +1546,23 @@
                                 vtoStatus.style.display = 'none';
                                 videoContainer.classList.add('face-detected');
 
-                                const newSkinTone = estimateSkinTone(faceLandmarkerResult.faceLandmarks[0]);
-                                if (newSkinTone && !isSkinToneLocked) {
-                                    currentSkinTone = newSkinTone;
-                                    isSkinToneLocked = true;
-                                    console.log("Estimated and locked skin tone:", currentSkinTone);
-                                    recommendLipstick(currentSkinTone);
+                                // Only recommend lipstick once when a face is first detected
+                                if (!hasRecommended) {
+                                    const newSkinTone = estimateSkinTone(faceLandmarkerResult.faceLandmarks[0]);
+                                    if (newSkinTone && !isSkinToneLocked) {
+                                        currentSkinTone = newSkinTone;
+                                        isSkinToneLocked = true;
+                                        console.log("Estimated and locked skin tone:", currentSkinTone);
+                                        
+                                        // Update the initial message with the detected skin tone
+                                        assistantMessageElem.innerHTML = `Dựa trên tông da <strong class="text-brand">${currentSkinTone}</strong> của bạn, tôi xin gợi ý một vài lựa chọn sau đây:`;
+                                        assistantMessageElem.style.textAlign = 'center';
+                                        
+                                        // Wait a moment before showing the full recommendation
+                                        setTimeout(() => {
+                                            recommendLipstick(currentSkinTone);
+                                        }, 1000); // 1-second delay
+                                    }
                                 }
 
                             } else {
