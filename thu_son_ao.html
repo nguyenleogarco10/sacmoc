@@ -762,11 +762,11 @@
         const chatbotResponses = [
             // Về thương hiệu và triết lý
             { 
-                questions: ["son sắc mộc là gì", "sắc mộc khác gì son khác", "sắc mộc có gì đặc biệt", "son mộc là gì", "giới thiệu"],
+                questions: ["son sắc mộc là gì", "sắc mộc khác gì son khác", "sắc mộc có gì đặc biệt", "son mộc là gì", "giới thiệu", "sắc mộc"],
                 answer: "Dạ, Sắc Mộc là một thương hiệu son môi thuần thiên nhiên. Chúng tôi không chỉ tập trung vào màu sắc mà còn cam kết mang đến một sản phẩm an toàn cho sức khỏe, thân thiện với môi trường, và thể hiện một lối sống có trách nhiệm. Son Sắc Mộc được làm từ nguyên liệu tự nhiên lành tính như dầu thực vật nguyên chất, sáp ong tự nhiên và bột màu khoáng an toàn."
             },
             {
-                questions: ["tên sắc mộc có ý nghĩa gì", "sắc mộc nghĩa là gì"],
+                questions: ["tên sắc mộc có ý nghĩa gì", "sắc mộc nghĩa là gì", "tên", "nghĩa", "là gì"],
                 answer: `"Sắc" đại diện cho vẻ đẹp và sự rạng rỡ. "Mộc" gợi lên sự gần gũi với thiên nhiên, sự thuần khiết và lành tính của nguyên liệu tự nhiên. Cái tên Sắc Mộc thể hiện triết lý "sống xanh – sống đẹp – sống có trách nhiệm" mà chúng tôi theo đuổi.`
             },
             // Về sản phẩm và thành phần
@@ -775,21 +775,21 @@
                 answer: "Dạ không, son Sắc Mộc cam kết không chứa các thành phần độc hại như chì, paraben, hương liệu hay các kim loại nặng. Chúng tôi sử dụng các nguyên liệu từ thiên nhiên, an toàn tuyệt đối cho người dùng, kể cả phụ nữ mang thai và những người có làn da nhạy cảm."
             },
             {
-                questions: ["thành phần son là gì", "son làm từ gì"],
+                questions: ["thành phần son là gì", "son làm từ gì", "thành phần", "làm từ"],
                 answer: "Sắc Mộc sử dụng các thành phần tự nhiên lành tính như dầu thực vật nguyên chất, sáp ong và bột màu khoáng an toàn. Chúng tôi muốn bạn yên tâm rằng mỗi thỏi son đều được làm ra từ những nguyên liệu 'tử tế' nhất."
             },
             {
-                questions: ["son có dưỡng môi không", "son có làm khô môi không", "có làm thâm môi không"],
+                questions: ["son có dưỡng môi không", "son có làm khô môi không", "có làm thâm môi không", "dưỡng", "thâm"],
                 answer: "Sắc Mộc được làm từ các thành phần thiên nhiên như dầu thực vật, bơ hạt mỡ và sáp ong, giúp son có khả năng dưỡng ẩm vượt trội, không gây khô hay thâm môi khi sử dụng. Bạn sẽ cảm nhận sự mềm mượt và thoải mái cả ngày."
             },
             // Về công nghệ và trải nghiệm mua sắm
             {
-                questions: ["cách chọn màu son phù hợp", "chọn màu online như nào", "có AR thử son không", "tư vấn màu son", "tư vấn", "thử", "chọn màu", "phù hợp"],
+                questions: ["cách chọn màu son phù hợp", "chọn màu online như nào", "có AR thử son không", "tư vấn màu son", "tư vấn", "thử", "chọn màu", "phù hợp", "chọn", "tư vấn"],
                 answer: "Dạ, chúng tôi đã tích hợp công nghệ thực tế tăng cường (AR) ngay trên website để giúp anh/chị thử màu son trực tiếp qua điện thoại một cách tiện lợi và trực quan. Ngoài ra, chúng tôi cũng có công nghệ AI để gợi ý màu son phù hợp với tông da của bạn. Điều này giúp anh/chị chọn được màu ưng ý nhất mà không cần đến cửa hàng."
             },
             // Về môi trường và cộng đồng
             {
-                questions: ["bao bì có thân thiện môi trường không", "vỏ son làm bằng gì", "vỏ son có tái chế được không"],
+                questions: ["bao bì có thân thiện môi trường không", "vỏ son làm bằng gì", "vỏ son có tái chế được không", "môi trường", "tái chế"],
                 answer: "Chắc chắn rồi ạ. Chúng tôi sử dụng vỏ son bằng gỗ tự nhiên được hoàn thiện thủ công và bao bì giấy tái chế, tất cả đều hướng đến triết lý sống xanh và có trách nhiệm với môi trường."
             },
             {
@@ -798,38 +798,42 @@
             },
             // Về giá cả và vận chuyển
             {
-                questions: ["son giá bao nhiêu", "giá một cây son", "giá 1 thỏi son", "mua son bao nhiêu tiền", "giá"],
-                answer: "Dạ thưa anh chị, một thỏi son Sắc Mộc hiện đang có mức giá là 329.000 VNĐ."
+                questions: ["son giá bao nhiêu", "giá một cây son", "giá 1 thỏi son", "mua son bao nhiêu tiền", "giá", "một cây", "một thỏi", "1 cây", "1 thỏi"],
+                answer: "Dạ thưa anh chị, một thỏi son Sắc Mộc hiện đang có mức giá là 219.000 VNĐ."
+            },
+            {
+                questions: ["giá 2 thỏi son", "mua 2 cây son bao nhiêu tiền", "giá", "hai cây", "hai thỏi", "2 cây", "2 thỏi"],
+                answer: "Dạ thưa anh chị, một thỏi son Sắc Mộc hiện đang có mức giá là 394.000 VNĐ (đã áp dụng ưu đãi giảm 10% tổng giá trị đơn hàng)."
             },
             {
                 questions: ["có combo nào không", "có ưu đãi gì không", "mua nhiều có giảm giá không", "giảm giá", "combo"],
                 answer: `Chúng tôi có một số combo ưu đãi đặc biệt dành cho khách hàng:
-- Combo Tự Nhiên (2 thỏi son bất kỳ): Giảm ngay 10% tổng giá trị đơn hàng, chỉ còn 592.200 VNĐ.
-- Combo Sống Xanh (3 thỏi son bất kỳ): Tặng kèm một túi vải cotton hữu cơ và miễn phí vận chuyển, tổng giá trị chỉ 885.000 VNĐ.`
+- Combo Tự Nhiên (2 thỏi son bất kỳ): Giảm ngay 10% tổng giá trị đơn hàng.
+- Combo Sống Xanh (3 thỏi son bất kỳ): Tặng kèm một túi vải cotton hữu cơ và miễn phí vận chuyển.`
             },
             {
-                questions: ["mua son ở đâu", "tôi có thể mua ở đâu", "cửa hàng ở đâu"],
+                questions: ["mua son ở đâu", "tôi có thể mua ở đâu", "cửa hàng ở đâu", "ở đâu", "ở"],
                 answer: "Bạn có thể mua hàng trực tiếp trên website của Sắc Mộc, các kênh mạng xã hội như Facebook, TikTok, hoặc ghé thăm cửa hàng offline của chúng tôi tại số 15-17 Ngọc Khánh, quận Ba Đình, Hà Nội."
             },
                 // Về chương trình affiliate
             {
-                questions: ["có chương trình affiliate không", "cộng tác viên", "tiếp thị liên kết"],
+                questions: ["có chương trình affiliate không", "cộng tác viên", "tiếp thị liên kết", "affiliate", "ctv", "liên kết", "phối hợp"],
                 answer: `Dạ có ạ! Chúng tôi rất vui được chào đón các đối tác cùng lan tỏa giá trị sống xanh. Chương trình affiliate của Sắc Mộc mang lại nhiều quyền lợi hấp dẫn:
 - Hoa hồng hấp dẫn: Hoa hồng 15% cho mỗi đơn hàng thành công qua link giới thiệu.
 - Tăng trưởng bền vững: Cùng chúng tôi xây dựng một cộng đồng làm đẹp có ý thức.
 - Hỗ trợ chuyên nghiệp: Chúng tôi sẽ cung cấp đầy đủ hình ảnh, nội dung và hỗ trợ kỹ thuật để bạn dễ dàng quảng bá sản phẩm.`
             },
             {
-                questions: ["đăng ký affiliate như nào", "cách tham gia affiliate", "làm sao để đăng ký cộng tác viên"],
+                questions: ["đăng ký affiliate như nào", "cách tham gia affiliate", "làm sao để đăng ký cộng tác viên", "cách", "tham gia"],
                 answer: "Anh/chị có thể đăng ký tham gia chương trình affiliate bằng cách truy cập vào trang 'Đối tác' trên website của chúng tôi và điền thông tin vào form đăng ký. Đội ngũ của Sắc Mộc sẽ liên hệ lại trong vòng 24 giờ làm việc để hỗ trợ anh/chị."
             },
             // Các câu hỏi mở rộng khác
             {
-                questions: ["công thức son có gì đặc biệt", "son có những thành phần nào nổi bật"],
+                questions: ["công thức son có gì đặc biệt", "son có những thành phần nào nổi bật", "thành phần"],
                 answer: "Công thức son Sắc Mộc kết hợp các thành phần giàu dưỡng chất như bơ hạt mỡ, dầu thực vật nguyên chất, sáp ong tự nhiên và bột màu khoáng an toàn. Đặc biệt, chúng tôi nói không với chì, paraben và hương liệu tổng hợp, đảm bảo an toàn tuyệt đối."
             },
             {
-                questions: ["son có dùng cho bà bầu được không", "phụ nữ mang thai có dùng được không"],
+                questions: ["son có dùng cho bà bầu được không", "phụ nữ mang thai có dùng được không", "bầu", "mang thai"],
                 answer: "Dạ vâng, son Sắc Mộc được làm từ nguyên liệu hoàn toàn thiên nhiên, không chứa các chất độc hại nên rất an toàn cho phụ nữ mang thai và những người có làn da nhạy cảm."
             },
             {
@@ -845,7 +849,7 @@
                 answer: "Chúng tôi đang xây dựng các chương trình chăm sóc khách hàng thân thiết với nhiều ưu đãi hấp dẫn như tích điểm, quà sinh nhật và voucher giảm giá độc quyền. Hãy đăng ký tài khoản trên website để không bỏ lỡ nhé!"
             },
             {
-                questions: ["Sắc Mộc có những màu son nào"],
+                questions: ["Sắc Mộc có những màu son nào", "những màu son", "các màu son", "màu son", "mầu son"],
                 answer: `Hiện tại, chúng tôi có 5 màu son chủ lực được nghiên cứu kỹ lưỡng để phù hợp với tông da châu Á:
 - Cánh hồng khô: Thanh lịch, dịu dàng
 - Hồng khói: Hiện đại, cá tính
@@ -1626,3 +1630,4 @@
     </script>
 </body>
 </html>
+
